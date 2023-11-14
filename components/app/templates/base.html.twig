@@ -1,0 +1,21 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css">
+    <title>krausgedruckt — 3D-Druck-Dienstleistungen aus Erftstadt</title>
+</head>
+<body class="antialiased">
+    {% block nav %}
+        {% include 'content/_nav.html.twig' %}
+    {% endblock %}
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+    {% block footer %}
+        {% include 'content/_footer.html.twig' %}
+    {% endblock %}
+</body>
+</html>
