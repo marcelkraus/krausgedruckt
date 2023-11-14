@@ -1,0 +1,18 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: auto
+    providers:
+        users_in_memory:
+            memory:
+                users:
+                    preview: { password: '$2y$10$ZcgCW403zrNEq6zesaFHouR0mYNaoOzpBh0rHyqLUcekYQcpklrnS', roles: ['ROLE_USER'] }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            provider: users_in_memory
+            http_basic:
+                realm: Homepage Preview
+    access_control:
+        - { path: ^/, roles: ROLE_USER }
