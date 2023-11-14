@@ -1,12 +1,25 @@
 <!doctype html>
+
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>krausgedruckt — Dein 3D-Druck-Dienstleister in Erftstadt</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/css/output.css" rel="stylesheet">
-</head>
-<body>
-    <p>Here be dragons.</p>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/output.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <title>krausgedruckt — 3D-Druck-Dienstleistungen aus Erftstadt</title>
+    </head>
+    <body class="antialiased text-primary">
+        <main>
+            {% include 'part/nav.html.twig' %}
+            {% include 'part/hero.html.twig' %}
+            {% include 'part/introduction.html.twig' %}
+            {% include 'part/team.html.twig' %}
+        </main>
+    </body>
+    <script type="text/javascript">
+        function toggleNavbar(collapseID) {
+            document.getElementById(collapseID).classList.toggle("hidden");
+            document.getElementById(collapseID).classList.toggle("block");
+        }
+    </script>
 </html>
