@@ -8,14 +8,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
         <title>krausgedruckt — 3D-Druck-Dienstleistungen aus Erftstadt</title>
     </head>
-    <body class="antialiased text-primary">
-        {% include 'nav.html.twig' %}
+    <body class="antialiased">
+        {% include 'partials/nav.html.twig' %}
         <main>
-            {% include 'main/hero.html.twig' %}
-            {% include 'main/introduction.html.twig' %}
-            {% include 'main/team.html.twig' %}
+            {% include 'partials/main/hero.html.twig' %}
+            {% include 'partials/main/introduction.html.twig' %}
+            {% include 'partials/main/team.html.twig' %}
+            {% include 'partials/main/contact.html.twig' %}
         </main>
-        {% include 'footer.html.twig' %}
+        {% include 'partials/footer.html.twig' %}
     </body>
     <script type="text/javascript">
         function toggleNavbar(collapseID) {
