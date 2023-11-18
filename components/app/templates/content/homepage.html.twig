@@ -10,12 +10,12 @@
         <div class="container mx-auto relative px-8 py-16 lg:py-24">
             <div class="flex flex-wrap items-center w-full md:w-2/3 lg:w-1/3">
                 <div class="text-white">
-                    <h1 class="text-4xl font-semibold leading-tight mb-8">
+                    <h1 class="text-4xl font-semibold leading-tight mb-8 md:mb-16">
                         <span class="text-brand-primary">Du hast die Vision.</span><br/>
                         Wir machen sie greifbar.
                     </h1>
                     <div class="text-2xl">
-                        <p class="mb-4">
+                        <p class="mb-4 md:mb-8">
                             Alle 3D-Druck-Dienstleistungen aus einer Hand: Kompetent, zeitnah, bezahlbar.
                         </p>
                         <p>
@@ -39,7 +39,7 @@
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="flex flex-wrap items-start">
                 <div class="w-full md:w-6/12">
-                    <h3 class="text-2xl font-semibold text-brand-primary mb-8">
+                    <h3 class="text-2xl font-semibold text-brand-primary mb-4">
                         Unser Angebot?<br/>
                         <span class="text-brand-secondary">Vielschichtig.</span>
                     </h3>
@@ -79,7 +79,7 @@
 
     <section class="bg-white relative">
         <div class="container mx-auto px-8 py-16 lg:py-24">
-            <h2 class="text-2xl font-semibold text-brand-primary mb-8">
+            <h2 class="text-2xl font-semibold text-brand-primary mb-4">
                 Wer wir sind?<br/>
                 <span class="text-brand-secondary">tl;dr: Ein Familienbetrieb.</span>
             </h2>
@@ -91,14 +91,14 @@
                     <p>Familienhund Lucky bringt uns täglich gute Laune, passt auf die Drucker auf und sorgt dafür, dass Marcel auch mal an die frische Luft kommt.</p>
                 </div>
                 <div class="flex flex-wrap justify-center w-full md:w-1/2 mt-8 md:mt-0">
-                    <div class="w-full md:w-1/2 lg:w-1/3 px-32 md:px-8 mb-8 lg:mb-0">
+                    <div class="w-full md:w-1/2 lg:w-1/3 px-32 md:px-8 mb-4 lg:mb-0">
                         <img src="/images/manuela.jpg" class="shadow-lg rounded-full" alt="Manuela Kraus" />
                         <div class="pt-4 text-center text-2xl">
                             <h5 class="font-semibold">Manuela</h5>
                             <p>Shop Girl</p>
                         </div>
                     </div>
-                    <div class="w-full md:w-1/2 lg:w-1/3 px-32 md:px-8 mb-8 lg:mb-0">
+                    <div class="w-full md:w-1/2 lg:w-1/3 px-32 md:px-8 mb-4 lg:mb-0">
                         <img src="/images/marcel.jpg" class="shadow-lg rounded-full" alt="Marcel Kraus" />
                         <div class="pt-4 text-center text-2xl">
                             <h5 class="font-semibold">Marcel</h5>
@@ -129,12 +129,12 @@
             <div class="flex justify-center">
                 <div class="w-full lg:w-1/2 flex shadow-xl rounded-xl bg-background-primary">
                     {{ form_start(form, { 'attr': { 'class': 'flex-auto p-8 text-primary' } }) }}
-                        <h4 class="text-2xl font-semibold text-brand-primary mb-8">
+                        <h4 class="text-2xl font-semibold text-brand-primary mb-4">
                             Interesse geweckt?<br/>
                             <span class="text-brand-secondary">Jetzt anfragen.</span>
                         </h4>
                         <p class="mb-4">Du hast Bock auf Druck? Dann nutze unser Kontaktformular, um uns schnell und einfach anzusprechen. Deine Anfrage ist natürlich unverbindlich und mit keinerlei Kosten verbunden.</p>
-                        <p class="mb-8">Falls du lieber E-Mails schreibst: Du erreichst uns unter <span class="font-semibold">hallo(at)krausgedruckt.de</span>.</p>
+                        <p class="mb-4">Falls du lieber E-Mails schreibst: Du erreichst uns unter <span class="font-semibold">hallo(at)krausgedruckt.de</span>.</p>
                         {{  form_errors(form) }}
                         {{ form_row(form.name, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
                         {{ form_row(form.email, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
