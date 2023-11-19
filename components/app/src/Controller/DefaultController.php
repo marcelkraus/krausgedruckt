@@ -60,10 +60,4 @@ class DefaultController extends AbstractController
     {
         return $this->render('content/data-privacy.html.twig');
     }
-
-    #[Route('/demo', name: 'app_demo')]
-    public function demo(): Response
-    {
-        return $this->render('demo.html.twig');
-    }
 }
