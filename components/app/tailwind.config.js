@@ -14,7 +14,7 @@ module.exports = {
           primary: '#ffedd5' // Orange:100
         },
         brand: {
-          primary: '#f97316', // Orange:400
+          primary: '#f97316', // Orange:500
           secondary: '#4b5563', // Gray:600
         },
         placeholder: '#9ca3af', // Gray:400
