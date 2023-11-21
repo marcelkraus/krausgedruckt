@@ -4,31 +4,24 @@
             <span class="text-brand-primary">Dein heisser Draht.</span><br/>
             Lass uns schreiben.
         </h4>
-        <div class="flex flex-wrap text-lg">
+        <div class="flex flex-wrap items-center text-lg">
             <div class="w-full md:w-1/2">
-                <p class="mb-4 md:mb-0">
-                    Als nebenberuflich geführten Familienbetrieb erreichst du uns am besten per E-Mail.<br/>
-                    Wir freuen uns aber auch über Postkarten. <span class="font-semibold">Und Brieftauben.</span>
-                </p>
+                Als nebenberuflich geführten Familienbetrieb erreichst du uns am besten asynchron — per E-Mail.<br/>
+                <span class="font-semibold">Wir freuen uns aber auch über Postkarten!</span>
             </div>
             <div class="w-full md:w-1/2 md:text-right">
-                <p><span class="block text-lg font-semibold mb-2"><span class="text-brand-primary">kraus</span>gedruckt ist ein Angebot von:</span></p>
-                <p>
-                    Marcel Kraus<br/>
-                    Bonner Straße 88<br/>
-                    50374 Erftstadt
-                </p>
+                <div class="mt-4 md:mt-0 md:transform md:-rotate-3 text-2xl font-semibold inline-flex items-center p-4 rounded-xl bg-brand-primary text-white">
+                    hallo
+                    {% include('content/_at.html.twig') %}
+                    krausgedruckt.de
+                </div>
             </div>
         </div>
-        <hr class="my-4 border-white" />
-        <div class="flex text-sm">
-            <div class="flex-auto font-semibold">
-                © {{ 'now' | date('Y') }} <span class="text-brand-primary">kraus</span>gedruckt<br/>
-                From Erftstadt with ♥
-            </div>
-            <div class="flex-none text-right">
-                <a href="{{ path('app_imprint') }}">Impressum</a> | <a href="{{ path('app_data_privacy') }}">Datenschutz</a></a>
-            </div>
+        <hr class="mt-8 mb-4 border-brand-primary" />
+        <div class="relative text-xs text-right">
+            <img src="/images/krausgedruckt-logo-dark.png" class="absolute w-36 -mt-6 ml-4" alt="Logo von krausgedruckt, dem 3D-Druck-Service in Erftstadt" />
+            <span class="font-semibold">© {{ 'now' | date('Y') }}</span> &middot; From Erftstadt with ♥<br/>
+            <a href="{{ path('app_imprint') }}">Impressum</a> | <a href="{{ path('app_data_privacy') }}">Datenschutz</a></a>
         </div>
     </div>
 </footer>
