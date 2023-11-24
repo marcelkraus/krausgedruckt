@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends AbstractController
+class ContactController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/', methods: ['POST'])]
     public function index(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactRequestType::class, new ContactRequest());
@@ -26,7 +26,7 @@ class DefaultController extends AbstractController
                 ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
                 ->replyTo($contactRequest->getEmail())
                 ->subject('Neue Kontaktanfrage erhalten')
-                ->textTemplate('email/contact.txt.twig')
+                ->textTemplate('contact.txt.twig')
                 ->context([
                     'name' => $contactRequest->getName(),
                     'emailAddress' => $contactRequest->getEmail(),
@@ -37,27 +37,11 @@ class DefaultController extends AbstractController
 
             return $this->redirectToRoute('app_contact_confirmation');
         }
-
-        return $this->render('content/homepage.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
 
-    #[Route('/vielen-dank-fuer-deine-anfrage', name: 'app_contact_confirmation')]
+    #[Route('/vielen-dank-fuer-deine-anfrage', name: 'app_contact_confirmation', methods: ['GET'])]
     public function contactConfirmation(): Response
     {
-        return $this->render('content/contact-confirmation.html.twig');
-    }
-
-    #[Route('/impressum', name: 'app_imprint')]
-    public function imprint(): Response
-    {
-        return $this->render('content/imprint.html.twig');
-    }
-
-    #[Route('/datenschutz', name: 'app_data_privacy')]
-    public function dataPrivacy(): Response
-    {
-        return $this->render('content/data-privacy.html.twig');
+        return $this->render('contact/confirmation.html.twig');
     }
 }

@@ -128,22 +128,22 @@
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="flex justify-center">
                 <div class="w-full lg:w-1/2 flex shadow-xl rounded-xl bg-background-primary">
-                    {{ form_start(form, { 'attr': { 'class': 'flex-auto p-8 text-primary' } }) }}
+                    {{ form_start(contactForm, { 'attr': { 'class': 'flex-auto p-8 text-primary' } }) }}
                         <h4 class="text-2xl font-semibold text-brand-primary mb-4">
                             Interesse geweckt?<br/>
                             <span class="text-brand-secondary">Jetzt anfragen.</span>
                         </h4>
                         <p class="mb-4">Du hast Bock auf Druck? Dann nutze unser Kontaktformular, um uns schnell und einfach anzusprechen. Deine Anfrage ist natürlich unverbindlich und mit keinerlei Kosten verbunden.</p>
                         <p class="mb-4">Falls du lieber E-Mails schreibst: Du erreichst uns unter <span class="font-semibold">hallo(at)krausgedruckt.de</span>.</p>
-                        {{  form_errors(form) }}
-                        {{ form_row(form.name, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
-                        {{ form_row(form.email, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
-                        {{ form_row(form.message, { 'row_class': 'w-full mb-4', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
+                        {{  form_errors(contactForm) }}
+                        {{ form_row(contactForm.name, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
+                        {{ form_row(contactForm.email, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
+                        {{ form_row(contactForm.message, { 'row_class': 'w-full mb-4', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
                         <div class="text-right mb-4">
-                            {{ form_widget(form.submit, { 'attr': {  'class': 'text-brand-primary font-semibold px-4 py-2 border-2 border-current hover:text-white hover:border-brand-primary hover:bg-brand-primary rounded-xl shadow' } }) }}
+                            {{ form_widget(contactForm.submit, { 'attr': {  'class': 'text-brand-primary font-semibold px-4 py-2 border-2 border-current hover:text-white hover:border-brand-primary hover:bg-brand-primary rounded-xl shadow' } }) }}
                         </div>
-                        {{ form_rest(form) }}
-                    {{ form_end(form) }}
+                        {{ form_rest(contactForm) }}
+                    {{ form_end(contactForm) }}
                 </div>
             </div>
         </div>
