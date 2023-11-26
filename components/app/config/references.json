@@ -1,0 +1,76 @@
+[
+  {
+    "id": 4,
+    "date": "2023-11-29",
+    "title": "Ein Abfallbehälter mit Akzenten",
+    "images": [
+      {
+        "file": "abfallbehaelter-am-prusa-mk4.jpg",
+        "alt": "3D-gedruckter Abfalleimer, montiert an einem Prusa MK4"
+      }
+    ],
+    "description": "Dieser Abfallbehälter spart uns eine Menge Zeit und Nerven – er wird an der Seite unseres Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden — und uns bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt – das Ergebnis kann sich sehen lassen!",
+    "source": {
+      "title": "Prusa MK4 bin",
+      "url": "https://www.printables.com/de/model/526044-prusa-mk4-bin/comments",
+      "author": "mkoistinen"
+    }
+  },
+  {
+    "id": 3,
+    "date": "2023-11-24",
+    "title": "Ein sinnvoller Aufsatz für eine Kaffemühle",
+    "images": [
+      {
+        "file": "bauteile-der-erweiterung-einer-kaffeemuehle.jpg",
+        "alt": "Zweifarbig gedruckte Bauteile eines Aufsatzes für eine Kaffeemühle"
+      },
+      {
+        "file": "skala-mit-einstellknopf.jpg",
+        "alt": "Zweifarbig gedruckte Skala und Einstellknopf eines Aufsatzes für eine Kaffeemühle"
+      }
+    ],
+    "client": "Markus",
+    "description": "Dieser Aufsatz für eine Kaffeemühle besteht aus insgesamt fünf verschiedenen Teilen, die vor der Montage zusammengesteckt werden. Montiert sorgt der Aufsatz dann für ungetrübten Kaffeegenuß, da der Mahlgrad der Mühle nun sehr fein eingestellt werden kann.\n\nBei diesem Druck wird die Zweifarbigkeit auf ein neues Level gehoben — die weiße Beschriftung wird zuerst gedruckt, anschließend ein neuer Druck in schwarz gestartet.\n\nDie feine Druckauflösung von 0,1 mm ermöglicht die Montage mit Magneten und einer handelsüblichen M5-Schraube.",
+    "source": {
+      "title": "Grind Setting Dial V2.0 Universal Fit - Eureka Mignon",
+      "url": "https://www.printables.com/de/model/473351-updated-grind-setting-dial-v20-universal-fit-eurek",
+      "author": "ordnerino"
+    }
+  },
+  {
+    "id": 2,
+    "date": "2023-10-03",
+    "title": "Ein unscheinbares Helferlein",
+    "images": [
+      {
+        "file": "messwerkzeug-fuer-schrauben-und-muttern.jpg",
+        "alt": "3D-gedrucktes Werkzeug zum Messen von Schrauben und Muttern"
+      }
+    ],
+    "client": "James",
+    "description": "James und Marcel haben eine Werkstatt – und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren. 😉",
+    "source": {
+      "title": "Rapid Metric Screw Measuring Tool (M2-M5, up to 50mm)",
+      "url": "https://www.printables.com/de/model/208880-rapid-metric-screw-measuring-tool-m2-m5-up-to-50mm",
+      "author": "fivesixzero"
+    }
+  },
+  {
+    "id": 1,
+    "date": "2023-09-22",
+    "title": "Ein Klassiker zu Beginn",
+    "images": [
+      {
+        "file": "original-prusa-schluesselanhaenger.jpg",
+        "alt": "3D-gedruckter Schlüssenanhänger mit Prusa-Schriftzug"
+      }
+    ],
+    "description": "Ein neuer Drucker, ein neuer Schlüsselanhänger.\n\nNatürlich ist der erste Druck auf einem neuen Prusa MK4 standesgemäß genau dieses Beispielmodell.",
+    "source": {
+      "title": "Prusa Keychain - sample model",
+      "url": "https://www.printables.com/de/model/436740-prusa-keychain-sample-model",
+      "author": "Prusa Research"
+    }
+  }
+]

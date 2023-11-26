@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Referenzen | {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary relative">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <h2 class="text-4xl font-semibold text-brand-primary text-center">
+                Unsere Referenzen<br/>
+                <span class="text-brand-secondary">Ein Einblick in unsere bunte Welt</span>
+            </h2>
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                {% for reference in references %}
+                    <article class="flex flex-col gap-8 lg:flex-row mt-16">
+                        <div class="flex flex-col items-center">
+                            {% for image in reference.images %}
+                                <img class="rounded-full border-background-secondary border-8 -mt-16 first:mt-0 max-w-[12rem] lg:max-w-[16rem]" src="/images/references/{{ reference.id }}/{{ image.file }}" alt="{{ image.alt }}">
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <div class="text-sm">
+                                Gedruckt {% if reference.client %}für {{ reference.client }}{% endif%} am <time datetime="{{ reference.date | date('Y-m-d') }}">{{ reference.date | date('d.m.Y') }}</time>
+                            </div>
+                            <div class="group relative max-w-xl">
+                                <h3 class="mt-1 text-xl text-brand-primary font-semibold">{{  reference.title }}</h3>
+                                <div class="mt-4">
+                                    {{ reference.description | nl2br }}
+                                </div>
+                            </div>
+                            {% if reference.source %}
+                                <div class="mt-8 border-t border-brand-secondary border-dashed">
+                                    <div class="flex items-center text-sm -mt-[1px]">
+                                        <div class="text-background-secondary bg-brand-secondary p-5 rounded-b-md font-semibold">
+                                            Modell
+                                        </div>
+                                        <div class="px-4">
+                                            <a class="font-semibold" href="{{ reference.source.url }}" target="_blank">{{ reference.source.title }}</a><br/>
+                                            von {{ reference.source.author }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+                    {% if not loop.last %}
+                        <hr class="mx-32 my-16 border-brand-secondary" />
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Bottom Wedge -->
+
+        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-brand-secondary fill-current" points="2560,0 2560,100 0,100"></polygon>
+            </svg>
+        </div>
+    </section>
+{% endblock %}
