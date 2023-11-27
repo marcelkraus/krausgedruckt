@@ -30,22 +30,14 @@
                                 </div>
                             </div>
                             {% if reference.source %}
-                                <div class="mt-8 border-t border-brand-secondary border-dashed">
-                                    <div class="flex items-center text-sm -mt-[1px]">
-                                        <div class="text-background-secondary bg-brand-secondary p-5 rounded-b-md font-semibold">
-                                            Modell
-                                        </div>
-                                        <div class="px-4">
-                                            <a class="font-semibold" href="{{ reference.source.url }}" target="_blank">{{ reference.source.title }}</a><br/>
-                                            von {{ reference.source.author }}
-                                        </div>
-                                    </div>
+                                <div class="mt-8">
+                                    {% include 'partials/_model.html.twig' with { 'model': reference.source } %}
                                 </div>
                             {% endif %}
                         </div>
                     </article>
                     {% if not loop.last %}
-                        <hr class="mx-32 my-16 border-brand-secondary" />
+                        <hr class="my-16 border-brand-secondary border-dashed" />
                     {% endif %}
                 {% endfor %}
             </div>
