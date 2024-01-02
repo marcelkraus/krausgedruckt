@@ -1,1 +1,14 @@
-/artifacts/*
+###> custom ###
+/node_modules
+###< custom ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/public/images/references/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
