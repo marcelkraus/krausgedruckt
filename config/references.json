@@ -17,28 +17,6 @@
     }
   },
   {
-    "id": 3,
-    "date": "2023-11-24",
-    "title": "Ein sinnvoller Aufsatz für eine Kaffemühle",
-    "images": [
-      {
-        "file": "bauteile-der-erweiterung-einer-kaffeemuehle.jpg",
-        "alt": "Zweifarbig gedruckte Bauteile eines Aufsatzes für eine Kaffeemühle"
-      },
-      {
-        "file": "skala-mit-einstellknopf.jpg",
-        "alt": "Zweifarbig gedruckte Skala und Einstellknopf eines Aufsatzes für eine Kaffeemühle"
-      }
-    ],
-    "client": "Markus",
-    "description": "Dieser Aufsatz für eine Kaffeemühle besteht aus insgesamt fünf verschiedenen Teilen, die vor der Montage zusammengesteckt werden. Montiert sorgt der Aufsatz dann für ungetrübten Kaffeegenuß, da der Mahlgrad der Mühle nun sehr fein eingestellt werden kann.\n\nBei diesem Druck wird die Zweifarbigkeit auf ein neues Level gehoben — die weiße Beschriftung wird zuerst gedruckt, anschließend ein neuer Druck in schwarz gestartet.\n\nDie feine Druckauflösung von 0,1 mm ermöglicht die Montage mit Magneten und einer handelsüblichen M5-Schraube.",
-    "source": {
-      "title": "Grind Setting Dial V2.0 Universal Fit - Eureka Mignon",
-      "url": "https://www.printables.com/de/model/473351-updated-grind-setting-dial-v20-universal-fit-eurek",
-      "author": "ordnerino"
-    }
-  },
-  {
     "id": 2,
     "date": "2023-10-03",
     "title": "Ein unscheinbares Helferlein",
