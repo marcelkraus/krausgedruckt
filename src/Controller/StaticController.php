@@ -10,23 +10,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StaticController extends AbstractController
 {
-    #[Route('/', name: 'app_static_homepage', methods: ['GET'])]
-    public function index(): Response
+    #[Route('/datenschutz', name: 'app_data_privacy', methods: ['GET'])]
+    function dataPrivacy(): Response
+    {
+        return $this->render('static/data-privacy.html.twig');
+    }
+
+    #[Route('/', name: 'app_homepage', methods: ['GET'])]
+    function homepage(): Response
     {
         return $this->render('static/homepage.html.twig', [
             'contactForm' => $this->createForm(ContactRequestType::class, new ContactRequest()),
         ]);
     }
 
-    #[Route('/impressum', name: 'app_static_imprint', methods: ['GET'])]
-    public function imprint(): Response
+    #[Route('/impressum', name: 'app_imprint', methods: ['GET'])]
+    function imprint(): Response
     {
         return $this->render('static/imprint.html.twig');
-    }
-
-    #[Route('/datenschutz', name: 'app_static_data_privacy', methods: ['GET'])]
-    public function dataPrivacy(): Response
-    {
-        return $this->render('static/data-privacy.html.twig');
     }
 }

@@ -1,13 +1,13 @@
 <nav class="bg-white">
     <div class="container mx-auto p-8 flex flex-row items-center justify-items-end">
         <div class="flex-none">
-            <a href="{{ path('app_static_homepage') }}">
+            <a href="{{ path('app_homepage') }}">
                 <h1 class="hidden">krausgedruckt: 3D-Druck-Service in Erftstadt</h1>
                 <img src="/images/krausgedruckt-logo.png" class="h-16 max-h-16 md:h-24 md:max-h-24" alt="Logo von krausgedruckt, dem 3D-Druck-Service in Erftstadt" />
             </a>
         </div>
         <div class="flex-auto">
-            <div class="block md:hidden">
+            <div class="block lg:hidden">
                 <div class="flex justify-end">
                     <a class="cursor-pointer px-4 py-2 border border-brand-secondary hover:border-brand-primary text-brand-secondary hover:text-brand-primary rounded-md" type="button" onclick="toggleNavbar()">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5" id="navbar-icon-open">
@@ -19,10 +19,11 @@
                     </a>
                 </div>
             </div>
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
                 <div class="flex justify-end gap-2 uppercase text-sm">
-                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_static_homepage" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_static_homepage') }}">Wie und wer</a>
-                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_reference" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_reference') }}">Was</a>
+                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_homepage') }}">Über uns</a>
+                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_reference" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_reference') }}">Referenzen</a>
+                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_questions" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_questions') }}">Häufig gestellte Fragen</a>
                 </div>
             </div>
         </div>
@@ -31,10 +32,13 @@
         <hr class="border-background-secondary mb-4" />
         <ul class="flex flex-row justify-end gap-4 list-none uppercase text-sm font-semibold">
             <li class="items-center">
-                <a class="text-brand-secondary hover:text-brand-primary mb-4" href="{{ path('app_static_homepage') }}">Wie und wer</a>
+                <a class="text-brand-secondary hover:text-brand-primary mb-4" href="{{ path('app_homepage') }}">Über uns</a>
             </li>
             <li class="flex items-center">
-                <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_reference') }}">Was</a>
+                <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_reference') }}">Referenzen</a>
+            </li>
+            <li class="flex items-center">
+                <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_questions') }}">Häufig gestellte Fragen</a>
             </li>
         </ul>
     </div>

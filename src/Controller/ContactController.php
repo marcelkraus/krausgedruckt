@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContactController extends AbstractController
 {
     #[Route('/', methods: ['POST'])]
-    public function index(Request $request, MailerInterface $mailer): Response
+    function index(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactRequestType::class, new ContactRequest());
         $form->handleRequest($request);
@@ -40,7 +40,7 @@ class ContactController extends AbstractController
     }
 
     #[Route('/vielen-dank-fuer-deine-anfrage', name: 'app_contact_confirmation', methods: ['GET'])]
-    public function contactConfirmation(): Response
+    function contactConfirmation(): Response
     {
         return $this->render('contact/confirmation.html.twig');
     }

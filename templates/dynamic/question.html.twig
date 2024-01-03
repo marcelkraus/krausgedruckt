@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Häufig gestellte Fragen | {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary relative">
+
+        <!-- Top Wedge -->
+
+        <div class="w-full absolute top-0 bottom-auto left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-t overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-white fill-current" points="0,0 0,100 2560,0"></polygon>
+            </svg>
+        </div>
+
+        <!-- Content -->
+
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <h2 class="text-4xl font-semibold text-brand-primary text-center">
+                Häufig gestellte Fragen<br/>
+                <span class="text-brand-secondary">Du fragst, wir antworten</span>
+            </h2>
+            <div class="mx-auto max-w-2xl lg:max-w-4xl mt-16">
+                <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0">
+                    {% for question in questions %}
+                        {% if question.isActive %}
+                            <div>
+                                <dt class="text-base font-semibold">{{ question.question }}</dt>
+                                <dd class="mt-2 text-base">{{ question.answer }}</dd>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </dl>
+            </div>
+        </div>
+
+        <!-- Bottom Wedge -->
+
+        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-brand-secondary fill-current" points="2560,0 2560,100 0,100"></polygon>
+            </svg>
+        </div>
+    </section>
+{% endblock %}
