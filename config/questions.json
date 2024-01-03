@@ -12,7 +12,7 @@
     {
         "isActive": true,
         "title": "Könnt ihr auch mehrfarbig drucken?",
-        "content": "Zur Zeit können wir nur einzelne Layer deines Bauteils in abweichenden Farben drucken (siehe Referenzen für einige Beispiele). In naher Zukunft können wir auch richtigen Mehrfarbdruck anbieten."
+        "content": "Zur Zeit können wir nur einzelne Layer deines Bauteils in abweichenden Farben drucken (siehe [Referenzen für einige Beispiele](/referenzen)). In naher Zukunft können wir auch richtigen Mehrfarbdruck anbieten."
     },
     {
         "isActive": true,
@@ -33,5 +33,10 @@
         "isActive": true,
         "title": "Wie erhalte ich meine gedruckten Exemplare?",
         "content": "Entweder kommst du deine gedruckten Exemplare in 50374 Erftstadt abholen oder wir senden dir diese ganz einfach per Briefpost oder DHL zu."
+    },
+    {
+        "isActive": true,
+        "title": "Woher bekomme ich 3D-Modelle?",
+        "content": "Gute Adressen sind [www.printables.com](https://www.printables.com), [www.thingiverse.com](https://www.thingiverse.com) und [www.thangs.com](https://www.thangs.com). Bitte beachte bei der Auswahl und Verwendung der gedruckten Bauteile die Nutzungsrechte der jeweiligen Autoren."
     }
 ]

@@ -28,7 +28,7 @@
                         {% if question.isActive %}
                             <div>
                                 <dt class="text-base font-semibold">{{ question.question }}</dt>
-                                <dd class="mt-2 text-base">{{ question.answer }}</dd>
+                                <dd class="mt-2 text-base">{{ question.answer | markdown_to_html }}</dd>
                             </div>
                         {% endif %}
                     {% endfor %}
