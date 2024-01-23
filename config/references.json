@@ -1,14 +1,7 @@
 [
     {
         "id": 3,
-        "date": "2023-11-29",
         "title": "Ein Abfallbehälter mit Akzenten",
-        "images": [
-            {
-                "file": "abfallbehaelter-am-prusa-mk4.jpg",
-                "alt": "3D-gedruckter Abfalleimer, montiert an einem Prusa MK4"
-            }
-        ],
         "description": "Dieser Abfallbehälter spart uns eine Menge Zeit und Nerven – er wird an der Seite unseres Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden — und uns bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt – das Ergebnis kann sich sehen lassen!",
         "source": {
             "title": "Prusa MK4 bin",
@@ -18,15 +11,7 @@
     },
     {
         "id": 2,
-        "date": "2023-10-03",
         "title": "Ein unscheinbares Helferlein",
-        "images": [
-            {
-                "file": "messwerkzeug-fuer-schrauben-und-muttern.jpg",
-                "alt": "3D-gedrucktes Werkzeug zum Messen von Schrauben und Muttern"
-            }
-        ],
-        "client": "James",
         "description": "James und Marcel haben eine Werkstatt – und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren. 😉",
         "source": {
             "title": "Rapid Metric Screw Measuring Tool (M2-M5, up to 50mm)",
@@ -36,14 +21,7 @@
     },
     {
         "id": 1,
-        "date": "2023-09-22",
         "title": "Ein Klassiker zu Beginn",
-        "images": [
-            {
-                "file": "original-prusa-schluesselanhaenger.jpg",
-                "alt": "3D-gedruckter Schlüssenanhänger mit Prusa-Schriftzug"
-            }
-        ],
         "description": "Ein neuer Drucker, ein neuer Schlüsselanhänger.\n\nNatürlich ist der erste Druck auf einem neuen Prusa MK4 standesgemäß genau dieses Beispielmodell.",
         "source": {
             "title": "Prusa Keychain - sample model",
