@@ -10,6 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StaticController extends AbstractController
 {
+    #[Route('/app', name: 'app_app', methods: ['GET'])]
+    function app(): Response
+    {
+        return $this->render('static/app.html.twig');
+    }
+
     #[Route('/datenschutz', name: 'app_data_privacy', methods: ['GET'])]
     function dataPrivacy(): Response
     {

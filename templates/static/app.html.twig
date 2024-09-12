@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    krausgerechnet: Die App | {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary relative">
+
+        <!-- Top Wedge -->
+
+        <div class="w-full absolute top-0 bottom-auto left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-t overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-white fill-current" points="0,0 0,100 2560,0"></polygon>
+            </svg>
+        </div>
+
+        <!-- Content -->
+
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <h2 class="text-4xl font-semibold text-brand-primary text-center">
+                krausgerechnet<br/>
+                <span class="text-brand-secondary">Der 3D-Druck-Kostenrechner für Apple iOS</span>
+            </h2>
+            <div class="mx-auto max-w-2xl lg:max-w-4xl mt-16">
+                Wir sind Fans von Transparenz und Fairness, aus diesem Grund haben wir uns an die Arbeit gemacht und eine kostenlose App für Apple-Geräte (iPhone, iPad, macOS in Vorbereitung) bereitgestellt.
+
+                „krausgerechnet“ ist der logische nächste Schritt und eine nicht nur namentlich passende Ergänzung zu „krausgerechnet“. Mit Hilfe dieser App behälst du den Überblick über die Kosten deiner 3D-Druck-Projekte.
+
+                Vorteile:
+
+                *
+            </div>
+        </div>
+
+        <!-- Bottom Wedge -->
+
+        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-brand-secondary fill-current" points="2560,0 2560,100 0,100"></polygon>
+            </svg>
+        </div>
+    </section>
+{% endblock %}
