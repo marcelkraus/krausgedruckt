@@ -1,0 +1,11 @@
+antispam:
+    profiles:
+        default:
+            honeypot: email_address
+            timer:
+                min: 3
+                max: 3600
+
+when@test:
+    antispam:
+        enabled: false
