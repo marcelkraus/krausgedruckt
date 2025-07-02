@@ -16,7 +16,9 @@ class ContactController extends AbstractController
     #[Route('/', methods: ['POST'])]
     function index(Request $request, MailerInterface $mailer): Response
     {
-        $form = $this->createForm(ContactRequestType::class, new ContactRequest());
+        $form = $this->createForm(ContactRequestType::class, new ContactRequest(), [
+            'antispam_profile' => 'default',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

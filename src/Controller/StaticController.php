@@ -20,7 +20,9 @@ class StaticController extends AbstractController
     function homepage(): Response
     {
         return $this->render('static/homepage.html.twig', [
-            'contactForm' => $this->createForm(ContactRequestType::class, new ContactRequest()),
+            'contactForm' => $this->createForm(ContactRequestType::class, new ContactRequest(), [
+                'antispam_profile' => 'default',
+            ]),
         ]);
     }
 
