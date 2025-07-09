@@ -2,7 +2,7 @@
     {
         "id": 7,
         "title": "Bequemes Schrauben am Tamiya BBX",
-        "description": "Als großer Fan von RC-Cars aller Art lässt sich dieses Hobby auch mit dem 3D-Druck verbinden.\n\nFür den neuen Buggy von Tamiya, dem Tamiya BBX, haben wir einen passenden Ständer gedruckt – so lässt sich bequem daran arbeiten.\n\nSobald die MMU-Einheit für den Mehrfarbdruck verfügbar ist, erfolgt ein Neuausdruck mit farbigem Tamiya-Logo.",
+        "description": "Als großer Fan von RC-Cars aller Art lässt sich dieses Hobby auch mit dem 3D-Druck verbinden.\n\nFür den neuen Buggy von Tamiya, dem Tamiya BBX, habe ich einen passenden Ständer gedruckt – so lässt sich bequem daran arbeiten.\n\nSobald die MMU-Einheit für den Mehrfarbdruck verfügbar ist, erfolgt ein Neuausdruck mit farbigem Tamiya-Logo.",
         "source": {
             "title": "Stand for Tamiya BBX buggy",
             "url": "https://www.printables.com/model/724690-stand-for-tamiya-bbx-buggy",
@@ -12,11 +12,11 @@
     {
         "id": 6,
         "title": "Eine Postkarte in Ehren",
-        "description": "Als großer Fan von Postkarten mussten wir natürlich eine Möglichkeit finden, die Postkarten unseres „Jurassic Jeep“ zu präsentieren.\n\nDas simple Design ist schnell zu drucken und orientiert sich in der Optik passenderweise an den Betonblöcken aus „Jurassic Park“.",
+        "description": "Als großer Fan von Postkarten musste ich natürlich eine Möglichkeit finden, die Postkarten meines „Jurassic Jeep“ zu präsentieren.\n\nDas simple Design ist schnell zu drucken und orientiert sich in der Optik passenderweise an den Betonblöcken der Zäune aus „Jurassic Park“.",
         "source": {
             "title": "Plain (but Jurassic) Postcard Holder",
             "url": "https://www.printables.com/model/585122-plain-but-jurassic-postcard-holder",
-            "author": "WhteRbt (= krausgedruckt)"
+            "author": "krausgedruckt"
         }
     },
     {
@@ -26,13 +26,13 @@
         "source": {
             "title": "Plain (but Jurassic) Business Card Holder",
             "url": "https://www.printables.com/model/585117-plain-but-jurassic-business-card-holder",
-            "author": "WhteRbt (= krausgedruckt)"
+            "author": "krausgedruckt"
         }
     },
     {
         "id": 4,
         "title": "Werkzeuge für 3D-Drucker aus dem 3D-Drucker",
-        "description": "Die Idee ist so simpel wie genial: 3D-Drucker drucken Werkzeuge (und Teile) für andere 3D-Drucker.\n\nHier als Beispiel zwei Werkzeuge zum Wechsel der Nozzle (= Düse) eines Prusa MK4, den wir für unsere Kunden einsetzen.",
+        "description": "Die Idee ist so simpel wie genial: 3D-Drucker drucken Werkzeuge (und Teile) für andere 3D-Drucker.\n\nHier als Beispiel zwei Werkzeuge zum Wechsel der Nozzle (= Düse) eines Prusa MK4, den ich für meine Kunden einsetze.",
         "source": {
             "title": "MK4 Nextruder Nozzle Change Heater Block Clamp",
             "url": "https://www.printables.com/model/624027-mk4-nextruder-nozzle-change-heater-block-clamp",
@@ -42,7 +42,7 @@
     {
         "id": 3,
         "title": "Ein Abfallbehälter mit Akzenten",
-        "description": "Dieser Abfallbehälter spart uns eine Menge Zeit und Nerven – er wird an der Seite unseres Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden — und uns bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt – das Ergebnis kann sich sehen lassen!",
+        "description": "Der Abfallbehälter spart mir eine Menge Zeit und Nerven – er wird an der Seite meines Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden — und mir bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt – das Ergebnis kann sich sehen lassen!",
         "source": {
             "title": "Prusa MK4 bin",
             "url": "https://www.printables.com/model/526044-prusa-mk4-bin",
@@ -52,7 +52,7 @@
     {
         "id": 2,
         "title": "Ein unscheinbares Helferlein",
-        "description": "James und Marcel haben eine Werkstatt – und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren. 😉",
+        "description": "Mein Freund James und ich haben eine Werkstatt – und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren. 😉",
         "source": {
             "title": "Rapid Metric Screw Measuring Tool (M2-M5, up to 50mm)",
             "url": "https://www.printables.com/model/208880-rapid-metric-screw-measuring-tool-m2-m5-up-to-50mm",

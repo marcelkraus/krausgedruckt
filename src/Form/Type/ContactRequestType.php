@@ -25,6 +25,7 @@ class ContactRequestType extends AbstractType {
             ])
             ->add('message', TextareaType::class, [
                 'label' => false,
+                'help' => 'Bitte beachte, dass Nachrichten mit mehr als einer URL aus Sicherheitsgründen ausgefiltert werden. Schreibe mir in dem Fall am besten eine E-Mail.',
                 'attr' => [
                     'rows' => 5,
                     'placeholder' => 'Deine Nachricht',

@@ -21,10 +21,10 @@
             </div>
             <div class="hidden lg:block">
                 <div class="flex justify-end gap-2 uppercase text-sm">
-                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_homepage') }}">Über uns</a>
+                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_homepage') }}">Über mich</a>
                     <a class="border px-4 py-2 rounded-md text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary" href="{{ path('app_homepage') }}#kontakt">Kontakt</a>
                     <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_reference" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_reference') }}">Referenzen</a>
-                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_questions" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_questions') }}">Häufig gestellte Fragen</a>
+                    <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_faq" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_reference') }}">Referenzen</a>
             </li>
             <li class="flex items-center">
-                <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_questions') }}">Häufig gestellte Fragen</a>
+                <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_faq') }}">Häufig gestellte Fragen</a>
             </li>
         </ul>
     </div>

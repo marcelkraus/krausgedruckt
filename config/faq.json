@@ -1,0 +1,42 @@
+[
+    {
+        "isActive": true,
+        "title": "Welche Materialien kannst du drucken?",
+        "content": "PLA, PETG, ASA und PA12/CF15 sind immer auf Lager – auch andere Materialien sind nach Rücksprache zu beschaffen und zu verarbeiten. Ich empfehle dir gerne ein passendes Material."
+    },
+    {
+        "isActive": true,
+        "title": "Welche Farben sind möglich?",
+        "content": "Materialien wie PLA liegen immer in den Standardfarben (z.B. Schwarz, Weiß, Grau, Blau, Rot, Grün) auf Lager. Generell sind aber alle Farben möglich, in denen es Filament gibt – hier kann es nur ggf. zu Aufpreisen kommen, wenn bestimmte Farben beschafft werden müssen."
+    },
+    {
+        "isActive": true,
+        "title": "Kannst du auch mehrfarbig drucken?",
+        "content": "Ja, ein gleichzeitiger Druck deines Bauteils in mehreren Farben ist möglich. Siehe [Referenzen für einige Beispiele](/referenzen)."
+    },
+    {
+        "isActive": true,
+        "title": "Wie groß kannst du drucken?",
+        "content": "Die maximal druckbaren Abmessungen sind 245 x 245 x 260 mm (Länge x Breite x Höhe). Brauchst du es noch größer, habe ich über mein Netzwerk Zugriff auf größere Drucker – oder ich drucke dein Bauteil in mehreren Teilen."
+    },
+    {
+        "isActive": true,
+        "title": "Wie lange dauert die Fertigung?",
+        "content": "Die Drucker laufen generell 12 bis 24 Stunden am Tag an sieben Tagen pro Woche. Je nach Auslastung und benötigter Menge kann ich deinen Druckwunsch daher in der Regel binnen weniger Tage erfüllen."
+    },
+    {
+        "isActive": true,
+        "title": "Gibt es Mindest-Abnahmemengen?",
+        "content": "Nein, Drucke sind generell ab einem Stück möglich. Nicht unerwähnt bleiben sollte aber, dass mit steigenden Stückzahlen gleicher 3D-Modelle indirekt auch der Preis pro Stück sinkt – der grundsätzliche Aufwand für die einmalige Vorbereitung bleibt ja konstant."
+    },
+    {
+        "isActive": true,
+        "title": "Wie erhalte ich meine gedruckten Teile?",
+        "content": "Entweder kommst du deine gedruckten Teile abholen oder ich sende dir diese ganz einfach zu. Du erhälst eine Rechnung mit ausgewiesener Mehrwertsteuer und zahlst bequem per Überweisung."
+    },
+    {
+        "isActive": true,
+        "title": "Woher bekomme ich weitere 3D-Modelle?",
+        "content": "Gute Adressen sind [www.printables.com](https://www.printables.com), [www.thingiverse.com](https://www.thingiverse.com) und [www.thangs.com](https://www.thangs.com). Bitte beachte bei der Auswahl und Verwendung der gedruckten Bauteile die Nutzungsrechte der jeweiligen Autoren."
+    }
+]

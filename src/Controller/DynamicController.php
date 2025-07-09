@@ -21,16 +21,16 @@ class DynamicController extends AbstractController
         );
     }
 
-    #[Route('/haeufig-gestellte-fragen', name: 'app_questions', methods: ['GET'])]
-    function questions(): Response
+    #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
+    function faq(): Response
     {
         $questions = $this->serializer->deserialize(
-            file_get_contents("../config/questions.json"),
+            file_get_contents("../config/faq.json"),
             'App\Entity\Question[]',
             'json'
         );
 
-        return $this->render('dynamic/question.html.twig', [
+        return $this->render('dynamic/faq.html.twig', [
             'questions' => $questions,
         ]);
     }

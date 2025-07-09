@@ -1,0 +1,6 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+{%- block form_help -%}
+    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('mt-2 text-primary text-sm')) }) -%}
+    {{- parent() -}}
+{%- endblock form_help -%}
