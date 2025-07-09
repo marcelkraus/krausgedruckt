@@ -5,6 +5,10 @@ antispam:
             timer:
                 min: 3
                 max: 3600
+            banned_markup: true
+            url_count:
+                max: 2
+                max_identical: 1
 
 when@test:
     antispam:
