@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Häufig gestellte Fragen | {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <h2 class="text-4xl font-semibold text-brand-primary mb-16 lg:mb-24">
+                    Häufig gestellte Fragen.<br/>
+                    <span class="text-brand-secondary">Du fragst, ich antworte.</span>
+                </h2>
+                <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0">
+                    {% for question in questions %}
+                        {% if question.isActive %}
+                            <div>
+                                <dt class="text-base font-semibold">{{ question.question }}</dt>
+                                <dd class="mt-2 text-base prose prose-a:text-brand-primary prose-a:no-underline">{{ question.answer | markdown_to_html }}</dd>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </dl>
+            </div>
+        </div>
+    </section>
+{% endblock %}

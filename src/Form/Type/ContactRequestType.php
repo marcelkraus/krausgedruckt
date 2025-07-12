@@ -34,7 +34,7 @@ class ContactRequestType extends AbstractType {
         ;
 
         $form->add('submit', SubmitType::class, [
-            'label' => 'Anfrage senden'
+            'label' => 'Nachricht senden'
         ])
         ;
     }

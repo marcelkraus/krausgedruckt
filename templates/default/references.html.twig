@@ -5,26 +5,15 @@
 {% endblock %}
 
 {% block main %}
-    <section class="bg-background-secondary relative">
-
-        <!-- Top Wedge -->
-
-        <div class="w-full absolute top-0 bottom-auto left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
-            <svg class="absolute bottom-t overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
-                <polygon class="text-white fill-current" points="0,0 0,100 2560,0"></polygon>
-            </svg>
-        </div>
-        
-        <!-- Content -->
-
+    <section class="bg-background-secondary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
-            <h2 class="text-4xl font-semibold text-brand-primary text-center">
-                Meine Referenzen.<br/>
-                <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
-            </h2>
             <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <h2 class="text-4xl font-semibold text-brand-primary mb-16 lg:mb-24">
+                    Meine Referenzen.<br/>
+                    <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
+                </h2>
                 {% for reference in references %}
-                    <article class="flex flex-col gap-8 lg:flex-row mt-16">
+                    <article class="flex flex-col gap-8 lg:flex-row">
                         <div class="flex flex-col items-center">
                             {% for filename in reference.images %}
                                 <img class="rounded-full border-background-secondary border-8 -mt-16 first:mt-0 max-w-[12rem] lg:max-w-[16rem]" src="/images/references/{{ reference.id }}/{{ filename }}" alt="Foto des Modells „{{ reference.title }}“">
@@ -39,7 +28,7 @@
                             </div>
                             {% if reference.source %}
                                 <div class="mt-8">
-                                    {% include 'partials/_model.html.twig' with { 'model': reference.source } %}
+                                    {% include '_model.html.twig' with { 'model': reference.source } %}
                                 </div>
                             {% endif %}
                         </div>
@@ -49,14 +38,6 @@
                     {% endif %}
                 {% endfor %}
             </div>
-        </div>
-
-        <!-- Bottom Wedge -->
-
-        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
-            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
-                <polygon class="text-brand-secondary fill-current" points="2560,0 2560,100 0,100"></polygon>
-            </svg>
         </div>
     </section>
 {% endblock %}

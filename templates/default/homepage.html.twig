@@ -16,7 +16,7 @@
                     </h1>
                     <div class="text-2xl">
                         <p class="mb-4 md:mb-8">
-                            Ich biete individuelle 3D-Druck-Dienstleistungen: Kompetent, zeitnah, bezahlbar.
+                            Ich biete dir individuelle 3D-Druck-Dienstleistungen:<br/>Kompetent, zeitnah und bezahlbar.
                         </p>
                         <p>
                             Nicht nur ausgedruckt.<br/>
@@ -44,7 +44,7 @@
                         <span class="text-brand-secondary">Vielschichtig.</span>
                     </h3>
                     <div class="text-base">
-                        <p class="mb-4">Mit meinem 3D-Druck-Service biete ich dir ein umfassendes Angebot für die additive Fertigung von Bauteilen aller Art. Gerne bringe ich dein 3D-Modell in die Realität!</p>
+                        <p class="mb-4">Als 3D-Druck-Dienstleister biete ich dir ein umfassendes Angebot für die additive Fertigung von Bauteilen aller Art. Gerne bringe ich dein 3D-Modell in die Realität!</p>
                         <p class="mb-4">Dabei langweile ich dich weder mit Materialschlachten, noch haue ich dir Fachbegriffe um die Ohren. Du sagst mir, wofür du dein gewünschtes Teil benötigst und ich empfehle dir das passende Material.</p>
                         <p class="mb-4">Ob du anschließend ein, zwei, zehn oder hundert Ausdrucke deines Teils benötigst, ist egal — denn es gibt keine Mindestabnahmemenge.</p>
                         <p class="mb-4">Neben diesem ganz auf dich und deine individuellen Wünsche zugeschnittenen Service plane ich in Zukunft auch eine Reihe handverlesener Produkte zum Direktkauf anzubieten. Du wählst nur das gewünschte Produkt, Menge und Farbe – und der Drucker legt los!</p>
@@ -106,38 +106,6 @@
                             <p>Good Boy</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
-            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
-                <polygon class="text-brand-primary fill-current" points="2560,0 2560,100 0,100"></polygon>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Contact -->
-
-    <section class="bg-brand-primary relative" id="kontakt">
-        <div class="container mx-auto px-8 py-16 lg:py-24">
-            <div class="flex justify-center">
-                <div class="w-full lg:w-1/2 flex shadow-xl rounded-xl bg-background-primary">
-                    {{ form_start(contactForm, { 'attr': { 'class': 'flex-auto p-8 text-primary' } }) }}
-                        <h4 class="text-2xl font-semibold text-brand-primary mb-4">
-                            Du hast Bock auf Druck?<br/>
-                            <span class="text-brand-secondary">Dann frage mich jetzt an.</span>
-                        </h4>
-                        <p class="mb-4">Nutze das nachfolgende Kontaktformular, um mich schnell und einfach anzusprechen. Deine Anfrage ist natürlich unverbindlich und mit keinerlei Kosten verbunden.</p>
-                        <p class="mb-4">Falls du lieber E-Mails schreibst: Du erreichst mich unter <span class="font-semibold">hallo(at)krausgedruckt.de</span>.</p>
-                        {{  form_errors(contactForm) }}
-                        {{ form_row(contactForm.name, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
-                        {{ form_row(contactForm.email, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
-                        {{ form_row(contactForm.message, { 'row_class': 'w-full mb-4', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
-                        <div class="text-right mb-4">
-                            {{ form_widget(contactForm.submit, { 'attr': {  'class': 'text-brand-primary font-semibold px-4 py-2 border-2 border-current hover:text-white hover:border-brand-primary hover:bg-brand-primary rounded-xl shadow' } }) }}
-                        </div>
-                        {{ form_rest(contactForm) }}
-                    {{ form_end(contactForm) }}
                 </div>
             </div>
         </div>

@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
-    <title>{% block title %}krausgedruckt: 3D-Druck-Service in Erftstadt{% endblock %}</title>
-    <meta property="description" content="Individueller 3D-Druck-Service und handgemachte Produkte: Du hast die Vision, wir machen sie greifbar!" />
+    <title>{% block title %}krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt{% endblock %}</title>
+    <meta property="description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://krausgedruckt.de" />
-    <meta property="og:title" content="krausgedruckt in Erftstadt bei Köln" />
-    <meta property="og:description" content="Individueller 3D-Druck-Service und handgemachte Produkte: Du hast die Vision, wir machen sie greifbar!" />
+    <meta property="og:title" content="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+    <meta property="og:description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
     <meta property="og:image" content="https://krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:domain" content="krausgedruckt.de" />
     <meta property="twitter:url" content="https://krausgedruckt.de" />
-    <meta property="twitter:title" content="krausgedruckt in Erftstadt bei Köln" />
-    <meta property="twitter:description" content="Individueller 3D-Druck-Service und handgemachte Produkte: Du hast die Vision, wir machen sie greifbar!" />
+    <meta property="twitter:title" content="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+    <meta property="twitter:description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
     <meta property="twitter:image" content="https://krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
     {% block meta %}{% endblock %}
     <script type="text/javascript">
@@ -35,13 +35,91 @@
 </head>
 <body class="antialiased">
     {% block nav %}
-        {% include 'partials/_nav.html.twig' %}
+        <nav class="bg-white">
+            <div class="container mx-auto p-8 flex flex-row items-center justify-items-end">
+                <div class="flex-none">
+                    <a href="{{ path('app_homepage') }}">
+                        <h1 class="hidden">krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt</h1>
+                        <img src="/images/krausgedruckt-logo.png" class="h-16 max-h-16 md:h-24 md:max-h-24" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+                    </a>
+                </div>
+                <div class="flex-auto">
+                    <div class="block lg:hidden">
+                        <div class="flex justify-end">
+                            <a class="cursor-pointer px-4 py-2 border border-brand-secondary hover:border-brand-primary text-brand-secondary hover:text-brand-primary rounded-md" type="button" onclick="toggleNavbar()">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5" id="navbar-icon-open">
+                                    <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 hidden" id="navbar-icon-close">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block">
+                        <div class="flex justify-end gap-2 uppercase text-sm">
+                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
+                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_contact" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
+                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_references" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
+                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_faq" %}text-white border-brand-primary bg-brand-primary{% else %}text-brand-secondary hover:text-brand-primary border-brand-secondary hover:border-brand-primary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mx-auto px-8 pb-4 hidden" id="navbar-menu">
+                <hr class="border-background-secondary mb-4" />
+                <ul class="flex flex-row justify-end gap-4 list-none uppercase text-sm font-semibold">
+                    <li class="items-center">
+                        <a class="text-brand-secondary hover:text-brand-primary mb-4" href="{{ path('app_homepage') }}">Übersicht</a>
+                    </li>
+                    <li class="items-center">
+                        <a class="text-brand-secondary hover:text-brand-primary mb-4" href="{{ path('app_contact') }}">Kontakt</a>
+                    </li>
+                    <li class="flex items-center">
+                        <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_references') }}">Referenzen</a>
+                    </li>
+                    <li class="flex items-center">
+                        <a class="text-brand-secondary hover:text-brand-primary" href="{{ path('app_faq') }}">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <script type="text/javascript">
+            function toggleNavbar() {
+                document.getElementById('navbar-menu').classList.toggle('hidden');
+                document.getElementById('navbar-icon-open').classList.toggle('hidden');
+                document.getElementById('navbar-icon-close').classList.toggle('hidden');
+            }
+        </script>
     {% endblock %}
     <main>
         {% block main %}{% endblock %}
     </main>
     {% block footer %}
-        {% include 'partials/_footer.html.twig' %}
+        <footer class="bg-brand-secondary text-white relative">
+            <div class="container mx-auto px-8 pt-16 lg:pt-24 pb-8">
+                <h4 class="text-2xl font-semibold mb-8">
+                    <span class="text-brand-primary">Dein heisser Draht.</span><br/>
+                    Lass uns schreiben.
+                </h4>
+                <div class="flex flex-wrap items-center text-lg">
+                    <div class="w-full md:w-1/2">
+                        <span class="font-semibold"><span class="text-brand-primary">kraus</span><span class="text-white">gedruckt</span></span> ist ein Nebengewerbe, am besten erreichst du mich daher schriftlich. Ich freue mich auf deine Mails – und Postkarten!
+                    </div>
+                    <div class="w-full md:w-1/2 md:text-right">
+                        <a class="mt-4 md:mt-0 md:transform md:-rotate-3 text-2xl font-semibold inline-flex items-center p-4 rounded-xl bg-brand-primary hover:bg-background-primary text-background-primary hover:text-brand-primary" href="{{ path('app_contact') }}">Schreibe mir!</a>
+                    </div>
+                </div>
+                <hr class="mt-8 mb-4 border-brand-primary" />
+                <div class="md:flex md:justify-between">
+                    <img src="/images/krausgedruckt-logo-dark.png" class="h-12 max-h-12 -mt-6 ml-0 md:ml-2 ml-auto" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+                    <div class="mt-4 md:mt-0 text-xs text-right">
+                        © 2023 – {{ 'now' | date('Y') }} Marcel Kraus, Erftstadt<br/>
+                        <a href="{{ path('app_imprint') }}">Impressum</a> | <a href="{{ path('app_data_privacy') }}">Datenschutz</a></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
     {% endblock %}
 </body>
 </html>
