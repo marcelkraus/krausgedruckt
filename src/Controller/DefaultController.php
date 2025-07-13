@@ -64,6 +64,16 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    #[Route('/kontakt-per-email', name: 'app_contact_email', methods: ['GET'])]
+    function emailRedirect(): Response {
+        return $this->redirect('mailto:hallo@krausgedruckt.de');
+    }
+
+    #[Route('/kontakt-per-whats-app', name: 'app_contact_whats_app', methods: ['GET'])]
+    function whatsAppRedirect(): Response {
+        return $this->redirect('https://wa.me/message/TKVKBR7RPHA7B1');
+    }
+
     #[Route('/kontakt/bestaetigung', name: 'app_contact_confirmation', methods: ['GET'])]
     function contactConfirmation(): Response
     {

@@ -14,7 +14,7 @@
                 </h2>
                 {{ form_start(contactForm) }}
                 <p class="mb-4">Nutze das nachfolgende Kontaktformular, um mich schnell und einfach anzusprechen. Deine Anfrage ist natürlich unverbindlich und mit keinerlei Kosten verbunden.</p>
-                <p class="mb-8">Falls du lieber E-Mails schreibst: Du erreichst mich unter <span class="font-semibold">hallo(at)krausgedruckt.de</span>.</p>
+                <p class="mb-8">Tipp: Falls du keine Kontaktformulare magst, erreichst du mich auch <a class="text-brand-primary hover:underline" href="{{ path('app_contact_email') }}">per E-Mail</a> oder <a class="text-brand-primary hover:underline" href="{{ path('app_contact_whats_app') }}">per WhatsApp</a>.</p>
                 {{  form_errors(contactForm) }}
                 {{ form_row(contactForm.name, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}
                 {{ form_row(contactForm.email, { 'row_class': 'w-full mb-2', 'widget_class': 'w-full placeholder-placeholder border-0 px-4 py-2 bg-white rounded-xl shadow focus:ring-0' }) }}

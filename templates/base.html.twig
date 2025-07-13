@@ -96,24 +96,28 @@
         {% block main %}{% endblock %}
     </main>
     {% block footer %}
-        <footer class="bg-brand-secondary text-white relative">
+        <footer class="bg-brand-secondary text-white">
             <div class="container mx-auto px-8 pt-16 lg:pt-24 pb-8">
                 <h4 class="text-2xl font-semibold mb-8">
                     <span class="text-brand-primary">Dein heisser Draht.</span><br/>
                     Lass uns schreiben.
                 </h4>
-                <div class="flex flex-wrap items-center text-lg">
-                    <div class="w-full md:w-1/2">
-                        <span class="font-semibold"><span class="text-brand-primary">kraus</span><span class="text-white">gedruckt</span></span> ist ein Nebengewerbe, am besten erreichst du mich daher schriftlich. Ich freue mich auf deine Mails – und Postkarten!
+                <div class="flex flex-wrap">
+                    <div class="w-full xl:w-1/2">
+                        <span class="font-semibold"><span class="text-brand-primary">kraus</span><span class="text-white">gedruckt</span></span> ist eine Nebenbeschäftigung, am besten erreichst du mich daher schriftlich. <span class="font-semibold">Ich freue mich auf deine Nachricht!</span>
                     </div>
-                    <div class="w-full md:w-1/2 md:text-right">
-                        <a class="mt-4 md:mt-0 md:transform md:-rotate-3 text-2xl font-semibold inline-flex items-center p-4 rounded-xl bg-brand-primary hover:bg-background-primary text-background-primary hover:text-brand-primary" href="{{ path('app_contact') }}">Schreibe mir!</a>
+                    <div class="w-full xl:w-1/2">
+                        <div class="flex gap-4 justify-start xl:justify-end mt-4 xl:mt-0">
+                            <a class="font-semibold px-4 py-2 rounded-xl border-2 border-brand-primary text-brand-primary hover:text-white bg-background-primary hover:bg-brand-primary" href="{{ path('app_contact') }}">Per Kontaktformular</a>
+                            <a class="font-semibold px-4 py-2 rounded-xl border-2 border-brand-primary text-brand-primary hover:text-white bg-background-primary hover:bg-brand-primary" href="{{ path('app_contact_email') }}">Per E-Mail</a>
+                            <a class="font-semibold px-4 py-2 rounded-xl border-2 border-brand-primary text-brand-primary hover:text-white bg-background-primary hover:bg-brand-primary" href="{{ path('app_contact_whats_app') }}">Per WhatsApp</a>
+                        </div>
                     </div>
                 </div>
                 <hr class="mt-8 mb-4 border-brand-primary" />
                 <div class="md:flex md:justify-between">
-                    <img src="/images/krausgedruckt-logo-dark.png" class="h-12 max-h-12 -mt-6 ml-0 md:ml-2 ml-auto" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
-                    <div class="mt-4 md:mt-0 text-xs text-right">
+                    <img src="/images/krausgedruckt-logo-dark.png" class="h-12 max-h-12 -mt-6 ml-4" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+                    <div class="mt-4 md:mt-0 ml-4 md:ml-0 text-xs md:text-right">
                         © 2023 – {{ 'now' | date('Y') }} Marcel Kraus, Erftstadt<br/>
                         <a href="{{ path('app_imprint') }}">Impressum</a> | <a href="{{ path('app_data_privacy') }}">Datenschutz</a></a>
                     </div>

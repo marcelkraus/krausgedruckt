@@ -12,7 +12,7 @@ Impressum | {{  parent() }}
     <section class="bg-brand-primary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="flex justify-center">
-                <div class="w-full lg:w-2/3 xl:w-1/2 mshadow-xl rounded-xl bg-background-primary p-8 prose prose-headings:text-primary prose-p:text-primary prose-a:text-brand-primary prose-a:no-underline prose-h2:text-brand-primary max-w-none">
+                <div class="w-full lg:w-2/3 xl:w-1/2 mshadow-xl rounded-xl bg-background-primary p-8 prose prose-headings:text-primary prose-p:text-primary prose-a:text-brand-primary prose-a:no-underline hover:prose-a:underline prose-h2:text-brand-primary max-w-none">
                     <h2 class="text-brand-primary">Impressum</h2>
                     <p>Stand: 25. Juni 2024</p>
                     <p>Die folgenden Adressinformationen werden nur aus Gründen der Rechtssicherheit gegeben. Jeglicher Missbrauch wird entsprechend geahndet.</p>
@@ -28,9 +28,9 @@ Impressum | {{  parent() }}
                         Umsatzsteuer Identifikationsnummer (USt-ID): DE176192769
                     </p>
                     <p>
-                        E-Mail: hallo (at) krausgedruckt.de<br/>
+                        E-Mail: <a href="{{ path('app_contact_email') }}">hallo (at) krausgedruckt (punkt) de</a><br/>
                         Telefon: +49 156 79419596 (Mo. bis Fr. von 14-18 Uhr)<br/>
-                        Bevorzugt erfolgt der Erstkontakt per E-Mail oder <a href="{{ path('app_contact') }}">über unser Kontaktformular</a>
+                        Bevorzugt erfolgt der Erstkontakt <a href="{{ path('app_contact_email') }}">per E-Mail</a>, <a href="{{ path('app_contact_whats_app') }}">per WhatsApp</a> oder <a href="{{ path('app_contact') }}">per Kontaktformular</a>
                     </p>
                     <h3>Bildnachweise</h3>
                     <ul>
