@@ -7,22 +7,27 @@
     {
         "isActive": true,
         "title": "Welche Farben sind möglich?",
-        "content": "Materialien wie PLA liegen immer in den Standardfarben (z.B. Schwarz, Weiß, Grau, Blau, Rot, Grün) auf Lager. Generell sind aber alle Farben möglich, in denen es Filament gibt – hier kann es nur ggf. zu Aufpreisen kommen, wenn bestimmte Farben beschafft werden müssen."
+        "content": "Materialien wie PLA liegen immer in den Standardfarben (z.B. Schwarz, Weiß, Grau, Blau, Rot, Grün) auf Lager. Generell sind aber alle Farben möglich, in denen es Filament gibt – hier kann es nur ggf. zu Aufpreisen und/oder Verzögerungen kommen, wenn spezielle Farben beschafft werden müssen."
     },
     {
         "isActive": true,
         "title": "Kannst du auch mehrfarbig drucken?",
-        "content": "Ja, ein gleichzeitiger Druck deines Bauteils in mehreren Farben ist möglich. Siehe [Referenzen für einige Beispiele](/referenzen)."
+        "content": "Ja, ein gleichzeitiger Druck deines Bauteils in mehreren Farben ist möglich. Siehe [meine Referenzen](/referenzen) für einige Beispiele."
+    },
+    {
+        "isActive": true,
+        "title": "Auf was für Druckern druckst du?",
+        "content": "Ich drucke auf Druckern des Marktführers Prusa aus der Tschechischen Republik, konkret auf dem Modell MK4s mit angeschlossener MMU3. Ich habe bei Bedarf Zugriff auf maximal drei dieser Drucker."
     },
     {
         "isActive": true,
         "title": "Wie groß kannst du drucken?",
-        "content": "Die maximal druckbaren Abmessungen sind 245 x 245 x 260 mm (Länge x Breite x Höhe). Brauchst du es noch größer, habe ich über mein Netzwerk Zugriff auf größere Drucker – oder ich drucke dein Bauteil in mehreren Teilen."
+        "content": "Der verfügbare Bauraum beträgt 250 x 210 x 220 mm (Länge x Breite x Höhe). Brauchst du es noch größer, kann ich dein Bauteil z.B. in mehreren Teilen drucken."
     },
     {
         "isActive": true,
         "title": "Wie lange dauert die Fertigung?",
-        "content": "Die Drucker laufen generell 12 bis 24 Stunden am Tag an sieben Tagen pro Woche. Je nach Auslastung und benötigter Menge kann ich deinen Druckwunsch daher in der Regel binnen weniger Tage erfüllen."
+        "content": "Die Drucker laufen bei Bedarf rund um die Uhr, auch am Wochenende. Je nach Auslastung und benötigter Menge kann ich deinen Druckwunsch daher in der Regel binnen weniger Tage erfüllen."
     },
     {
         "isActive": true,
@@ -38,5 +43,10 @@
         "isActive": true,
         "title": "Woher bekomme ich weitere 3D-Modelle?",
         "content": "Gute Adressen sind [www.printables.com](https://www.printables.com), [www.thingiverse.com](https://www.thingiverse.com) und [www.thangs.com](https://www.thangs.com). Bitte beachte bei der Auswahl und Verwendung der gedruckten Bauteile die Nutzungsrechte der jeweiligen Autoren."
+    },
+    {
+        "isActive": true,
+        "title": "Was kostet mich ein 3D-Druck?",
+        "content": "Kontaktiere mich gerne [per Kontaktformular](/kontakt), [per E-Mail](/kontakt-per-email) oder [per WhatsApp](/kontakt-per-whats-app) und nenne mir ein paar Details – ich unterbreite dir gerne ein Angebot."
     }
 ]
