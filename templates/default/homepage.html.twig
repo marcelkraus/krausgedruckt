@@ -3,7 +3,7 @@
 {% block main %}
     <!-- Hero -->
 
-    <section class="flex content-center items-center h-[100vh]">
+    <section class="flex content-center items-center h-[100vh] relative">
         <div class="w-full h-full bg-center bg-cover absolute bg-[url('/images/hero.jpg')]">
             <span class="w-full h-full absolute opacity-75 bg-brand-secondary"></span>
         </div>
@@ -25,6 +25,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="w-full absolute top-auto bottom-0 left-0 right-0 overflow-hidden h-[100px] mb-[-1px]">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="fill-background-primary" points="2560,0 2560,100 0,100"></polygon>
+            </svg>
         </div>
     </section>
 
