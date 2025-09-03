@@ -9,9 +9,11 @@
     <meta property="description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://krausgedruckt.de" />
-    <meta property="og:title" content="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
-    <meta property="og:description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
-    <meta property="og:image" content="https://krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
+    {% block social_media_meta %}
+        <meta property="og:title" content="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+        <meta property="og:description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
+        <meta property="og:image" content="https://krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
+    {% endblock %}
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:domain" content="krausgedruckt.de" />
     <meta property="twitter:url" content="https://krausgedruckt.de" />
@@ -57,31 +59,35 @@
                         </div>
                     </div>
                     <div class="hidden lg:block">
-                        <div class="flex gap-2 justify-end text-sm uppercase">
-                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
-                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
-                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_references" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
-                            <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
-                        </div>
+                        {%  block main_menu %}
+                            <div class="flex gap-2 justify-end text-sm uppercase">
+                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
+                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
+                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_references" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
+                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
+                            </div>
+                        {% endblock %}
                     </div>
                 </div>
             </div>
             <div class="container hidden mx-auto px-8 pb-4" id="navbar-menu">
                 <hr class="border-background-secondary mb-4" />
-                <ul class="flex flex-row gap-4 justify-end list-none text-sm uppercase font-semibold">
-                    <li class="items-center">
-                        <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_homepage') }}">Übersicht</a>
-                    </li>
-                    <li class="items-center">
-                        <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_contact') }}">Kontakt</a>
-                    </li>
-                    <li class="flex items-center">
-                        <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_references') }}">Referenzen</a>
-                    </li>
-                    <li class="flex items-center">
-                        <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_faq') }}">FAQ</a>
-                    </li>
-                </ul>
+                {%  block mobile_main_menu %}
+                    <ul class="flex flex-row gap-4 justify-end list-none text-sm uppercase font-semibold">
+                        <li class="items-center">
+                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_homepage') }}">Übersicht</a>
+                        </li>
+                        <li class="items-center">
+                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_contact') }}">Kontakt</a>
+                        </li>
+                        <li class="flex items-center">
+                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_references') }}">Referenzen</a>
+                        </li>
+                        <li class="flex items-center">
+                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_faq') }}">FAQ</a>
+                        </li>
+                    </ul>
+                {% endblock %}
             </div>
         </nav>
         <script type="text/javascript">

@@ -32,6 +32,20 @@ class DefaultController extends AbstractController
         return $this->render('default/homepage.html.twig');
     }
 
+    #[Route('/advintage', name: 'app_landing_page_advintage', methods: ['GET'])]
+    function advintage(): Response
+    {
+        $printableModels = $this->serializer->deserialize(
+            file_get_contents("../config/advintage-landing-page.json"),
+            'App\Entity\PrintableModel[]',
+            'json'
+        );
+
+        return $this->render('default/advintage-landing-page.html.twig', [
+            'printableModels' => $printableModels,
+        ]);
+    }
+
     #[Route('/kontakt', name: 'app_contact', methods: ['GET', 'POST'])]
     function contact(Request $request, MailerInterface $mailer): Response
     {
