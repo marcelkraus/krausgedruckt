@@ -42,7 +42,7 @@
                 <div class="flex-auto">
                     <div class="block lg:hidden">
                         <div class="flex justify-end">
-                            <a class="border border-brand-secondary cursor-pointer hover:border-brand-primary hover:text-brand-primary px-4 py-2 rounded-md text-brand-secondary" type="button" onclick="toggleNavbar()">
+                            <a class="border border-brand-secondary cursor-pointer hover:border-brand-primary hover:text-brand-primary px-4 py-2 rounded-xl text-brand-secondary" type="button" onclick="toggleNavbar()">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5" id="navbar-icon-open">
                                     <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
                                 </svg>
@@ -55,10 +55,10 @@
                     <div class="hidden lg:block">
                         {%  block main_menu %}
                             <div class="flex gap-2 justify-end text-sm uppercase">
-                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
-                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
-                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_references" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
-                                <a class="border px-4 py-2 rounded-md {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_references" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
                             </div>
                         {% endblock %}
                     </div>
