@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Referenzen | {{  parent() }}
+    Referenzen ▪ {{  parent() }}
 {% endblock %}
 
 {% block main %}
     <section class="bg-background-secondary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <h2 class="mb-16 text-4xl font-semibold text-brand-primary lg:mb-24">
+                <h2 class="mb-8 text-4xl font-semibold text-brand-primary lg:mb-12">
                     Meine Referenzen.<br/>
                     <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
                 </h2>
@@ -34,7 +34,7 @@
                         </div>
                     </article>
                     {% if not loop.last %}
-                        <hr class="border-brand-secondary border-dashed my-16" />
+                        <hr class="border-brand-secondary border-dashed my-12" />
                     {% endif %}
                 {% endfor %}
             </div>
