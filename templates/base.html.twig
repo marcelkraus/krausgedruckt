@@ -64,10 +64,10 @@
                     </div>
                 </div>
             </div>
-            <div class="container hidden mx-auto px-8 pb-4" id="navbar-menu">
+            <div class="container hidden mx-auto pb-4 px-8" id="navbar-menu">
                 <hr class="border-background-secondary mb-4" />
                 {%  block mobile_main_menu %}
-                    <ul class="flex flex-row gap-4 justify-end list-none text-sm uppercase font-semibold">
+                    <ul class="flex flex-row font-semibold gap-4 justify-end list-none text-sm uppercase">
                         <li class="items-center">
                             <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_homepage') }}">Übersicht</a>
                         </li>
@@ -97,8 +97,8 @@
     </main>
     {% block footer %}
         <footer class="bg-brand-secondary text-white">
-            <div class="container mx-auto px-8 pt-16 pb-8 lg:pt-24">
-                <h4 class="mb-8 text-2xl font-semibold">
+            <div class="container mx-auto pb-8 pt-16 px-8 lg:pt-24">
+                <h4 class="font-semibold mb-8 text-2xl">
                     <span class="text-brand-primary">Dein heisser Draht.</span><br/>
                     Lass uns schreiben.
                 </h4>
