@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ContactRequest;
+use App\Entity\PortfolioPiece;
 use App\Form\Type\ContactRequestType;
+use App\Repository\PortfolioPieceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,17 +97,11 @@ class DefaultController extends AbstractController
         return $this->render('default/contact-confirmation.html.twig');
     }
 
-    #[Route('/referenzen', name: 'app_references', methods: ['GET'])]
-    function references(): Response
+    #[Route('/referenzen', name: 'app_portfolio_pieces', methods: ['GET'])]
+    function portfolioPieces(EntityManagerInterface $entityManager): Response
     {
-        $references = $this->serializer->deserialize(
-            file_get_contents("../config/references.json"),
-            'App\Entity\Reference[]',
-            'json'
-        );
-
-        return $this->render('default/references.html.twig', [
-            'references' => $references,
+        return $this->render('default/portfolio-pieces.html.twig', [
+            'portfolioPieces' => $entityManager->getRepository(PortfolioPiece::class)->findAll(),
         ]);
     }
 

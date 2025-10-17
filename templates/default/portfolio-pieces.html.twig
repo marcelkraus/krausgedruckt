@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Referenzen | {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <h2 class="font-semibold mb-16 text-4xl text-brand-primary lg:mb-24">
+                    Meine Referenzen.<br/>
+                    <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
+                </h2>
+                {% for portfolioPiece in portfolioPieces %}
+                    <article class="flex flex-col gap-8 lg:flex-row">
+                        <div class="flex flex-col items-center">
+                            {% for filename in portfolioPiece.images %}
+                                <img class="-mt-16 border-8 border-background-secondary first:mt-0 max-w-[12rem] rounded-full lg:max-w-[16rem]" src="/images/portfolio-pieces/{{ portfolioPiece.id }}/{{ filename }}" alt="Foto des Modells „{{ portfolioPiece.title }}"">
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <div class="group max-w-xl relative">
+                                <h3 class="font-semibold mt-1 text-brand-primary text-xl">{{  portfolioPiece.title }}</h3>
+                                <div class="mt-4">
+                                    {{ portfolioPiece.description | nl2br }}
+                                </div>
+                            </div>
+                            {% if portfolioPiece.sourceTitle %}
+                                <div class="mt-8">
+                                    <div class="flex flex-col text-sm">
+                                        <div class="bg-brand-secondary font-semibold p-2 rounded-t-xl text-background-secondary text-center">
+                                            Verwendetes Modell
+                                        </div>
+                                        <div class="bg-white p-2 rounded-b-xl text-brand-secondary text-center">
+                                            <a class="font-semibold" href="{{ portfolioPiece.sourceUrl }}" target="_blank">{{ portfolioPiece.sourceTitle }}</a><br/>
+                                            Erstellt von {{ portfolioPiece.sourceAuthor }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+                    {% if not loop.last %}
+                        <hr class="border-brand-secondary border-dashed my-16" />
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
