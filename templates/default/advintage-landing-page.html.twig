@@ -10,12 +10,12 @@
 
 {%  block main_menu %}
     <div class="flex gap-2 justify-end text-sm uppercase">
-        <a class="border px-4 py-2 rounded-md border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary" href="{{ path('app_homepage') }}">Zur Homepage</a>
+        <a class="border border-brand-secondary hover:border-brand-primary hover:text-brand-primary px-4 py-2 rounded-md text-brand-secondary" href="{{ path('app_homepage') }}">Zur Homepage</a>
     </div>
 {% endblock %}
 
 {% block mobile_main_menu %}
-    <ul class="flex flex-row gap-4 justify-end list-none text-sm uppercase font-semibold">
+    <ul class="flex flex-row font-semibold gap-4 justify-end list-none text-sm uppercase">
         <li class="items-center">
             <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_homepage') }}">Zur Homepage</a>
         </li>
@@ -23,14 +23,14 @@
 {% endblock %}
 
 {% block main %}
-    <section class="absolute bg-center bg-cover bg-[url('/images/advintage-landing-page/hero.jpg')] content-center flex h-[50vh] items-center relative w-full">
+    <section class="absolute bg-[url('/images/advintage-landing-page/hero.jpg')] bg-center bg-cover content-center flex h-[50vh] items-center relative w-full">
         <div class="absolute bg-brand-secondary h-full opacity-75 w-full">
             <span class="absolute h-full w-full"></span>
         </div>
         <div class="container mx-auto px-8 py-16 relative lg:py-24">
             <div class="flex flex-wrap items-center w-full md:w-2/3 lg:w-1/3">
                 <div class="text-white">
-                    <h1 class="mb-8 text-4xl font-semibold leading-tight md:mb-16">
+                    <h1 class="font-semibold leading-tight mb-8 text-4xl md:mb-16">
                         <span class="text-brand-primary">We ❤ adVintage.</span><br/>
                         Fortune & Glory, Kid!
                     </h1>
@@ -44,8 +44,8 @@
         </div>
     </section>
     <section class="bg-background-primary">
-        <div class="container max-w-prose mx-auto px-16 md:px-0 py-16 lg:py-24">
-            <h3 class="mb-4 text-2xl font-semibold text-brand-primary">
+        <div class="container max-w-prose mx-auto px-16 py-16 md:px-0 lg:py-24">
+            <h3 class="font-semibold mb-4 text-2xl text-brand-primary">
                 Deine Wahl?<br/>
                 <span class="text-brand-secondary">War weise.</span>
             </h3>
@@ -54,7 +54,7 @@
                 <p class="mb-4">Ich bin Marcel, stolzer Besitzer mehrerer Hüte von adVintage, ein großer Fan von Thomas und seiner Arbeit als Hutmacher – und der Mann hinter <span class="font-semibold"><span class="text-brand-primary">kraus</span><span class="text-brand-secondary">gedruckt</span></span>.</p>
                 <p class="mb-4">Du hast die Chance genutzt und einen modularen adVintage-Hutständer erworben – dafür danke ich dir und wünsche dir viel Spaß damit! Der Hutständer wurde mit bestem Material aus Deutschland auf Druckern aus Europa gedruckt und ich hoffe sehr, er gefällt dir!</p>
                 <p class="mb-4">Ich habe diese Landing Page für dich und die anderen stolzen Besitzer eingerichtet – als kleine Einladung, tiefer in die Welt des 3D-Drucks einzutauchen. Unten findest du ein paar Modelle aus der Welt von Indiana Jones, bereitgestellt von kreativen Menschen auf den Portalen <a class="hover:underline text-brand-primary" href="https://www.printables.com">Printables</a> und <a class="hover:underline text-brand-primary" href="https://www.thingiverse.com">Thingiverse</a>.
-                <div class="mb-4 border-2 border-brand-primary p-2 shadow-lg bg-white text-center font-semibold">
+                <div class="bg-white border-2 border-brand-primary font-semibold mb-4 p-2 shadow-lg text-center">
                     <p class="mb-4">Schicke mir ein Foto deines Hutes auf deinem Hutständer – oder poste es auf Instagram und markiere <a class="hover:underline text-brand-primary" href="https://www.instagram.com/krausgedruckt/" title="krausgedruckt auf Instagram">@krausgedruckt</a> – und erhalte satte</p>
                     <p class="mb-4 text-xl">— <strong>20 % Rabatt</strong> —</p>
                     <p class="mb-4">auf deine erste Bestellung bei mir!</p>
@@ -70,7 +70,7 @@
                 {% for printableModel in printableModels %}
                     <div class="bg-white break-words flex flex-col mb-4 min-w-0 rounded-xl shadow-lg w-full">
                         <a href="{{ printableModel.modelUrl }}"><img class="align-middle rounded-t-lg w-full" src="/images/advintage-landing-page/{{ printableModel.imageName }}" alt="{{ printableModel.modelName }}" /></a>
-                        <h4 class="font-semibold text-base p-4">
+                        <h4 class="font-semibold p-4 text-base">
                             <a class="hover:underline text-brand-primary" href="{{ printableModel.modelUrl }}">{{ printableModel.modelName }}</a><br/>
                             <span class="text-brand-secondary">Von <a class="hover:underline " href="{{ printableModel.authorUrl }}">{{ printableModel.authorName }}</a> ({{ printableModel.platform }})</span>
                         </h4>
