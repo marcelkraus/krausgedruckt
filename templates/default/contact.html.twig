@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Kontakt | {{  parent() }}
+    Kontakt ▪ {{  parent() }}
 {% endblock %}
 
 {% block main %}
-    <section class="bg-background-secondary relative">
+    <section class="bg-background-secondary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <h2 class="font-semibold mb-16 text-4xl text-brand-primary lg:mb-24">
-                    Du hast Bock auf Druck?<br/>
-                    <span class="text-brand-secondary">Cool. Ich auch!</span>
+                <h2 class="font-semibold mb-8 text-4xl text-brand-primary lg:mb-12">
+                    Wer druckt ist doof.<br/>
+                    <span class="text-brand-secondary">Nicht.</span>
                 </h2>
                 {{ form_start(contactForm) }}
                 <p class="mb-4">Nutze das nachfolgende Kontaktformular, um mich schnell und einfach anzusprechen. Deine Anfrage ist natürlich unverbindlich und mit keinerlei Kosten verbunden.</p>

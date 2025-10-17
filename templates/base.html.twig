@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
-    <title>{% block title %}krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt{% endblock %}</title>
-    <meta property="description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
+    <title>{% block title %}krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt{% endblock %}</title>
+    <meta property="description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://krausgedruckt.de" />
     {% block social_media_meta %}
-        <meta property="og:title" content="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
-        <meta property="og:description" content="krausgedruckt bietet individuellen 3D-Druck und handgemachte Produkte: Du hast die Vision, ich mache sie greifbar!" />
+        <meta property="og:title" content="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
+        <meta property="og:description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
         <meta property="og:image" content="https://krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
     {% endblock %}
     {% block meta %}{% endblock %}
@@ -35,8 +35,8 @@
             <div class="container flex flex-row items-center justify-items-end mx-auto p-8">
                 <div class="flex-none">
                     <a href="{{ path('app_homepage') }}">
-                        <h1 class="hidden">krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt</h1>
-                        <img src="/images/krausgedruckt-logo.png" class="h-16 max-h-16 md:h-24 md:max-h-24" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+                        <h1 class="hidden">krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt</h1>
+                        <img src="/images/krausgedruckt-logo.png" class="h-16 max-h-16 md:h-24 md:max-h-24" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
                     </a>
                 </div>
                 <div class="flex-auto">
@@ -117,10 +117,10 @@
                 </div>
                 <hr class="border-brand-primary mb-4 mt-8" />
                 <div class="md:flex md:justify-between">
-                    <img src="/images/krausgedruckt-logo-dark.png" class="-mt-6 h-12 max-h-12 ml-4" alt="krausgedruckt von Marcel Kraus – Dein 3D-Druck-Dienstleister in Erftstadt" />
+                    <img src="/images/krausgedruckt-logo-dark.png" class="-mt-6 h-12 max-h-12 ml-4" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
                     <div class="ml-4 mt-4 text-xs md:ml-0 md:mt-0 md:text-right">
-                        © 2023 – {{ 'now' | date('Y') }} Marcel Kraus, Erftstadt<br/>
-                        <a href="{{ path('app_imprint') }}">Impressum</a> | <a href="{{ path('app_data_privacy') }}">Datenschutz</a></a>
+                        © 2023—{{ 'now' | date('Y') }} krausgedruckt von Marcel Kraus<br/>
+                        <a href="{{ path('app_data_privacy') }}">Datenschutz</a> ▪ <a href="{{ path('app_imprint') }}">Impressum</a></a>
                     </div>
                 </div>
             </div>
