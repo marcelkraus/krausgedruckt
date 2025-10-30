@@ -49,7 +49,12 @@ class DefaultController extends AbstractController
     #[Route('/kontakt', name: 'app_contact', methods: ['GET', 'POST'])]
     function contact(Request $request, MailerInterface $mailer): Response
     {
-        $contactForm = $this->createForm(ContactRequestType::class, new ContactRequest(), [
+        $contactRequest = new ContactRequest();
+        if ($discountCode = $request->query->get('discount-code', null)) {
+            $contactRequest->setDiscountCode($discountCode);
+        }
+
+        $contactForm = $this->createForm(ContactRequestType::class, $contactRequest, [
             'antispam_profile' => 'default',
         ]);
         $contactForm->handleRequest($request);
@@ -66,6 +71,7 @@ class DefaultController extends AbstractController
                     'name' => $contactRequest->getName(),
                     'emailAddress' => $contactRequest->getEmail(),
                     'message' => $contactRequest->getMessage(),
+                    'discountCode' => $contactRequest->getDiscountCode(),
                 ]);
 
             $mailer->send($message);

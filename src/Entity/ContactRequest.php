@@ -22,6 +22,8 @@ class ContactRequest
      */
     protected $message = "";
 
+    protected $discountCode = null;
+
     public function setName(string $name): void {
         $this->name = $name;
     }
@@ -44,5 +46,13 @@ class ContactRequest
 
     public function setMessage(string $message): void {
         $this->message = $message;
+    }
+
+    public function setDiscountCode(?string $discountCode): void {
+        $this->discountCode = $discountCode;
+    }
+
+    public function getDiscountCode(): ?string {
+        return $this->discountCode;
     }
 }

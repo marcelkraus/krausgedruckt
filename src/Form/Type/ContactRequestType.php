@@ -31,6 +31,12 @@ class ContactRequestType extends AbstractType {
                     'placeholder' => 'Deine Nachricht',
                 ],
             ])
+            ->add('discountCode', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'help' => 'Sofern du einen Rabattcode hast, trage diesen bitte hier ein.',
+                'attr' => ['placeholder' => 'Rabattcode'],
+            ])
         ;
 
         $form->add('submit', SubmitType::class, [
