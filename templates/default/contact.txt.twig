@@ -1,3 +1,9 @@
-{{ name }} <{{ emailAddress }}> hat folgende Nachricht über das Kontaktformular auf https://krausgedruckt.de geschickt:
+Es wurde eine neue Nachricht über das Kontaktformular auf https://krausgedruckt.de/kontakt empfangen:
+
++++
+Name: {{ name }}
+E-Mail: <{{ emailAddress }}>
+Rabattcode: {{ discountCode | default('—') }}
++++
 
 {{ message }}
