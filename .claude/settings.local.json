@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
-      "Bash(ddev exec:*)"
+      "Bash(ddev exec:*)",
+      "WebSearch",
+      "Bash(ddev composer:*)",
+      "Bash(curl:*)",
+      "Bash(ddev restart:*)"
     ],
     "deny": [],
     "ask": []
