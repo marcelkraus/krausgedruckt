@@ -19,6 +19,8 @@ class ReferenceRepository extends ServiceEntityRepository
     public function findAllOrdered(): array
     {
         return $this->createQueryBuilder('r')
+            ->where('r.isVisible = :isVisible')
+            ->setParameter('isVisible', true)
             ->orderBy('r.createdAt', 'DESC')
             ->getQuery()
             ->getResult();

@@ -39,11 +39,15 @@ class Reference
     #[ORM\Embedded(class: Source::class, columnPrefix: 'source_')]
     protected ?Source $source = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $isVisible = false;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
         $this->source = new Source();
         $this->createdAt = new \DateTime();
+        $this->isVisible = false;
     }
 
     public function getId(): ?Uuid
@@ -135,6 +139,17 @@ class Reference
     public function setSource(?Source $source): self
     {
         $this->source = $source;
+        return $this;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
         return $this;
     }
 }
