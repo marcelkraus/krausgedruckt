@@ -15,9 +15,9 @@
                 {% for reference in references %}
                     <article class="flex flex-col gap-8 lg:flex-row">
                         <div class="flex flex-col items-center">
-                            {% for filename in reference.images %}
-                                <img class="-mt-16 border-8 border-background-secondary first:mt-0 lg:max-w-[16rem] max-w-[12rem] rounded-full" src="/images/references/{{ reference.id }}/{{ filename }}" alt="Foto des Modells „{{ reference.title }}""">
-                            {% endfor %}
+                            {% if reference.imagePath %}
+                                <img class="border-8 border-background-secondary lg:max-w-[16rem] max-w-[12rem] rounded-full" src="{{ reference.imagePath }}" alt="Foto des Modells „{{ reference.title }}"">
+                            {% endif %}
                         </div>
                         <div>
                             <div class="group max-w-xl relative">

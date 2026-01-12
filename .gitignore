@@ -1,5 +1,6 @@
 ###> custom ###
 /node_modules
+/public/images/references/*.jpg
 ###< custom ###
 
 ###> symfony/framework-bundle ###

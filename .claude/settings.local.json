@@ -2,11 +2,20 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
-      "Bash(ddev exec:*)",
-      "WebSearch",
-      "Bash(ddev composer:*)",
+      "Bash(chmod:*)",
       "Bash(curl:*)",
-      "Bash(ddev restart:*)"
+      "Bash(ddev composer:*)",
+      "Bash(ddev exec:*)",
+      "Bash(ddev logs:*)",
+      "Bash(ddev restart:*)",
+      "Bash(do echo \"=== Directory: $dir ===\")",
+      "Bash(done)",
+      "Bash(for dir in /Users/marcelkraus/Developer/krausgedruckt/public/images/references/*/)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(xargs ddev exec grep:*)",
+      "Read(//tmp/**)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

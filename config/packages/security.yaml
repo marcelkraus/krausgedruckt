@@ -1,0 +1,36 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser: 'auto'
+    providers:
+        admin_user:
+            memory:
+                users:
+                    krausgedruckt:
+                        password: '%env(ADMIN_PASSWORD)%'
+                        roles: ['ROLE_ADMIN']
+    firewalls:
+        dev:
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        admin:
+            pattern: ^/admin
+            lazy: true
+            provider: admin_user
+            http_basic:
+                realm: 'krausgedruckt:admin'
+            logout:
+                path: admin_logout
+                target: app_homepage
+        main:
+            lazy: true
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

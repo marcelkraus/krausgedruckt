@@ -2,33 +2,102 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Finder\Finder;
+use App\Repository\ReferenceRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\Uuid;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[ORM\Entity(repositoryClass: ReferenceRepository::class)]
+#[ORM\Table(name: 'reference')]
+#[Vich\Uploadable]
 class Reference
 {
-    protected int $id;
-    protected string $title;
-    protected array $image;
-    protected string $description;
-    protected ?Source $source;
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    protected ?Uuid $id = null;
 
-    /**
-     * @param int $id
-     * @param string $title
-     * @param string $description
-     * @param ?Source $source
-     */
-    public function __construct(int $id, string $title, string $description, ?Source $source = null)
+    #[ORM\Column(type: 'string', length: 255)]
+    protected string $title = '';
+
+    #[ORM\Column(type: 'text')]
+    protected string $description = '';
+
+    #[Vich\UploadableField(mapping: 'reference_images', fileNameProperty: 'image')]
+    protected ?File $imageFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $image = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: 'datetime')]
+    protected \DateTimeInterface $createdAt;
+
+    #[ORM\Embedded(class: Source::class, columnPrefix: 'source_')]
+    protected ?Source $source = null;
+
+    public function __construct()
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->description = $description;
-        $this->source = $source;
+        $this->id = Uuid::v7();
+        $this->source = new Source();
+        $this->createdAt = new \DateTime();
     }
 
-    public function getId(): int
+    public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+
+        if ($imageFile) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
     }
 
     public function getTitle(): string
@@ -36,21 +105,15 @@ class Reference
         return $this->title;
     }
 
-    public function getImages(): array
+    public function setTitle(string $title): self
     {
-        $result = [];
+        $this->title = $title;
+        return $this;
+    }
 
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->name('*.jpg')
-            ->in(sprintf('%s/../../public/images/references/%d', __DIR__ , $this->id));
-
-        foreach ($finder as $file) {
-            $result[] = $file->getRelativePathname();
-        }
-
-        return $result;
+    public function getImagePath(): ?string
+    {
+        return $this->image ? '/images/references/' . $this->image : null;
     }
 
     public function getDescription(): string
@@ -58,8 +121,20 @@ class Reference
         return $this->description;
     }
 
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
     public function getSource(): ?Source
     {
         return $this->source;
+    }
+
+    public function setSource(?Source $source): self
+    {
+        $this->source = $source;
+        return $this;
     }
 }

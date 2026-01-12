@@ -1,0 +1,7 @@
+vich_uploader:
+    db_driver: orm
+    mappings:
+        reference_images:
+            uri_prefix: /images/references
+            upload_destination: '%kernel.project_dir%/public/images/references'
+            namer: App\Service\ReferenceImageNamer

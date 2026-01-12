@@ -4,37 +4,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Dies ist eine Symfony 7.3 Website für krausgedruckt (3D-Druckdienstleistungen), gehostet mit DDEV. Die Seite verwendet Twig-Templates mit Tailwind CSS für das Styling.
+This is a Symfony 8.0 website for krausgedruckt (3D printing services), hosted with DDEV. The site uses Twig templates with Tailwind CSS for styling and EasyAdmin for backend management.
 
 ## Development Environment
 
 ### DDEV Setup
-- Projekt läuft in DDEV mit PHP 8.2, nginx-fpm und MariaDB 10.4
+- Project runs in DDEV with PHP 8.4, nginx-fpm, and MariaDB 10.4
 - URL: https://krausgedruckt.ddev.site
 - Start: `ddev start`
 - Stop: `ddev stop`
-- SSH in Container: `ddev ssh`
+- SSH into container: `ddev ssh`
 
 ### Common Commands
 
 **Symfony Console:**
 ```bash
 ddev exec bin/console <command>
-# oder innerhalb des Containers:
+# or inside the container:
 bin/console <command>
 ```
 
-**Cache leeren:**
+**Clear cache:**
 ```bash
 ddev exec bin/console cache:clear
 ```
 
-**Tailwind CSS kompilieren:**
+**Compile Tailwind CSS:**
 ```bash
-# Development mit Watch-Mode (binary ist in bin/tailwindcss):
+# Development with watch mode (binary is in bin/tailwindcss):
 ddev exec bin/tailwindcss -i public/css/input.css -o public/css/output.css --watch
 
-# Production Build (minified):
+# Production build (minified):
 ddev exec bin/tailwindcss -i public/css/input.css -o public/css/output.css --minify
 ```
 
@@ -45,53 +45,80 @@ ddev composer require <package>
 ddev composer update
 ```
 
+**Database Migrations:**
+```bash
+# Create a new migration after entity changes
+ddev exec bin/console make:migration
+
+# Run pending migrations
+ddev exec bin/console doctrine:migrations:migrate
+```
+
 ## Architecture
 
 ### Data Flow & Content Management
-- Projekt nutzt **keine relationale Datenbank** für Content
-- JSON-Dateien in `config/` dienen als Content-Datenbank (z.B. `faq.json`, `references.json`, `advintage-landing-page.json`)
-- **Flow:** JSON → Symfony Serializer → Entity DTOs → Twig Templates
-- Entities in `src/Entity/` sind reine DTOs ohne Doctrine-Annotations (z.B. `PrintableModel`, `Reference`, `Question`)
+- **References** are stored in the MariaDB database and managed via EasyAdmin
+- **Other content** (FAQ, landing pages) uses JSON files in `config/` (e.g., `faq.json`, `advintage-landing-page.json`)
+- **Flow for references:** Database → Doctrine → Entity → Twig Templates
+- **Flow for JSON content:** JSON → Symfony Serializer → Entity DTOs → Twig Templates
+- `Reference` entity is a full Doctrine entity with ORM mapping and UUID as primary key
+- Other entities (e.g., `PrintableModel`, `Question`) are pure DTOs without Doctrine annotations
 
 ### Controller Structure
-- Alle Routes sind in `src/Controller/DefaultController.php` definiert mit PHP 8 Attributes
-- Controller instanziiert Symfony Serializer im Konstruktor
-- Jede Route lädt ihre Content-Daten via `$this->serializer->deserialize()` aus den JSON-Dateien
-- Beispiel: `/advintage` Route lädt `config/advintage-landing-page.json` und deserialisiert zu `PrintableModel[]`
+- **Frontend routes** are defined in `src/Controller/DefaultController.php` with PHP 8 attributes
+- Controller instantiates Symfony Serializer in constructor
+- Each route loads its content data via `$this->serializer->deserialize()` from JSON files
+- Example: `/advintage` route loads `config/advintage-landing-page.json` and deserializes to `PrintableModel[]`
+- **Admin controllers** are located in `src/Controller/Admin/` for EasyAdmin CRUD operations
+
+### EasyAdmin Backend
+- EasyAdmin 4 for backend management at `/admin`
+- **DashboardController** (`src/Controller/Admin/DashboardController.php`): Entry point for admin interface
+- **ReferenceCrudController** (`src/Controller/Admin/ReferenceCrudController.php`): CRUD for references
+- **VichUploaderBundle** for image uploads in references
+  - Mapping: `reference_images` → `/public/images/references/`
+  - Upload field: `imageFile` (VichImageType) in ReferenceCrudController
+- **Reference Entity** features:
+  - UUID v7 as primary key
+  - Fields: `title`, `description`, `image`, `imageFile`
+  - Embedded `Source` entity for attribution (title, URL, author)
+  - Timestamps: `createdAt`, `updatedAt`
 
 ### Template Organization
-- Base-Template: `templates/base.html.twig`
-- Seiten-Templates: `templates/default/*.html.twig`
-- Wiederverwendbare Komponenten: `templates/_*.html.twig` (z.B. `_model.html.twig`)
-- Custom Form-Layout: `templates/form_layout.html.twig`
+- Base template: `templates/base.html.twig`
+- Page templates: `templates/default/*.html.twig`
+- Reusable components: `templates/_*.html.twig` (e.g., `_model.html.twig`)
+- Custom form layout: `templates/form_layout.html.twig`
 
 ### Styling with Tailwind
 - Input CSS: `public/css/input.css`
-- Output CSS: `public/css/output.css` (wird via `bin/tailwindcss` binary generiert)
-- Config: `tailwind.config.js` mit custom Brand-Colors (Orange/Gray Theme)
-- Plugins: `@tailwindcss/forms` und `@tailwindcss/typography` sind aktiv
-- Templates müssen im `content` Array der Tailwind-Config definiert sein
-- **Wichtig:** Nach Template-Änderungen muss Tailwind neu kompiliert werden
+- Output CSS: `public/css/output.css` (generated via `bin/tailwindcss` binary)
+- Config: `tailwind.config.js` with custom brand colors (orange/gray theme)
+- Plugins: `@tailwindcss/forms` and `@tailwindcss/typography` are active
+- Templates must be defined in the `content` array of Tailwind config
+- **Important:** Tailwind must be recompiled after template changes
 
 ### Forms & Anti-Spam
-- Contact Form verwendet `ContactRequestType` mit Omines Anti-Spam Bundle
-- Mail-Versand über Symfony Mailer mit `TemplatedEmail`
-- Form hat 4 Felder: `name`, `email`, `message`, `discountCode`
-- E-Mail-Template: `templates/default/contact.txt.twig`
-- Discount-Code kann via Query-Parameter vorausgefüllt werden: `/kontakt?discount-code=CODE`
-- Sender/Recipient-Adressen in `.env` konfiguriert:
+- Contact form uses `ContactRequestType` with Omines Anti-Spam Bundle
+- Email sending via Symfony Mailer with `TemplatedEmail`
+- Form has 4 fields: `name`, `email`, `message`, `discountCode`
+- Email template: `templates/default/contact.txt.twig`
+- Discount code can be pre-filled via query parameter: `/kontakt?discount-code=CODE`
+- Sender/recipient addresses configured in `.env`:
   - `CONTACT_FORM_SENDER_ADDRESS`
   - `CONTACT_FORM_RECIPIENT_ADDRESS`
-- `.env.local` überschreibt diese für lokale/production Umgebungen
+- `.env.local` overrides these for local/production environments
 
 ### Static Assets
-- Bilder: `public/images/`
-- Landing Page Bilder: `public/images/advintage-landing-page/`
-- Referenz-Bilder: `public/images/references/{id}/`
+- Images: `public/images/`
+- Landing page images: `public/images/advintage-landing-page/`
+- Reference images: `public/images/references/` (uploaded via VichUploader)
 
 ## Important Notes
 
-- **Content-Updates:** Um Content zu ändern, bearbeite die JSON-Dateien in `config/` (keine Datenbank-Migrations nötig)
-- **Routing:** Alle Routen nutzen deutsche URLs (z.B. `/kontakt`, `/referenzen`, `/impressum`)
-- **Database:** MariaDB wird aktuell nicht aktiv genutzt (nur für potentielle zukünftige Features)
-- **Environment:** `.env.local` sollte nie committed werden und enthält lokale Overrides
+- **Reference updates:** References are managed via the EasyAdmin interface at `/admin`
+- **Other content updates:** To change FAQ, landing pages, etc., edit the JSON files in `config/`
+- **Routing:** All frontend routes use German URLs (e.g., `/kontakt`, `/referenzen`, `/impressum`)
+- **Database:** MariaDB stores references (Reference entity) - use Doctrine migrations for schema changes
+- **Admin access:** EasyAdmin at `/admin` for backend management
+- **Environment:** `.env.local` should never be committed and contains local overrides
