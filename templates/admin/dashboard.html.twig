@@ -1,0 +1,36 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    Willkommen.
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-images"></i> Referenzen verwalten
+                </div>
+                <div class="card-body">
+                    <p>Verwalte deine 3D-Druck-Referenzen.</p>
+                    <a href="{{ path('admin_reference_index') }}" class="btn btn-primary">
+                        <i class="fa fa-images"></i> Zu den Referenzen
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-globe"></i> Website ansehen
+                </div>
+                <div class="card-body">
+                    <p>Schau dir die öffentliche Website an.</p>
+                    <a href="{{ path('app_homepage') }}" class="btn btn-secondary" target="_blank">
+                        <i class="fa fa-external-link"></i> Zur Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

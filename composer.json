@@ -7,6 +7,8 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-migrations-bundle": "^4.0",
+        "easycorp/easyadmin-bundle": "^4.27",
         "league/commonmark": "^2.4",
         "omines/antispam-bundle": "^0.1.12",
         "symfony/console": "8.0.*",
@@ -23,7 +25,8 @@
         "symfony/yaml": "8.0.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/markdown-extra": "^3.8",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "*"
     },
     "config": {
         "allow-plugins": {
@@ -72,5 +75,8 @@
             "allow-contrib": true,
             "require": "8.0.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.3"
     }
 }

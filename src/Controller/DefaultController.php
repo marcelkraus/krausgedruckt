@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ContactRequest;
 use App\Form\Type\ContactRequestType;
+use App\Repository\ReferenceRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,13 +102,9 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/referenzen', name: 'app_references', methods: ['GET'])]
-    function references(): Response
+    function references(ReferenceRepository $referenceRepository): Response
     {
-        $references = $this->serializer->deserialize(
-            file_get_contents("../config/references.json"),
-            'App\Entity\Reference[]',
-            'json'
-        );
+        $references = $referenceRepository->findAllOrdered();
 
         return $this->render('default/references.html.twig', [
             'references' => $references,

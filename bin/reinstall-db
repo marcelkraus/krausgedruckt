@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -e
+
+echo "======================================"
+echo "Database & Images Reinstallation"
+echo "======================================"
+echo ""
+
+if [ -z "$IS_DDEV_PROJECT" ]; then
+    # Running outside DDEV container
+    CONSOLE="ddev exec bin/console"
+    echo "Running commands via DDEV..."
+else
+    # Running inside DDEV container
+    CONSOLE="bin/console"
+    echo "Running commands inside DDEV container..."
+fi
+
+echo ""
+echo "Step 1: Dropping existing database..."
+$CONSOLE doctrine:database:drop --force --if-exists
+
+echo ""
+echo "Step 2: Creating new database..."
+$CONSOLE doctrine:database:create
+
+echo ""
+echo "Step 3: Creating database schema..."
+if $CONSOLE doctrine:migrations:list &>/dev/null; then
+    $CONSOLE doctrine:migrations:migrate --no-interaction
+else
+    $CONSOLE doctrine:schema:create
+fi
+
+echo ""
+echo "Step 4: Cleaning up images..."
+if [ -z "$IS_DDEV_PROJECT" ]; then
+    # Running outside DDEV - use host filesystem
+    IMAGE_COUNT=$(find public/images/references -maxdepth 1 -type f -name "*.jpg" | wc -l)
+    if [ "$IMAGE_COUNT" -gt 0 ]; then
+        find public/images/references -maxdepth 1 -type f -name "*.jpg" -delete
+        echo "Deleted $IMAGE_COUNT JPG files from public/images/references/"
+    else
+        echo "No JPG files found in public/images/references/"
+    fi
+else
+    # Running inside DDEV container
+    IMAGE_COUNT=$(find /var/www/html/public/images/references -maxdepth 1 -type f -name "*.jpg" | wc -l)
+    if [ "$IMAGE_COUNT" -gt 0 ]; then
+        find /var/www/html/public/images/references -maxdepth 1 -type f -name "*.jpg" -delete
+        echo "Deleted $IMAGE_COUNT JPG files from public/images/references/"
+    else
+        echo "No JPG files found in public/images/references/"
+    fi
+fi
+
+echo ""
+echo "Step 5: Loading fixtures..."
+$CONSOLE doctrine:fixtures:load --no-interaction
+
+echo ""
+echo "======================================"
+echo "✓ Reinstallation completed successfully!"
+echo "======================================"
