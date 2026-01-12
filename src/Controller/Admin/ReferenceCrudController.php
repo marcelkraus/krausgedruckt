@@ -6,6 +6,7 @@ use App\Entity\Reference;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -23,7 +24,7 @@ class ReferenceCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Referenz')
             ->setEntityLabelInPlural('Referenzen')
-            ->setDefaultSort(['id' => 'DESC']);
+            ->setDefaultSort(['createdAt' => 'DESC']);
     }
 
     public function configureFields(string $pageName): iterable
@@ -57,5 +58,10 @@ class ReferenceCrudController extends AbstractCrudController
 
         yield TextField::new('source.author', 'Quelle: Autor')
             ->hideOnIndex();
+
+        yield DateField::new('createdAt', 'Erstellt am')
+            ->setFormTypeOptions([
+                'years' => range(date('Y') - 10, date('Y') + 1),
+            ]);
     }
 }

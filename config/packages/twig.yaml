@@ -3,6 +3,10 @@ twig:
     form_themes:
         - 'form_layout.html.twig'
 
+twig_extra:
+    markdown:
+        enabled: true
+
 when@test:
     twig:
         strict_variables: true
