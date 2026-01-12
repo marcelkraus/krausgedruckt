@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Reference;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -27,6 +28,8 @@ class ReferenceCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield BooleanField::new('isVisible', 'Sichtbar');
+
         yield TextField::new('title', 'Titel')
             ->setRequired(true);
 
