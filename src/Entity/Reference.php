@@ -46,7 +46,7 @@ class Reference
     {
         $this->id = Uuid::v7();
         $this->source = new Source();
-        $this->createdAt = new \DateTime();
+        $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
         $this->isVisible = false;
     }
 

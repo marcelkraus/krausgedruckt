@@ -13,25 +13,22 @@
                     <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
                 </h2>
                 {% for reference in references %}
-                    <article class="flex flex-col gap-8 lg:flex-row">
-                        <div class="flex flex-col items-center">
-                            {% if reference.imagePath %}
-                                <img class="border-8 border-background-secondary lg:max-w-[16rem] max-w-[12rem] rounded-full" src="{{ reference.imagePath }}" alt="Foto des Modells „{{ reference.title }}"">
-                            {% endif %}
+                    <article>
+                        <h3 class="font-semibold mt-1 text-brand-primary text-xl">
+                            {{  reference.title }}
+                            <br/><span class="text-brand-secondary">{{ reference.createdAt | date('d.m.Y') }}</span>
+                        </h3>
+                        {% if reference.imagePath %}
+                            <img class="mt-4 border-8 border-white rounded-2xl shadow-xl" src="{{ reference.imagePath }}" alt="Foto des Modells „{{ reference.source.title }}“">
+                        {% endif %}
+                        <div class="mt-4 prose prose-orange prose-a:no-underline hover:prose-a:underline prose-a:text-brand-primary prose-a:font-normal max-w-none">
+                            {{ reference.description | markdown_to_html }}
                         </div>
-                        <div>
-                            <div class="group max-w-xl relative">
-                                <h3 class="font-semibold mt-1 text-brand-primary text-xl">{{  reference.title }}</h3>
-                                <div class="mt-4">
-                                    {{ reference.description | nl2br }}
-                                </div>
+                        {% if reference.source %}
+                            <div class="mt-8">
+                                {% include '_model.html.twig' with { 'model': reference.source } %}
                             </div>
-                            {% if reference.source %}
-                                <div class="mt-8">
-                                    {% include '_model.html.twig' with { 'model': reference.source } %}
-                                </div>
-                            {% endif %}
-                        </div>
+                        {% endif %}
                     </article>
                     {% if not loop.last %}
                         <hr class="border-brand-secondary border-dashed my-12" />
