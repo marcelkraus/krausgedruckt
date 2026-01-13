@@ -10,6 +10,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 #[ORM\Table(name: 'reference')]
+#[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class Reference
 {
@@ -151,5 +152,19 @@ class Reference
     {
         $this->isVisible = $isVisible;
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if (!$this->createdAt) {
+            $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 }
