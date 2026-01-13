@@ -13,13 +13,11 @@
                     <span class="text-brand-secondary">Du fragst, ich antworte.</span>
                 </h2>
                 <dl class="gap-x-6 gap-y-8 sm:grid sm:grid-cols-2 sm:space-y-0 space-y-8">
-                    {% for question in questions %}
-                        {% if question.isActive %}
-                            <div>
-                                <dt class="font-semibold text-base">{{ question.question }}</dt>
-                                <dd class="mt-2 prose prose-a:no-underline prose-a:text-brand-primary text-base">{{ question.answer | markdown_to_html }}</dd>
-                            </div>
-                        {% endif %}
+                    {% for faqEntry in faqEntries %}
+                        <div>
+                            <dt class="font-semibold text-base">{{ faqEntry.question }}</dt>
+                            <dd class="mt-2 prose prose-a:no-underline prose-a:text-brand-primary text-base">{{ faqEntry.answer | markdown_to_html }}</dd>
+                        </div>
                     {% endfor %}
                 </dl>
             </div>

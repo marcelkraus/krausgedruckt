@@ -9,7 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class AppFixtures extends Fixture
+class ReferenceFixtures extends Fixture
 {
     public function __construct(
         #[Autowire('%kernel.project_dir%')] private string $projectDir,

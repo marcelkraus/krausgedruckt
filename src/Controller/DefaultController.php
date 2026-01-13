@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ContactRequest;
 use App\Form\Type\ContactRequestType;
+use App\Repository\FaqEntryRepository;
 use App\Repository\ReferenceRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -112,16 +113,12 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
-    function faq(): Response
+    function faq(FaqEntryRepository $faqEntryRepository): Response
     {
-        $questions = $this->serializer->deserialize(
-            file_get_contents("../config/faq.json"),
-            'App\Entity\Question[]',
-            'json'
-        );
+        $faqEntries = $faqEntryRepository->findAllOrdered();
 
         return $this->render('default/faq.html.twig', [
-            'questions' => $questions,
+            'faqEntries' => $faqEntries,
         ]);
     }
 

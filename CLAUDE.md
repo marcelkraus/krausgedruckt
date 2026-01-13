@@ -57,24 +57,28 @@ ddev exec bin/console doctrine:migrations:migrate
 ## Architecture
 
 ### Data Flow & Content Management
-- **References** are stored in the MariaDB database and managed via EasyAdmin
-- **Other content** (FAQ, landing pages) uses JSON files in `config/` (e.g., `faq.json`, `advintage-landing-page.json`)
-- **Flow for references:** Database → Doctrine → Entity → Twig Templates
+- **References** and **FAQ** are stored in the MariaDB database and managed via EasyAdmin
+- **Other content** (landing pages) uses JSON files in `config/` (e.g., `advintage-landing-page.json`)
+- **Flow for database content:** Database → Doctrine → Entity → Twig Templates
 - **Flow for JSON content:** JSON → Symfony Serializer → Entity DTOs → Twig Templates
-- `Reference` entity is a full Doctrine entity with ORM mapping and UUID as primary key
-- Other entities (e.g., `PrintableModel`, `Question`) are pure DTOs without Doctrine annotations
+- `Reference` and `FaqEntry` entities are full Doctrine entities with ORM mapping and UUID v7 as primary key
+- Other entities (e.g., `PrintableModel`) are pure DTOs without Doctrine annotations
 
 ### Controller Structure
 - **Frontend routes** are defined in `src/Controller/DefaultController.php` with PHP 8 attributes
-- Controller instantiates Symfony Serializer in constructor
-- Each route loads its content data via `$this->serializer->deserialize()` from JSON files
-- Example: `/advintage` route loads `config/advintage-landing-page.json` and deserializes to `PrintableModel[]`
+- Controller instantiates Symfony Serializer in constructor for JSON-based content
+- **Database-backed routes:**
+  - `/referenzen` loads references via `ReferenceRepository::findAllOrdered()`
+  - `/haeufig-gestellte-fragen` loads FAQ via `FaqEntryRepository::findAllOrdered()` (sorted by `sortOrder`)
+- **JSON-backed routes:**
+  - `/advintage` loads `config/advintage-landing-page.json` and deserializes to `PrintableModel[]`
 - **Admin controllers** are located in `src/Controller/Admin/` for EasyAdmin CRUD operations
 
 ### EasyAdmin Backend
 - EasyAdmin 4 for backend management at `/admin`
 - **DashboardController** (`src/Controller/Admin/DashboardController.php`): Entry point for admin interface
 - **ReferenceCrudController** (`src/Controller/Admin/ReferenceCrudController.php`): CRUD for references
+- **FaqEntryCrudController** (`src/Controller/Admin/FaqEntryCrudController.php`): CRUD for FAQ entries
 - **VichUploaderBundle** for image uploads in references
   - Mapping: `reference_images` → `/public/images/references/`
   - Upload field: `imageFile` (VichImageType) in ReferenceCrudController
@@ -83,6 +87,12 @@ ddev exec bin/console doctrine:migrations:migrate
   - Fields: `title`, `description`, `image`, `imageFile`
   - Embedded `Source` entity for attribution (title, URL, author)
   - Timestamps: `createdAt`, `updatedAt`
+- **FaqEntry Entity** features:
+  - UUID v7 as primary key
+  - Fields: `question`, `answer`, `isVisible`, `sortOrder`
+  - Timestamps: `createdAt` (immutable), `updatedAt`
+  - Custom sorting via `sortOrder` field with up/down buttons in admin interface
+  - Requires `getSortButtons()` getter method for EasyAdmin field rendering
 
 ### Template Organization
 - Base template: `templates/base.html.twig`
@@ -117,8 +127,9 @@ ddev exec bin/console doctrine:migrations:migrate
 ## Important Notes
 
 - **Reference updates:** References are managed via the EasyAdmin interface at `/admin`
-- **Other content updates:** To change FAQ, landing pages, etc., edit the JSON files in `config/`
-- **Routing:** All frontend routes use German URLs (e.g., `/kontakt`, `/referenzen`, `/impressum`)
-- **Database:** MariaDB stores references (Reference entity) - use Doctrine migrations for schema changes
+- **FAQ updates:** FAQ entries are managed via the EasyAdmin interface at `/admin`
+- **Other content updates:** To change landing pages, edit the JSON files in `config/`
+- **Routing:** All frontend routes use German URLs (e.g., `/kontakt`, `/referenzen`, `/haeufig-gestellte-fragen`)
+- **Database:** MariaDB stores references (Reference entity) and FAQ (FaqEntry entity) - use Doctrine migrations for schema changes
 - **Admin access:** EasyAdmin at `/admin` for backend management
 - **Environment:** `.env.local` should never be committed and contains local overrides

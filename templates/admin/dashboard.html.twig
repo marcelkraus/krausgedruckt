@@ -14,7 +14,10 @@
                 <div class="card-body">
                     <p>Verwalte deine 3D-Druck-Referenzen.</p>
                     <a href="{{ path('admin_reference_index') }}" class="btn btn-primary">
-                        <i class="fa fa-images"></i> Zu den Referenzen
+                        <i class="fa fa-images"></i> Referenzen verwalten
+                    </a>
+                    <a href="{{ path('app_references') }}" class="btn btn-secondary" target="_blank">
+                        <i class="fa fa-external-link"></i> Auf Homepage ansehen
                     </a>
                 </div>
             </div>
@@ -22,12 +25,15 @@
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fa fa-globe"></i> Website ansehen
+                    <i class="fa fa-question-circle"></i> FAQ verwalten
                 </div>
                 <div class="card-body">
-                    <p>Schau dir die öffentliche Website an.</p>
-                    <a href="{{ path('app_homepage') }}" class="btn btn-secondary" target="_blank">
-                        <i class="fa fa-external-link"></i> Zur Website
+                    <p>Verwalte die häufig gestellten Fragen.</p>
+                    <a href="{{ path('admin_faq_entry_index') }}" class="btn btn-primary">
+                        <i class="fa fa-question-circle"></i> FAQ verwalten
+                    </a>
+                    <a href="{{ path('app_faq') }}" class="btn btn-secondary" target="_blank">
+                        <i class="fa fa-external-link"></i> Auf Homepage ansehen
                     </a>
                 </div>
             </div>
