@@ -96,6 +96,11 @@ class DefaultController extends AbstractController
         return $this->redirect('https://wa.me/message/TKVKBR7RPHA7B1');
     }
 
+    #[Route('/bewerten', name: 'app_review', methods: ['GET'])]
+    function review(): Response {
+        return $this->redirect($_SERVER['GOOGLE_REVIEW_URL']);
+    }
+
     #[Route('/kontakt/bestaetigung', name: 'app_contact_confirmation', methods: ['GET'])]
     function contactConfirmation(): Response
     {
