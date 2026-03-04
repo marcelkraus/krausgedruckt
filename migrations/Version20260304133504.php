@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-final class Version20260304120000 extends AbstractMigration
+final class Version20260304133504 extends AbstractMigration
 {
     public function getDescription(): string
     {
