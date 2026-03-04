@@ -27,12 +27,11 @@
                                 {% if reference.summary %}
                                     <p class="mt-2 text-brand-secondary line-clamp-3">{{ reference.summary }}</p>
                                 {% endif %}
-                                <div class="mt-auto pt-4 flex items-center justify-between">
-                                    <span class="text-brand-secondary font-semibold text-sm">{{ reference.createdAt | date('d.m.Y') }}</span>
-                                    {% if reference.category %}
+                                {% if reference.category %}
+                                    <div class="mt-auto pt-4">
                                         <span class="bg-brand-primary/10 text-brand-primary rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </article>
                     {% endfor %}

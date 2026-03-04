@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Enum\Material;
+use App\Enum\Printer;
 use App\Repository\ReferenceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -53,6 +55,12 @@ class Reference
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(nullable: true)]
     protected ?Category $category = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true, enumType: Material::class)]
+    protected ?Material $material = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true, enumType: Printer::class)]
+    protected ?Printer $printer = null;
 
     public function __construct()
     {
@@ -201,6 +209,43 @@ class Reference
     {
         $this->category = $category;
         return $this;
+    }
+
+    public function getMaterial(): ?Material
+    {
+        return $this->material;
+    }
+
+    public function setMaterial(?Material $material): self
+    {
+        $this->material = $material;
+        return $this;
+    }
+
+    public function getPrinter(): ?Printer
+    {
+        return $this->printer;
+    }
+
+    public function setPrinter(?Printer $printer): self
+    {
+        $this->printer = $printer;
+        return $this;
+    }
+
+    public function getMaterialLabel(): ?string
+    {
+        if (!$this->material) {
+            return null;
+        }
+
+        $label = $this->material->value;
+
+        if ($this->printer?->isMultiColor()) {
+            $label .= ', mehrfarbig';
+        }
+
+        return $label;
     }
 
     #[ORM\PrePersist]
