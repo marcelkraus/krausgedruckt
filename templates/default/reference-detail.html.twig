@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ reference.title }} &middot; {{  parent() }}
+{% endblock %}
+
+{% block main %}
+    <section class="bg-background-secondary">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <article class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    {% if reference.imagePath %}
+                        <img class="w-full" src="{{ reference.imagePath }}" alt="Foto des Modells „{{ reference.source.title }}"">
+                    {% endif %}
+                    <div class="p-8 lg:p-12">
+                        <h2 class="text-4xl font-semibold text-brand-primary">
+                            {{ reference.title }}
+                        </h2>
+                        <div class="mt-8 flex flex-col lg:flex-row lg:gap-0">
+                            <div class="text-sm text-brand-secondary lg:w-40 flex-shrink-0 lg:text-right lg:pr-8 flex flex-col">
+                                <p class="font-semibold text-base">{{ reference.createdAt | date('d.m.Y') }}</p>
+                                <p class="font-semibold text-base mt-1">Marcel Kraus</p>
+                                {% if reference.category %}
+                                    <span class="mt-auto pt-2 self-start lg:self-end bg-brand-primary/10 text-brand-primary rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="hidden lg:block self-stretch border-l border-gray-100"></div>
+                            <div class="mt-6 lg:mt-0 lg:pl-8 prose prose-orange prose-a:no-underline hover:prose-a:underline prose-a:text-brand-primary prose-a:font-normal max-w-none">
+                                {{ reference.description | markdown_to_html }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if reference.source %}
+                        <div class="px-8 py-6 lg:px-12">
+                            {% include '_model.html.twig' with { 'model': reference.source } %}
+                        </div>
+                    {% endif %}
+                </article>
+                <div class="mt-12">
+                    <a href="{{ path('app_references') }}" class="border border-brand-secondary hover:border-brand-primary hover:text-brand-primary px-4 py-2 rounded-xl text-brand-secondary text-sm uppercase">&larr; Alle Referenzen</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReferenceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Uid\Uuid;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -40,8 +41,18 @@ class Reference
     #[ORM\Embedded(class: Source::class, columnPrefix: 'source_')]
     protected ?Source $source = null;
 
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    protected string $slug = '';
+
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected bool $isVisible = false;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $summary = null;
+
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    protected ?Category $category = null;
 
     public function __construct()
     {
@@ -143,6 +154,22 @@ class Reference
         return $this;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    public function getYear(): int
+    {
+        return (int) $this->createdAt->format('Y');
+    }
+
     public function isVisible(): bool
     {
         return $this->isVisible;
@@ -154,11 +181,38 @@ class Reference
         return $this;
     }
 
+    public function getSummary(): ?string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(?string $summary): self
+    {
+        $this->summary = $summary;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+        return $this;
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
         if (!$this->createdAt) {
             $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
+        }
+
+        if (empty($this->slug)) {
+            $slugger = new AsciiSlugger('de');
+            $this->slug = strtolower($slugger->slug($this->title)->toString());
         }
     }
 

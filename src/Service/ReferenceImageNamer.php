@@ -14,10 +14,6 @@ class ReferenceImageNamer implements NamerInterface
     ) {
     }
 
-    /**
-     * Creates filename in format: {title-as-slug}-{uuid}.{extension}
-     * Example: ein-klassiker-zu-beginn-01934e5f8b127890abcdef1234567890.jpg
-     */
     public function name($object, PropertyMapping $mapping): string
     {
         if (!$object instanceof Reference) {
@@ -27,13 +23,11 @@ class ReferenceImageNamer implements NamerInterface
         $file = $mapping->getFile($object);
         $extension = $file->guessExtension() ?? 'bin';
 
-        // Title as slug
         $slug = $this->slugger->slug($object->getTitle())->lower()->toString();
 
-        // UUID (without dashes for shorter name)
         $id = $object->getId();
         if ($id === null) {
-            throw new \LogicException('Reference entity must have an ID before file upload. Ensure UUID is set in constructor.');
+            throw new \LogicException('Reference entity must have an ID before file upload.');
         }
 
         $uuid = str_replace('-', '', $id->toRfc4122());

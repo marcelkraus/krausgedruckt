@@ -10,6 +10,7 @@
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "easycorp/easyadmin-bundle": "^4.27",
         "league/commonmark": "^2.4",
+        "liip/imagine-bundle": "^2.17",
         "omines/antispam-bundle": "^0.1.12",
         "symfony/console": "8.0.*",
         "symfony/dotenv": "8.0.*",

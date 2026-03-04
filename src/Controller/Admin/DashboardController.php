@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\FaqEntry;
 use App\Entity\Reference;
+use App\Controller\Admin\FaqEntryCrudController;
+use App\Controller\Admin\ReferenceCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -22,14 +25,25 @@ class DashboardController extends AbstractDashboardController
 
     public function index(): Response
     {
-        // Render a simple dashboard
-        return $this->render('admin/dashboard.html.twig');
+        $referenceIndexUrl = $this->adminUrlGenerator
+            ->setController(ReferenceCrudController::class)
+            ->setAction('index')
+            ->generateUrl();
+
+        $faqIndexUrl = $this->adminUrlGenerator
+            ->setController(FaqEntryCrudController::class)
+            ->setAction('index')
+            ->generateUrl();
+
+        return $this->render('admin/dashboard.html.twig', [
+            'referenceIndexUrl' => $referenceIndexUrl,
+            'faqIndexUrl' => $faqIndexUrl,
+        ]);
     }
 
     #[Route('/admin/logout', name: 'admin_logout')]
     public function logout(): void
     {
-        // This method can be blank - Symfony will intercept the request
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
@@ -43,6 +57,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Referenzen', 'fa fa-images', Reference::class);
+        yield MenuItem::linkToCrud('Kategorien', 'fa fa-tags', Category::class);
         yield MenuItem::linkToCrud('FAQ', 'fa fa-question-circle', FaqEntry::class);
     }
 }
