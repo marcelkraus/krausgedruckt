@@ -117,6 +117,20 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    #[Route('/referenzen/{year}/{slug}', name: 'app_reference_detail', methods: ['GET'])]
+    function referenceDetail(int $year, string $slug, ReferenceRepository $referenceRepository): Response
+    {
+        $reference = $referenceRepository->findByYearAndSlug($year, $slug);
+
+        if (!$reference || !$reference->isVisible()) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('default/reference-detail.html.twig', [
+            'reference' => $reference,
+        ]);
+    }
+
     #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
     function faq(FaqEntryRepository $faqEntryRepository): Response
     {

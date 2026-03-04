@@ -1,10 +1,10 @@
 
-<div class="flex flex-col text-sm">
-    <div class="bg-brand-secondary p-2 rounded-t-md text-background-secondary text-center font-semibold">
-        Verwendetes Modell
-    </div>
-    <div class="bg-white p-2 rounded-b-md text-brand-secondary text-center">
-        <a class="font-semibold" href="{{ model.url }}" target="_blank">{{ model.title }}</a><br/>
-        Erstellt von {{ model.author }}
-    </div>
+<div class="flex items-center gap-4 text-xs text-brand-secondary uppercase font-semibold">
+    <span class="flex-1 border-t border-gray-100"></span>
+    <span>Verwendetes 3D-Modell</span>
+    <span class="flex-1 border-t border-gray-100"></span>
+</div>
+<div class="mt-3 text-sm text-center">
+    <a class="font-semibold" href="{{ model.url }}" target="_blank">&bdquo;{{ model.title }}&ldquo;</a><br/>
+    Erstellt und bereitgestellt von {{ model.author }}
 </div>

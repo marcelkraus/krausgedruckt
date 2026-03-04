@@ -25,4 +25,17 @@ class ReferenceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByYearAndSlug(int $year, string $slug): ?Reference
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.slug = :slug')
+            ->andWhere('r.createdAt >= :startOfYear')
+            ->andWhere('r.createdAt < :startOfNextYear')
+            ->setParameter('slug', $slug)
+            ->setParameter('startOfYear', new \DateTime("$year-01-01"))
+            ->setParameter('startOfNextYear', new \DateTime(($year + 1) . '-01-01'))
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
