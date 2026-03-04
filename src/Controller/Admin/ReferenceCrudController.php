@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Reference;
+use App\Enum\Material;
+use App\Enum\Printer;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -48,7 +51,14 @@ class ReferenceCrudController extends AbstractCrudController
             ->setRequired(true)
             ->hideOnIndex();
 
-        yield AssociationField::new('category', 'Kategorie');
+        yield AssociationField::new('category', 'Kategorie')
+            ->setSortProperty('name');
+
+        yield ChoiceField::new('material', 'Material')
+            ->setChoices(Material::cases());
+
+        yield ChoiceField::new('printer', 'Drucker')
+            ->setChoices(Printer::cases());
 
         yield ImageField::new('image', 'Bild')
             ->setBasePath('/images/references')
