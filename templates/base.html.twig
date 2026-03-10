@@ -57,8 +57,9 @@
                             <div class="flex gap-2 justify-end text-sm uppercase">
                                 <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
                                 <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') in ["app_references", "app_reference_detail"] %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_app" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_app') }}">App</a>
                                 <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
                             </div>
                         {% endblock %}
                     </div>
@@ -74,11 +75,14 @@
                         <li class="items-center">
                             <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_references') }}">Referenzen</a>
                         </li>
-                        <li class="flex items-center">
-                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_contact') }}">Kontakt</a>
+                        <li class="items-center">
+                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_app') }}">App</a>
                         </li>
                         <li class="flex items-center">
                             <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_faq') }}">FAQ</a>
+                        </li>
+                        <li class="flex items-center">
+                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_contact') }}">Kontakt</a>
                         </li>
                     </ul>
                 {% endblock %}
