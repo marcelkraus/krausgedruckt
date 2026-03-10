@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Der 3D-Druck-Kostenrechner &middot; {{  parent() }}
+{% endblock %}
+
+{% block social_media_meta %}
+    <meta property="og:title" content="krausgedruckt präsentiert: Den 3D-Druck-Kostenrechner für iPhone, iPad und Mac" />
+    <meta property="og:description" content="Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte." />
+    <meta property="og:image" content="https://www.krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
+{% endblock %}
+
+{% block main %}
+    <!-- Hero -->
+
+    <section class="bg-background-secondary">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <h2 class="font-semibold mb-8 text-4xl text-brand-primary">
+                    Der 3D-Druck-Kostenrechner.<br/>
+                    <span class="text-brand-secondary">Alles, was du für deine Kalkulation brauchst.</span>
+                </h2>
+                <div class="flex flex-wrap gap-4 items-center">
+                    <a href="{{ appStoreUrlMobile }}">
+                        <img src="/images/app-store-badge-mobile.svg" alt="Laden im App Store" class="h-14" />
+                    </a>
+                    <a href="{{ appStoreUrlDesktop }}">
+                        <img src="/images/app-store-badge-desktop.svg" alt="Laden im Mac App Store" class="h-14" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Description -->
+
+    <section class="bg-background-primary">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                <div class="flex flex-wrap items-start">
+                    <div class="w-full md:w-1/2">
+                        <h2 class="font-semibold mb-8 text-4xl text-brand-primary lg:mb-12">
+                            Die Kosten im Blick.<br/>
+                            <span class="text-brand-secondary">Einfach. Schnell. Kostenlos.</span>
+                        </h2>
+                        <div class="text-base">
+                            <p class="mb-4">Der 3D-Druck-Kostenrechner gibt dir einen schnellen und einfachen Überblick über die <em>wirklichen</em> Gesamtkosten deiner 3D-Druck-Projekte, bestehend aus den Material-, Arbeits- und Betriebskosten.</p>
+                            <p class="mb-4">Dabei ist die Grundfunktionalität der App – die einfache Kostenberechnung von 3D-Drucken – zu 100 % kostenlos. Dies bleibt auch so – für immer.</p>
+                            <p>Einen hohen Wert lege ich auf den Schutz deiner Daten. Die App ist komplett werbefrei, ich tracke dich nicht und vor allem erfasse ich keine persönlichen Daten.</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 w-full md:mt-0 md:w-1/2 md:pl-8 lg:pl-12">
+                        <div class="bg-white break-words flex flex-col min-w-0 overflow-hidden rounded-xl shadow-lg w-full">
+                            <blockquote class="p-8 text-base">
+                                <h3 class="font-semibold mb-4 text-xl">
+                                    <span class="text-brand-primary">Du willst mehr?</span><br />
+                                    <span class="text-brand-secondary">Dann wird es Zeit für PLUS.</span>
+                                </h3>
+                                <p class="mb-4">PLUS ist das kostenpflichtige Paket an Zusatzfunktionen, das du über den App Store kaufen kannst.</p>
+                                <p class="mb-4">PLUS ermöglicht dir die Speicherung von Berechnungen, die Erstellung und Auswahl von Profilen und die Berechnung deines Gewinns.</p>
+                                <p>PLUS ist dabei ein einmaliger Kauf – kein Abo. Falls du langfristig Freude mit der App hast, würde ich mich dennoch ab und an über ein Trinkgeld freuen… 😉</p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+
+    <section class="bg-white">
+        <div class="container mx-auto px-8 py-16 lg:py-24">
+            <div class="mx-auto max-w-2xl lg:max-w-4xl text-center">
+                <div>
+                    <img src="/images/app-icon.png" alt="3D-Druck-Kostenrechner" class="h-48 w-48 rounded-2xl shadow-lg mx-auto mb-8 lg:mb-12" />
+                </div>
+                <h2 class="font-semibold mb-8 text-4xl text-brand-primary">
+                    Jetzt kostenlos herunterladen.<br/>
+                    <span class="text-brand-secondary">Verfügbar für iPhone, iPad und Mac.</span>
+                </h2>
+                <div class="flex flex-wrap gap-4 justify-center items-center">
+                    <a href="{{ appStoreUrlMobile }}">
+                        <img src="/images/app-store-badge-mobile.svg" alt="Laden im App Store" class="h-14" />
+                    </a>
+                    <a href="{{ appStoreUrlDesktop }}">
+                        <img src="/images/app-store-badge-desktop.svg" alt="Laden im Mac App Store" class="h-14" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

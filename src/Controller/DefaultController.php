@@ -107,6 +107,15 @@ class DefaultController extends AbstractController
         return $this->render('default/contact-confirmation.html.twig');
     }
 
+    #[Route('/app', name: 'app_app', methods: ['GET'])]
+    function app(): Response
+    {
+        return $this->render('default/app.html.twig', [
+            'appStoreUrlMobile' => $_SERVER['APP_STORE_URL_MOBILE'],
+            'appStoreUrlDesktop' => $_SERVER['APP_STORE_URL_DESKTOP'],
+        ]);
+    }
+
     #[Route('/referenzen', name: 'app_references', methods: ['GET'])]
     function references(ReferenceRepository $referenceRepository): Response
     {
