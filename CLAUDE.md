@@ -1,6 +1,10 @@
-# CLAUDE.md
+# krausgedruckt-homepage
+> krauswerk > marcelkraus-hub > krausgedruckt-brand > krausgedruckt-homepage
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Dieses Projekt ist Teil des krauswerks – meinem persönlichen Hub für
+alle Projekte und Marken. Übergeordneter Kontext und Struktur sind im
+krauswerk-Repository dokumentiert:
+https://github.com/marcelkraus/krauswerk
 
 ## Project Overview
 
