@@ -158,6 +158,14 @@ class Reference
         return $this->source;
     }
 
+    public function hasSource(): bool
+    {
+        return $this->source !== null
+            && $this->source->getTitle() !== null
+            && $this->source->getUrl() !== null
+            && $this->source->getAuthor() !== null;
+    }
+
     public function setSource(?Source $source): self
     {
         $this->source = $source;
