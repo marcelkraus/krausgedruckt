@@ -17,10 +17,33 @@
                             {{ reference.title }}
                         </h2>
                         <div class="mt-8 flex flex-col lg:flex-row lg:gap-0">
-                            <div class="text-brand-secondary lg:w-44 flex-shrink-0 lg:pr-8 flex flex-col">
-                                <p class="text-xs leading-relaxed">Eintrag vom {{ reference.createdAt | date('d.m.Y') }}</p>
+                            {# Mobile: single line with separators #}
+                            <div class="lg:hidden text-brand-secondary text-xs leading-relaxed flex flex-wrap items-center gap-x-1.5 mb-6">
+                                <span class="font-semibold">{{ reference.createdAt | format_datetime('none', 'none', pattern='MMMM yyyy', locale='de') }}</span>
+                                {% if reference.category %}
+                                    <span>&middot;</span>
+                                    <span>{{ reference.category.name }}</span>
+                                {% endif %}
+                                {% if reference.printer or reference.materialLabel %}
+                                    <span>&middot;</span>
+                                    <span>
+                                        {%- if reference.printer %}{{ reference.printer.value }}{% endif %}
+                                        {%- if reference.printer and reference.materialLabel %}, {% endif %}
+                                        {%- if reference.materialLabel %}{{ reference.materialLabel }}{% endif -%}
+                                    </span>
+                                {% endif %}
+                                {% if reference.ratingUrl %}
+                                    <span>&middot;</span>
+                                    <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
+                                       class="hover:text-brand-primary transition-colors">Kundenbewertung lesen</a>
+                                {% endif %}
+                            </div>
+                            {# Desktop: vertical sidebar #}
+                            <div class="hidden lg:flex lg:flex-col text-brand-secondary lg:w-44 flex-shrink-0 lg:pr-8">
+                                <p class="text-xs font-semibold leading-relaxed">{{ reference.createdAt | format_datetime('none', 'none', pattern='MMMM yyyy', locale='de') }}</p>
                                 {% if reference.printer or reference.materialLabel %}
                                     <div class="mt-3 text-xs leading-relaxed">
+                                        <p class="font-semibold">Druckdaten</p>
                                         {% if reference.printer %}
                                             <p>{{ reference.printer.value }}</p>
                                         {% endif %}
@@ -29,8 +52,17 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
+                                {% if reference.ratingUrl %}
+                                    <div class="mt-3 text-xs leading-relaxed">
+                                        <p class="font-semibold">Weitere Infos</p>
+                                        <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
+                                           class="hover:text-brand-primary transition-colors">
+                                            Kundenbewertung lesen
+                                        </a>
+                                    </div>
+                                {% endif %}
                                 {% if reference.category %}
-                                    <div class="mt-3">
+                                    <div class="mt-auto pt-3">
                                         <span class="bg-brand-primary/10 text-brand-primary rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
                                     </div>
                                 {% endif %}
