@@ -68,7 +68,6 @@ class Reference
     public function __construct()
     {
         $this->id = Uuid::v7();
-        $this->source = new Source();
         $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
         $this->isVisible = false;
     }
@@ -260,6 +259,19 @@ class Reference
         }
 
         return $label;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function normalizeSource(): void
+    {
+        if ($this->source === null) {
+            return;
+        }
+
+        if ($this->source->getTitle() === '' && $this->source->getUrl() === '') {
+            $this->source = null;
+        }
     }
 
     #[ORM\PrePersist]
