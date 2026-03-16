@@ -81,6 +81,9 @@ class ReferenceCrudController extends AbstractCrudController
         yield TextField::new('source.author', 'Quelle: Autor')
             ->hideOnIndex();
 
+        yield TextField::new('ratingUrl', 'Google-Bewertung: URL')
+            ->hideOnIndex();
+
         yield DateField::new('createdAt', 'Erstellt am')
             ->setFormTypeOptions([
                 'years' => range(date('Y') - 10, date('Y') + 1),

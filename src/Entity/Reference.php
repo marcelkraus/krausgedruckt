@@ -62,6 +62,9 @@ class Reference
     #[ORM\Column(type: 'string', length: 255, nullable: true, enumType: Printer::class)]
     protected ?Printer $printer = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $ratingUrl = null;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
@@ -230,6 +233,17 @@ class Reference
     public function setPrinter(?Printer $printer): self
     {
         $this->printer = $printer;
+        return $this;
+    }
+
+    public function getRatingUrl(): ?string
+    {
+        return $this->ratingUrl;
+    }
+
+    public function setRatingUrl(?string $ratingUrl): self
+    {
+        $this->ratingUrl = $ratingUrl;
         return $this;
     }
 

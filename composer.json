@@ -24,7 +24,8 @@
         "symfony/twig-bundle": "8.0.*",
         "symfony/validator": "8.0.*",
         "symfony/yaml": "8.0.*",
-        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/extra-bundle": "^3.23",
+        "twig/intl-extra": "^3.23",
         "twig/markdown-extra": "^3.8",
         "twig/twig": "^2.12|^3.0",
         "vich/uploader-bundle": "*"
