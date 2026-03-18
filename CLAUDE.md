@@ -7,174 +7,172 @@ Dieses Projekt ist Teil meiner IT-Landschaft – einer Sammlung
 privater und gewerblicher Projekte. Übergeordneter Kontext und
 Struktur sind im „Übergreifenden Kontext" dokumentiert.
 
-## Project Overview
+## Beschreibung
 
-This is a Symfony 8.0 website for krausgedruckt
-(3D printing services), hosted with DDEV. The site uses
-Twig templates with Tailwind CSS for styling and
-EasyAdmin for backend management.
+Website für krausgedruckt (https://www.krausgedruckt.de) – meine
+Marke für 3D-Druck und Druckdienstleistungen. Die Seite zeigt
+Referenzen und FAQ (über EasyAdmin-Backend) sowie Landing-Pages
+(über JSON-Konfiguration).
 
-## Development Environment
+## Technologie-Stack
 
-### DDEV Setup
-- Project runs in DDEV with PHP 8.4, nginx-fpm, and MariaDB 10.4
-- URL: https://krausgedruckt.ddev.site
-- Start: `ddev start`
-- Stop: `ddev stop`
-- SSH into container: `ddev ssh`
+- **Backend:** Symfony 8.0, PHP 8.4
+- **Templates:** Twig
+- **Styling:** Tailwind CSS mit eigenen Markenfarben
+  (Orange/Grau-Schema)
+- **Backend-Verwaltung:** EasyAdmin 4
+- **Datei-Upload:** VichUploaderBundle (Referenzbilder)
+- **Anti-Spam:** Omines AntiSpamBundle (Honeypot, Timer,
+  URL-Count)
+- **Mail:** Symfony Mailer mit TemplatedEmail
+- **Datenbank:** Doctrine ORM, MariaDB 10.4
+- **Entwicklung:** DDEV (Nginx-FPM, PHP 8.4)
 
-### Common Commands
+## Entwicklungsumgebung
 
-**Symfony Console:**
+### DDEV starten
+
 ```bash
-ddev exec bin/console <command>
-# or inside the container:
-bin/console <command>
+ddev start
 ```
 
-**Clear cache:**
-```bash
-ddev exec bin/console cache:clear
-```
+Zugriff über: https://krausgedruckt.ddev.site
 
-**Compile Tailwind CSS:**
+### Tailwind CSS kompilieren
+
 ```bash
-# Development with watch mode (binary is in bin/tailwindcss):
+# Entwicklung mit Watch-Modus (Binary liegt in bin/tailwindcss):
 ddev exec bin/tailwindcss -i public/css/input.css -o public/css/output.css --watch
 
-# Production build (minified):
+# Produktions-Build (minifiziert):
 ddev exec bin/tailwindcss -i public/css/input.css -o public/css/output.css --minify
 ```
 
-**Composer:**
+### Symfony-Befehle
+
+```bash
+ddev exec bin/console cache:clear
+ddev exec bin/console debug:routes
+```
+
+### Composer
+
 ```bash
 ddev composer install
 ddev composer require <package>
 ddev composer update
 ```
 
-**Database Migrations:**
+### Datenbank-Migrationen
+
 ```bash
-# Create a new migration after entity changes
+# Migration erstellen nach Entity-Änderungen
 ddev exec bin/console make:migration
 
-# Run pending migrations
+# Ausstehende Migrationen ausführen
 ddev exec bin/console doctrine:migrations:migrate
 ```
 
-## Architecture
+## Projektstruktur
 
-### Data Flow & Content Management
-- **References** and **FAQ** are stored in the MariaDB
-  database and managed via EasyAdmin
-- **Other content** (landing pages) uses JSON files in
-  `config/` (e.g., `advintage-landing-page.json`)
-- **Flow for database content:** Database → Doctrine →
-  Entity → Twig Templates
-- **Flow for JSON content:** JSON → Symfony Serializer →
-  Entity DTOs → Twig Templates
-- `Reference` and `FaqEntry` entities are full Doctrine
-  entities with ORM mapping and UUID v7 as primary key
-- Other entities (e.g., `PrintableModel`) are pure DTOs
-  without Doctrine annotations
+```
+krausgedruckt-homepage/
+├── config/
+│   ├── advintage-landing-page.json   ← Landing-Page-Inhalte
+│   └── packages/                     ← Bundle-Konfigurationen
+├── src/
+│   ├── Controller/
+│   │   ├── DefaultController.php     ← Alle Frontend-Routes
+│   │   └── Admin/
+│   │       ├── DashboardController.php
+│   │       ├── ReferenceCrudController.php
+│   │       └── FaqEntryCrudController.php
+│   ├── Entity/
+│   │   ├── ContactRequest.php        ← Kontaktformular-Entity
+│   │   ├── Reference.php             ← Doctrine (UUID v7)
+│   │   ├── Source.php                ← Embedded Entity
+│   │   ├── FaqEntry.php              ← Doctrine (UUID v7)
+│   │   └── PrintableModel.php        ← DTO (JSON-basiert)
+│   └── Form/Type/
+│       └── ContactRequestType.php
+├── templates/
+│   ├── base.html.twig
+│   ├── form_layout.html.twig         ← Formular-Layout (Tailwind)
+│   ├── default/*.html.twig           ← Seitentemplates
+│   └── _*.html.twig                  ← Wiederverwendbare Partials
+├── public/
+│   ├── css/
+│   │   ├── input.css                 ← Tailwind-Input
+│   │   └── output.css                ← Kompiliertes CSS
+│   └── images/
+│       └── references/               ← Upload via VichUploader
+├── migrations/
+├── .ddev/config.yaml
+├── composer.json
+├── package.json
+└── tailwind.config.js
+```
 
-### Controller Structure
-- **Frontend routes** are defined in
-  `src/Controller/DefaultController.php` with PHP 8
-  attributes
-- Controller instantiates Symfony Serializer in
-  constructor for JSON-based content
-- **Database-backed routes:**
-  - `/referenzen` loads references via
-    `ReferenceRepository::findAllOrdered()`
-  - `/haeufig-gestellte-fragen` loads FAQ via
-    `FaqEntryRepository::findAllOrdered()`
-    (sorted by `sortOrder`)
-- **JSON-backed routes:**
-  - `/advintage` loads
-    `config/advintage-landing-page.json` and
-    deserializes to `PrintableModel[]`
-- **Admin controllers** are located in
-  `src/Controller/Admin/` for EasyAdmin CRUD operations
+## Architektur
 
-### EasyAdmin Backend
-- EasyAdmin 4 for backend management at `/admin`
-- **DashboardController**
-  (`src/Controller/Admin/DashboardController.php`):
-  Entry point for admin interface
-- **ReferenceCrudController**
-  (`src/Controller/Admin/ReferenceCrudController.php`):
-  CRUD for references
-- **FaqEntryCrudController**
-  (`src/Controller/Admin/FaqEntryCrudController.php`):
-  CRUD for FAQ entries
-- **VichUploaderBundle** for image uploads in references
-  - Mapping: `reference_images` → `/public/images/references/`
-  - Upload field: `imageFile` (VichImageType) in ReferenceCrudController
-- **Reference Entity** features:
-  - UUID v7 as primary key
-  - Fields: `title`, `description`, `image`, `imageFile`
-  - Embedded `Source` entity for attribution (title, URL, author)
-  - Timestamps: `createdAt`, `updatedAt`
-- **FaqEntry Entity** features:
-  - UUID v7 as primary key
-  - Fields: `question`, `answer`, `isVisible`, `sortOrder`
-  - Timestamps: `createdAt` (immutable), `updatedAt`
-  - Custom sorting via `sortOrder` field with up/down
-    buttons in admin interface
-  - Requires `getSortButtons()` getter method for
-    EasyAdmin field rendering
+### Datenfluss
+- **Referenzen** und **FAQ** werden in der Datenbank gespeichert
+  und über EasyAdmin verwaltet
+  (Datenbank → Doctrine → Entity → Twig)
+- **Landing-Pages** nutzen JSON-Dateien in `config/`
+  (JSON → Symfony Serializer → DTO → Twig)
+- `Reference` und `FaqEntry` sind vollständige
+  Doctrine-Entities mit UUID v7 als Primärschlüssel
+- `PrintableModel` ist ein reines DTO ohne Doctrine-Mapping
 
-### Template Organization
-- Base template: `templates/base.html.twig`
-- Page templates: `templates/default/*.html.twig`
-- Reusable components: `templates/_*.html.twig`
-  (e.g., `_model.html.twig`)
-- Custom form layout: `templates/form_layout.html.twig`
+### EasyAdmin-Backend
+- Zugang über `/admin`
+- **ReferenceCrudController:** CRUD für Referenzen mit
+  Bild-Upload (VichUploader → `/public/images/references/`)
+- **FaqEntryCrudController:** CRUD für FAQ-Einträge mit
+  Sortierung über `sortOrder`-Feld (Auf-/Ab-Buttons)
 
-### Styling with Tailwind
-- Input CSS: `public/css/input.css`
-- Output CSS: `public/css/output.css`
-  (generated via `bin/tailwindcss` binary)
-- Config: `tailwind.config.js` with custom brand colors
-  (orange/gray theme)
-- Plugins: `@tailwindcss/forms` and `@tailwindcss/typography` are active
-- Templates must be defined in the `content` array of Tailwind config
-- **Important:** Tailwind must be recompiled after template changes
+### Template-Organisation
+- Basis-Template: `templates/base.html.twig`
+- Seitentemplates: `templates/default/*.html.twig`
+- Wiederverwendbare Partials: `templates/_*.html.twig`
+- Formular-Layout: `templates/form_layout.html.twig`
 
-### Forms & Anti-Spam
-- Contact form uses `ContactRequestType` with Omines Anti-Spam Bundle
-- Email sending via Symfony Mailer with `TemplatedEmail`
-- Form has 4 fields: `name`, `email`, `message`, `discountCode`
-- Email template: `templates/default/contact.txt.twig`
-- Discount code can be pre-filled via query parameter:
+## Routing
+
+| Route | Beschreibung |
+|-------|-------------|
+| `GET /` | Startseite |
+| `GET /referenzen` | Referenzen (DB-basiert) |
+| `GET /haeufig-gestellte-fragen` | FAQ (DB-basiert) |
+| `GET /advintage` | Landing-Page (JSON-basiert) |
+| `GET /kontakt` | Kontaktformular |
+| `POST /kontakt` | Formular-Verarbeitung |
+| `GET /impressum` | Impressum |
+| `GET /datenschutz` | Datenschutzerklärung |
+| `GET /admin` | EasyAdmin-Backend |
+
+## Kontaktformular
+
+- Felder: Name, E-Mail, Nachricht, Rabattcode
+- Rabattcode vorbefüllbar via Query-Parameter:
   `/kontakt?discount-code=CODE`
-- Sender/recipient addresses configured in `.env`:
-  - `CONTACT_FORM_SENDER_ADDRESS`
-  - `CONTACT_FORM_RECIPIENT_ADDRESS`
-- `.env.local` overrides these for local/production environments
+- Anti-Spam-Profil: Honeypot, Timer (3–3600 Sekunden),
+  Markup-Filter, URL-Limit (maximal 2 URLs)
+- E-Mail-Versand über Symfony Mailer
 
-### Static Assets
-- Images: `public/images/`
-- Landing page images: `public/images/advintage-landing-page/`
-- Reference images: `public/images/references/`
-  (uploaded via VichUploader)
+## Tailwind-Konfiguration
 
-## Important Notes
+- Eigene Markenfarben (Orange/Grau-Schema)
+- Plugins: `@tailwindcss/forms`, `@tailwindcss/typography`
+- Tailwind muss nach Template-Änderungen neu kompiliert werden
 
-- **Reference updates:** References are managed via the
-  EasyAdmin interface at `/admin`
-- **FAQ updates:** FAQ entries are managed via the
-  EasyAdmin interface at `/admin`
-- **Other content updates:** To change landing pages,
-  edit the JSON files in `config/`
-- **Routing:** All frontend routes use German URLs
-  (e.g., `/kontakt`, `/referenzen`,
-  `/haeufig-gestellte-fragen`)
-- **Database:** MariaDB stores references (Reference
-  entity) and FAQ (FaqEntry entity) - use Doctrine
-  migrations for schema changes
-- **Admin access:** EasyAdmin at `/admin` for backend
-  management
-- **Environment:** `.env.local` should never be
-  committed and contains local overrides
+## Umgebungsvariablen
+
+| Variable | Beschreibung |
+|----------|-------------|
+| `APP_ENV` | Umgebung (`dev` / `prod`) |
+| `APP_SECRET` | Symfony Secret |
+| `MAILER_DSN` | Mail-Transport |
+| `CONTACT_FORM_SENDER_ADDRESS` | Absender des Kontaktformulars |
+| `CONTACT_FORM_RECIPIENT_ADDRESS` | Empfänger des Kontaktformulars |
