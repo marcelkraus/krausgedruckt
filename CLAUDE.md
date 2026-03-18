@@ -1,10 +1,9 @@
 # krausgedruckt-homepage
-> krauswerk > marcelkraus-hub > krausgedruckt-brand > krausgedruckt-homepage
+> Übergreifender Kontext > krausgedruckt > homepage
 
-Dieses Projekt ist Teil des krauswerks – meinem persönlichen Hub für
-alle Projekte und Marken. Übergeordneter Kontext und Struktur sind im
-krauswerk-Repository dokumentiert:
-https://github.com/marcelkraus/krauswerk
+Dieses Projekt ist Teil meiner IT-Landschaft – einer Sammlung
+privater und gewerblicher Projekte. Übergeordneter Kontext und
+Struktur sind im „Übergreifenden Kontext" dokumentiert.
 
 ## Project Overview
 
