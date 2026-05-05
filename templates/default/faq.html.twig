@@ -8,15 +8,15 @@
     <section class="bg-background-secondary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <h2 class="font-semibold mb-8 text-4xl text-brand-primary lg:mb-12">
+                <h2 class="font-semibold mb-8 text-4xl text-brand-papaya lg:mb-12">
                     Häufig gestellte Fragen.<br/>
-                    <span class="text-brand-secondary">Du fragst, ich antworte.</span>
+                    <span class="text-muted">Du fragst, ich antworte.</span>
                 </h2>
                 <dl class="gap-x-6 gap-y-8 sm:grid sm:grid-cols-2 sm:space-y-0 space-y-8">
                     {% for faqEntry in faqEntries %}
                         <div>
                             <dt class="font-semibold text-base">{{ faqEntry.question }}</dt>
-                            <dd class="mt-2 prose prose-a:no-underline prose-a:text-brand-primary text-base">{{ faqEntry.answer | markdown_to_html }}</dd>
+                            <dd class="mt-2 prose prose-a:no-underline prose-a:text-brand-papaya text-base">{{ faqEntry.answer | markdown_to_html }}</dd>
                         </div>
                     {% endfor %}
                 </dl>

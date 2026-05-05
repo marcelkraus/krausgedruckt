@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
     <title>{% block title %}krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt{% endblock %}</title>
     <meta property="description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
     <meta property="og:type" content="website" />
@@ -36,13 +39,13 @@
                 <div class="flex-none">
                     <a href="{{ path('app_homepage') }}">
                         <h1 class="hidden">krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt</h1>
-                        <img src="/images/krausgedruckt-logo.png" class="h-16 max-h-16 md:h-24 md:max-h-24" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
+                        <img src="/images/krausgedruckt-logo.svg" class="h-10 max-h-10 md:h-14 md:max-h-14" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
                     </a>
                 </div>
                 <div class="flex-auto">
                     <div class="block lg:hidden">
                         <div class="flex justify-end">
-                            <a class="border border-brand-secondary cursor-pointer hover:border-brand-primary hover:text-brand-primary px-4 py-2 rounded-xl text-brand-secondary" type="button" onclick="toggleNavbar()">
+                            <a class="border border-muted cursor-pointer hover:border-brand-papaya hover:text-brand-papaya px-4 py-2 rounded-xl text-muted" type="button" onclick="toggleNavbar()">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5" id="navbar-icon-open">
                                     <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
                                 </svg>
@@ -55,11 +58,11 @@
                     <div class="hidden lg:block">
                         {%  block main_menu %}
                             <div class="flex gap-2 justify-end text-sm uppercase">
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') in ["app_references", "app_reference_detail"] %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_app" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_app') }}">App</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-primary border-brand-primary text-white{% else %}border-brand-secondary hover:border-brand-primary hover:text-brand-primary text-brand-secondary{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') in ["app_references", "app_reference_detail"] %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_app" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_app') }}">App</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
+                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
                             </div>
                         {% endblock %}
                     </div>
@@ -70,19 +73,19 @@
                 {%  block mobile_main_menu %}
                     <ul class="flex flex-row font-semibold gap-4 justify-end list-none text-sm uppercase">
                         <li class="items-center">
-                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_homepage') }}">Übersicht</a>
+                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_homepage') }}">Übersicht</a>
                         </li>
                         <li class="items-center">
-                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_references') }}">Referenzen</a>
+                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_references') }}">Referenzen</a>
                         </li>
                         <li class="items-center">
-                            <a class="hover:text-brand-primary mb-4 text-brand-secondary" href="{{ path('app_app') }}">App</a>
+                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_app') }}">App</a>
                         </li>
                         <li class="flex items-center">
-                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_faq') }}">FAQ</a>
+                            <a class="hover:text-brand-papaya text-muted" href="{{ path('app_faq') }}">FAQ</a>
                         </li>
                         <li class="flex items-center">
-                            <a class="hover:text-brand-primary text-brand-secondary" href="{{ path('app_contact') }}">Kontakt</a>
+                            <a class="hover:text-brand-papaya text-muted" href="{{ path('app_contact') }}">Kontakt</a>
                         </li>
                     </ul>
                 {% endblock %}
@@ -100,30 +103,29 @@
         {% block main %}{% endblock %}
     </main>
     {% block footer %}
-        <footer class="bg-brand-secondary text-white">
+        <footer class="bg-muted text-white">
             <div class="container mx-auto pb-8 pt-16 px-8 lg:pt-24">
                 <h4 class="font-semibold mb-8 text-2xl">
-                    <span class="text-brand-primary">Dein heisser Draht.</span><br/>
+                    <span class="text-brand-papaya">Dein heisser Draht.</span><br/>
                     Lass uns schreiben.
                 </h4>
                 <div class="flex flex-wrap">
                     <div class="w-full xl:w-1/2">
-                        <span class="font-semibold"><span class="text-brand-primary">kraus</span><span class="text-white">gedruckt</span></span> ist eine Nebenbeschäftigung, am besten erreichst du mich daher schriftlich. <span class="font-semibold">Ich freue mich auf deine Nachricht!</span>
+                        <span class="font-semibold"><span class="text-brand-papaya">kraus</span><span class="text-white">gedruckt</span></span> ist eine Nebenbeschäftigung, am besten erreichst du mich daher schriftlich. <span class="font-semibold">Ich freue mich auf deine Nachricht!</span>
                     </div>
                     <div class="w-full xl:w-1/2">
                         <div class="flex flex-wrap gap-4 justify-start mt-4 xl:justify-end xl:mt-0">
-                            <a class="bg-background-primary border-2 border-brand-primary flex-none font-semibold hover:bg-brand-primary hover:text-white px-4 py-2 rounded-xl text-brand-primary text-sm" href="http://instagram.com/krausgedruckt/" title="krausgedruckt auf Instagram">Instagram</a>
-                            <a class="bg-background-primary border-2 border-brand-primary flex-none font-semibold hover:bg-brand-primary hover:text-white px-4 py-2 rounded-xl text-brand-primary text-sm" href="{{ path('app_contact') }}">Kontakt</a>
-                            <a class="bg-background-primary border-2 border-brand-primary flex-none font-semibold hover:bg-brand-primary hover:text-white px-4 py-2 rounded-xl text-brand-primary text-sm" href="{{ path('app_contact_email') }}">E-Mail</a>
-                            <a class="bg-background-primary border-2 border-brand-primary flex-none font-semibold hover:bg-brand-primary hover:text-white px-4 py-2 rounded-xl text-brand-primary text-sm" href="{{ path('app_contact_whats_app') }}">WhatsApp</a>
+                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="http://instagram.com/krausgedruckt/" title="krausgedruckt auf Instagram">Instagram</a>
+                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact') }}">Kontakt</a>
+                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact_email') }}">E-Mail</a>
+                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact_whats_app') }}">WhatsApp</a>
                         </div>
                     </div>
                 </div>
-                <hr class="border-brand-primary mb-4 mt-8" />
-                <div class="md:flex md:justify-between">
-                    <img src="/images/krausgedruckt-logo-dark.png" class="-mt-6 h-12 max-h-12 ml-4" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
+                <hr class="border-brand-papaya mb-4 mt-8" />
+                <div class="md:flex md:justify-end">
                     <div class="ml-4 mt-4 text-xs md:ml-0 md:mt-0 md:text-right">
-                        © 2023—{{ 'now' | date('Y') }} krausgedruckt von Marcel Kraus<br/>
+                        Copyright © {{ 'now' | date('Y') }} krausgedruckt von Marcel Kraus<br/>
                         <a href="{{ path('app_review') }}">Bewerten</a> &middot; <a href="{{ path('app_imprint') }}">Impressum</a> &middot; <a href="{{ path('app_data_privacy') }}">Datenschutz</a>
                     </div>
                 </div>

@@ -11,15 +11,15 @@ module.exports = {
     extend: {
       colors: {
         background: {
-          primary: '#ffedd5', // Orange:100
-          secondary: '#e5e7eb', // Gray:200
+          primary: colors.orange[100],
+          secondary: colors.gray[200],
         },
         brand: {
-          primary: '#f97316', // Orange:500
-          secondary: '#4b5563', // Gray:600
+          papaya: '#EA580C', // orange-600
+          'primary-text': '#171717', // neutral-900
         },
-        placeholder: '#9ca3af', // Gray:400
-        primary: '#111827', // Gray:900
+        muted: colors.gray[600],
+        placeholder: colors.gray[400],
       },
     },
   },

@@ -8,9 +8,9 @@
     <section class="bg-background-secondary">
         <div class="container mx-auto px-8 py-16 lg:py-24">
             <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <h2 class="mb-8 text-4xl font-semibold text-brand-primary lg:mb-12">
+                <h2 class="mb-8 text-4xl font-semibold text-brand-papaya lg:mb-12">
                     Meine Referenzen.<br/>
-                    <span class="text-brand-secondary">Ein kleiner Einblick in meine bunte Welt.</span>
+                    <span class="text-muted">Ein kleiner Einblick in meine bunte Welt.</span>
                 </h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {% for reference in references %}
@@ -21,15 +21,15 @@
                                 </a>
                             {% endif %}
                             <div class="p-6 flex flex-col flex-1">
-                                <h3 class="text-xl font-semibold text-brand-primary">
+                                <h3 class="text-xl font-semibold text-brand-papaya">
                                     <a href="{{ path('app_reference_detail', {year: reference.year, slug: reference.slug}) }}" class="hover:underline">{{ reference.title }}</a>
                                 </h3>
                                 {% if reference.summary %}
-                                    <p class="mt-2 text-brand-secondary line-clamp-3">{{ reference.summary }}</p>
+                                    <p class="mt-2 text-muted line-clamp-3">{{ reference.summary }}</p>
                                 {% endif %}
                                 {% if reference.category %}
                                     <div class="mt-auto pt-4">
-                                        <span class="bg-brand-primary/10 text-brand-primary rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
+                                        <span class="bg-brand-papaya/10 text-brand-papaya rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
                                     </div>
                                 {% endif %}
                             </div>
