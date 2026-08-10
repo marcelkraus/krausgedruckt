@@ -26,7 +26,7 @@ class ReferenceImageSubscriber
         }
 
         $image = $entity->getImage();
-        if ($image && str_contains($image, 'temp_')) {
+        if ($image !== null && str_contains($image, 'temp_')) {
             $this->renameImageWithUuid($entity);
         }
     }

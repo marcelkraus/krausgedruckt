@@ -110,15 +110,10 @@ class FaqEntry
         return $this;
     }
 
-    // Alias method for template compatibility
-    public function isActive(): bool
-    {
-        return $this->isVisible();
-    }
-
     public function getSortButtons(): string
     {
-        return ''; // Overridden by controller
+        // The value is rendered by FaqEntryCrudController via formatValue().
+        return '';
     }
 
     #[ORM\PrePersist]

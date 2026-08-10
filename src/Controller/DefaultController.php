@@ -52,7 +52,8 @@ class DefaultController extends AbstractController
     function contact(Request $request, MailerInterface $mailer): Response
     {
         $contactRequest = new ContactRequest();
-        if ($discountCode = $request->query->get('discount-code', null)) {
+        $discountCode = $request->query->get('discount-code');
+        if ($discountCode !== null) {
             $contactRequest->setDiscountCode($discountCode);
         }
 

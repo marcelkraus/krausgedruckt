@@ -35,7 +35,7 @@ ddev exec bin/console cache:clear
 
 **Compile Tailwind CSS:**
 ```bash
-# Development with watch mode (wrapper script, no arguments):
+# Watch mode (wrapper script, minified output, no arguments):
 ddev exec bin/tailwindcss
 
 # Production build (minified):
@@ -140,12 +140,19 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 - `App\Enum\Printer`: Prusa CORE One+, Prusa MINI+, Prusa MK4S, Prusa MK4S+MMU; `isMultiColor()` is true for the MMU variant
 
 ### EasyAdmin Backend
-- EasyAdmin 4 for backend management at `/admin`
+- EasyAdmin 5 for backend management at `/admin`
 - **DashboardController** (`src/Controller/Admin/DashboardController.php`): entry point, renders `templates/admin/dashboard.html.twig` with deep links into the Reference and FAQ index pages; menu contains Dashboard, Referenzen, Kategorien and FAQ
 - **ReferenceCrudController**: CRUD for references, sorted by `createdAt` descending
 - **CategoryCrudController**: CRUD for categories, sorted by `name` ascending
 - **FaqEntryCrudController**: CRUD for FAQ entries, sorted by `sortOrder` ascending, with custom up/down actions that swap the sort order of neighbouring entries
 - All CRUD labels and field labels are German
+
+**EasyAdmin 5 mechanics** — these are mandatory and easy to get wrong:
+- Pretty URLs are required. They are loaded through `config/routes/easyadmin.yaml` with `type: easyadmin.routes`; the dashboard declares its own path via `#[AdminDashboard(routePath: '/admin', routeName: 'admin')]`
+- Custom CRUD actions **must** carry `#[AdminRoute]`. Without it they are silently ignored when the routes are built
+- Menu entries use `MenuItem::linkTo(<CrudController>::class, ...)` and point at the CRUD controller, not at the entity
+- `entityId` is a route path segment, not a query parameter. Read the record through `$context->getEntity()->getInstance()` rather than from the query string
+- Custom actions get no CSRF protection from the bundle — only `delete`, `batchDelete` and the boolean toggle are covered. State-changing actions have to restrict themselves to POST and validate their own token, as `FaqEntryCrudController` does for sorting
 
 ### Admin Authentication
 - Firewall `admin` covers `^/admin` and uses **HTTP Basic** with realm `krausgedruckt:admin`
@@ -195,6 +202,8 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 | Variable | Purpose |
 | --- | --- |
 | `ADMIN_PASSWORD` | Password hash for the in-memory admin user |
+| `APP_ENV` | Symfony environment, overridden to `prod` in deployments |
+| `APP_SECRET` | Symfony application secret |
 | `APP_STORE_URL_DESKTOP` | App Store link used on `/app` for desktop visitors |
 | `APP_STORE_URL_MOBILE` | App Store link used on `/app` for mobile visitors |
 | `CONTACT_FORM_RECIPIENT_ADDRESS` | Recipient of contact form emails |

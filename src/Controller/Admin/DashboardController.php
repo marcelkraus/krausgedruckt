@@ -2,11 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
-use App\Entity\FaqEntry;
-use App\Entity\Reference;
-use App\Controller\Admin\FaqEntryCrudController;
-use App\Controller\Admin\ReferenceCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -56,8 +51,8 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Referenzen', 'fa fa-images', Reference::class);
-        yield MenuItem::linkToCrud('Kategorien', 'fa fa-tags', Category::class);
-        yield MenuItem::linkToCrud('FAQ', 'fa fa-question-circle', FaqEntry::class);
+        yield MenuItem::linkTo(ReferenceCrudController::class, 'Referenzen', 'fa fa-images');
+        yield MenuItem::linkTo(CategoryCrudController::class, 'Kategorien', 'fa fa-tags');
+        yield MenuItem::linkTo(FaqEntryCrudController::class, 'FAQ', 'fa fa-question-circle');
     }
 }

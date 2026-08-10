@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Uid\Uuid;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 #[ORM\Table(name: 'reference')]
@@ -70,6 +70,9 @@ class Reference
         $this->id = Uuid::v7();
         $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
         $this->isVisible = false;
+        // The admin form binds to the property paths source.title, source.url
+        // and source.author, so the embeddable has to exist from the start.
+        $this->source = new Source();
     }
 
     public function getId(): ?Uuid
@@ -86,7 +89,7 @@ class Reference
     {
         $this->imageFile = $imageFile;
 
-        if ($imageFile) {
+        if ($imageFile !== null) {
             $this->updatedAt = new \DateTime();
         }
 
@@ -139,7 +142,7 @@ class Reference
 
     public function getImagePath(): ?string
     {
-        return $this->image ? '/images/references/' . $this->image : null;
+        return $this->image !== null ? '/images/references/' . $this->image : null;
     }
 
     public function getDescription(): string
@@ -270,26 +273,25 @@ class Reference
     }
 
     #[ORM\PrePersist]
-    #[ORM\PreUpdate]
     public function normalizeSource(): void
     {
         if ($this->source === null) {
             return;
         }
 
-        if ($this->source->getTitle() === '' && $this->source->getUrl() === '') {
+        $isEmpty = ($this->source->getTitle() ?? '') === ''
+            && ($this->source->getUrl() ?? '') === ''
+            && ($this->source->getAuthor() ?? '') === '';
+
+        if ($isEmpty) {
             $this->source = null;
         }
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function generateSlugValue(): void
     {
-        if (isset($this->createdAt) === false) {
-            $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
-        }
-
-        if (empty($this->slug)) {
+        if ($this->slug === '') {
             $slugger = new AsciiSlugger('de');
             $this->slug = strtolower($slugger->slug($this->title)->toString());
         }
