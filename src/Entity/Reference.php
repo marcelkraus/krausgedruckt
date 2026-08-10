@@ -256,7 +256,7 @@ class Reference
 
     public function getMaterialLabel(): ?string
     {
-        if (!$this->material) {
+        if ($this->material === null) {
             return null;
         }
 
@@ -285,7 +285,7 @@ class Reference
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        if (!$this->createdAt) {
+        if (isset($this->createdAt) === false) {
             $this->createdAt = (new \DateTime())->setTime(0, 0, 0);
         }
 

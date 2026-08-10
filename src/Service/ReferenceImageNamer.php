@@ -16,7 +16,7 @@ class ReferenceImageNamer implements NamerInterface
 
     public function name($object, PropertyMapping $mapping): string
     {
-        if (!$object instanceof Reference) {
+        if ($object instanceof Reference === false) {
             throw new \InvalidArgumentException('Object must be an instance of Reference');
         }
 

@@ -90,7 +90,7 @@ class FaqEntryCrudController extends AbstractCrudController
         $entityId = $context->getRequest()->query->get('entityId');
         $faqEntry = $entityManager->getRepository(FaqEntry::class)->find($entityId);
 
-        if (!$faqEntry) {
+        if ($faqEntry === null) {
             throw $this->createNotFoundException('FaqEntry not found');
         }
 

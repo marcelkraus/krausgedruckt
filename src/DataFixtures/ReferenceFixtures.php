@@ -26,7 +26,7 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
         $fixtureImagesPath = $this->projectDir . '/public/images/references/fixtures';
         $imagesPath = $this->projectDir . '/public/images/references';
 
-        if (!is_dir($imagesPath)) {
+        if (is_dir($imagesPath) === false) {
             mkdir($imagesPath, 0777, true);
         }
 

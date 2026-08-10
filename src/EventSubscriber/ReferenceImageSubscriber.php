@@ -21,7 +21,7 @@ class ReferenceImageSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof Reference) {
+        if ($entity instanceof Reference === false) {
             return;
         }
 
@@ -34,14 +34,14 @@ class ReferenceImageSubscriber
     private function renameImageWithUuid(Reference $reference): void
     {
         $oldImage = $reference->getImage();
-        if (!$oldImage) {
+        if ($oldImage === null) {
             return;
         }
 
         $imageDir = $this->projectDir . '/public/images/references/';
         $oldPath = $imageDir . $oldImage;
 
-        if (!file_exists($oldPath)) {
+        if (file_exists($oldPath) === false) {
             return;
         }
 

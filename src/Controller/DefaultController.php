@@ -131,7 +131,7 @@ class DefaultController extends AbstractController
     {
         $reference = $referenceRepository->findByYearAndSlug($year, $slug);
 
-        if (!$reference || !$reference->isVisible()) {
+        if ($reference === null || $reference->isVisible() === false) {
             throw $this->createNotFoundException();
         }
 

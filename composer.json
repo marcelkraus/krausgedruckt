@@ -12,18 +12,18 @@
         "league/commonmark": "^2.4",
         "liip/imagine-bundle": "^2.17",
         "omines/antispam-bundle": "^0.1.12",
-        "symfony/console": "8.0.*",
-        "symfony/dotenv": "8.0.*",
+        "symfony/console": "8.1.*",
+        "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
-        "symfony/form": "8.0.*",
-        "symfony/framework-bundle": "8.0.*",
-        "symfony/mailer": "8.0.*",
-        "symfony/runtime": "8.0.*",
-        "symfony/security-csrf": "8.0.*",
-        "symfony/serializer": "8.0.*",
-        "symfony/twig-bundle": "8.0.*",
-        "symfony/validator": "8.0.*",
-        "symfony/yaml": "8.0.*",
+        "symfony/form": "8.1.*",
+        "symfony/framework-bundle": "8.1.*",
+        "symfony/mailer": "8.1.*",
+        "symfony/runtime": "8.1.*",
+        "symfony/security-csrf": "8.1.*",
+        "symfony/serializer": "8.1.*",
+        "symfony/twig-bundle": "8.1.*",
+        "symfony/validator": "8.1.*",
+        "symfony/yaml": "8.1.*",
         "twig/extra-bundle": "^3.23",
         "twig/intl-extra": "^3.23",
         "twig/markdown-extra": "^3.8",
@@ -75,7 +75,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "8.0.*"
+            "require": "8.1.*"
         }
     },
     "require-dev": {
