@@ -1,0 +1,55 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    Instagram-Vorschau
+{% endblock %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block head_javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/instagram-preview.js') }}" defer></script>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-image"></i> Bild im Hochformat
+                </div>
+                {% if reference.imagePortraitPathWithFallback %}
+                    <img src="{{ reference.imagePortraitPathWithFallback }}" alt="Bild zur Referenz „{{ reference.title }}“" class="img-fluid">
+                    {% if reference.imagePortraitPath is null %}
+                        <div class="card-body">
+                            <p class="text-warning mb-0">
+                                <i class="fa fa-triangle-exclamation"></i>
+                                Für diese Referenz gibt es kein Hochformat. Angezeigt wird das Querformat.
+                            </p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card-body">
+                        <p class="mb-0">Für diese Referenz ist kein Bild hinterlegt.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fa fa-align-left"></i> Text zum Kopieren</span>
+                    <button type="button" class="btn btn-primary btn-sm" data-instagram-caption-copy>
+                        <i class="fa fa-clipboard"></i> In Zwischenablage kopieren
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 instagram-caption" data-instagram-caption>{{ caption }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Referenzen &middot; {{  parent() }}
-{% endblock %}
+{% block title %}Referenzen · krausgedruckt von Marcel Kraus{% endblock %}
 
 {% block main %}
     <section class="bg-background-secondary">
@@ -15,9 +13,12 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {% for reference in references %}
                         <article class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
-                            {% if reference.imagePath %}
+                            {% if reference.imageLandscapePath %}
                                 <a href="{{ path('app_reference_detail', {year: reference.year, slug: reference.slug}) }}">
-                                    <img class="w-full h-64 object-cover" src="{{ reference.imagePath | imagine_filter('reference_thumb') }}" alt="{{ reference.title }}">
+                                    <picture>
+                                        <source media="(min-width: 1024px)" srcset="{{ reference.imageLandscapePath | imagine_filter('reference_landscape') }}">
+                                        <img class="w-full object-cover aspect-[4/5] lg:aspect-[5/4]" src="{{ reference.imagePortraitPath ? reference.imagePortraitPath | imagine_filter('reference_portrait') : reference.imageLandscapePath | imagine_filter('reference_landscape') }}" alt="{{ reference.title }}">
+                                    </picture>
                                 </a>
                             {% endif %}
                             <div class="p-6 flex flex-col flex-1">

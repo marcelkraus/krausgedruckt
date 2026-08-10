@@ -1,10 +1,4 @@
-# krausgedruckt-homepage
-> krauswerk > marcelkraus-hub > krausgedruckt-brand > krausgedruckt-homepage
-
-Dieses Projekt ist Teil des krauswerks – meinem persönlichen Hub für
-alle Projekte und Marken. Übergeordneter Kontext und Struktur sind im
-krauswerk-Repository dokumentiert:
-https://github.com/marcelkraus/krauswerk
+# krausgedruckt
 
 ## Project Overview
 
@@ -66,8 +60,8 @@ ddev exec bin/console doctrine:migrations:migrate
 
 **Reset the local database:**
 ```bash
-# Drops and recreates the database, runs migrations, deletes all JPG files
-# in public/images/references/ and loads the fixtures
+# Drops and recreates the database, runs migrations, deletes all uploaded
+# reference images from landscape/ and portrait/ and loads the fixtures
 bin/reinstall-db
 ```
 
@@ -117,9 +111,12 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 
 **Reference** (`reference` table)
 - UUID v7 as primary key, lifecycle callbacks enabled
-- Content: `title`, `slug` (unique), `summary`, `description`, `image`, `imageFile`
+- Content: `title`, `slug` (unique), `summary`, `description`
+- The slug is generated from the title while a reference is created — the field is disabled there — and can be edited freely afterwards. Changing it changes the address of the detail page. A pattern check keeps it URL-safe and `UniqueEntity` catches a collision before the database does
+- Images: `imageLandscape` / `imageFileLandscape` (5:4, stored at 1080 × 864) and `imagePortrait` / `imageFilePortrait` (4:5, stored at 1080 × 1350)
 - Classification: `category` (ManyToOne to `Category`, nullable), `material` (`Material` enum, nullable), `printer` (`Printer` enum, nullable)
 - Visibility: `isVisible` (defaults to `false`)
+- **Mandatory:** both images and the category. Enforced at form validation only — the columns stay nullable so references predating the split can still be read. The images are checked through a callback that accepts either a freshly uploaded file or an already stored one, because VichUploader writes the file name while flushing, long after validation has run. References predating the second image cannot be saved until a portrait image is supplied — this is intended
 - Attribution: embedded `Source` (`title`, `url`, `author` — all optional)
 - Google rating: `ratingUrl` (nullable)
 - Timestamps: `createdAt` (set to midnight on construction), `updatedAt`
@@ -127,6 +124,7 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 **Category** (`category` table)
 - UUID v7 as primary key
 - Fields: `name`, `slug` (unique)
+- Same slug handling as the reference: generated from the name while the category is created, the field is disabled there, editable afterwards, pattern checked and unique. The slug is currently not read anywhere — no route and no template uses it
 
 **FaqEntry** (`faq_entry` table)
 - UUID v7 as primary key, index on `sort_order`
@@ -137,13 +135,14 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 
 **Enums**
 - `App\Enum\Material`: ASA, FLEX, PA12-CF, PC, PC-CF, PETG, PLA
-- `App\Enum\Printer`: Prusa CORE One+, Prusa MINI+, Prusa MK4S, Prusa MK4S+MMU; `isMultiColor()` is true for the MMU variant
+- `App\Enum\Printer`: Prusa CORE One INDX, Prusa CORE One L, Prusa CORE One+, Prusa MINI+, Prusa MK4S, Prusa MK4S + MMU3; `isMultiColor()` is true for the INDX and the MMU3 variant
+- Both enums carry a `getHashtags()` method feeding the Instagram caption. Keep the hashtags next to the case, never in a second place
 
 ### EasyAdmin Backend
 - EasyAdmin 5 for backend management at `/admin`
 - **DashboardController** (`src/Controller/Admin/DashboardController.php`): entry point, renders `templates/admin/dashboard.html.twig` with deep links into the Reference and FAQ index pages; menu contains Dashboard, Referenzen, Kategorien and FAQ
 - **ReferenceCrudController**: CRUD for references, sorted by `createdAt` descending
-- **CategoryCrudController**: CRUD for categories, sorted by `name` ascending
+- **CategoryCrudController**: CRUD for categories, sorted by `name` ascending. A category that references point to cannot be deleted: the button is hidden through `displayIf()` and `deleteEntity()` refuses the request, so a hand crafted call cannot run into a foreign key error either. Use `ReferenceRepository::countByCategory()` for that check — it counts through the criteria API, because a hand written DQL comparison against the association silently returns zero for the UUID identifier
 - **FaqEntryCrudController**: CRUD for FAQ entries, sorted by `sortOrder` ascending, with custom up/down actions that swap the sort order of neighbouring entries
 - All CRUD labels and field labels are German
 
@@ -161,12 +160,25 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 - Access control requires `ROLE_ADMIN` for `^/admin`
 
 ### Image Handling
-- **VichUploaderBundle** handles image uploads for references
-  - Mapping: `reference_images` → `/public/images/references/`, URI prefix `/images/references`
-  - Upload field: `imageFile` (VichImageType) in `ReferenceCrudController`
-  - Namer: `App\Service\ReferenceImageNamer` builds the filename as `<title-slug>-<uuid-without-dashes>.<extension>`
-- `App\EventSubscriber\ReferenceImageSubscriber` listens on `postPersist` and renames temporary uploads (filenames containing `temp_`) once the entity has its UUID
-- **LiipImagineBundle** provides the `reference_thumb` filter set (GD driver, 600×400 outbound thumbnail, quality 80); cached files land in `public/media/cache`
+Every reference carries two images. Both are capped at a width of 1080 pixels, matching what Instagram accepts.
+
+| | Landscape | Portrait |
+| --- | --- | --- |
+| Ratio | 5:4 | 4:5 |
+| Stored size | 1080 × 864 | 1080 × 1350 |
+| Directory | `public/images/references/landscape/` | `public/images/references/portrait/` |
+| VichUploader mapping | `reference_images_landscape` | `reference_images_portrait` |
+| LiipImagine filter | `reference_landscape` | `reference_portrait` |
+
+- `Assert\Image` on the upload properties enforces the ratio with a tolerance of roughly one percent, a minimum size matching the target, a maximum of 12 MB and 30 megapixels, and restricts the type to JPEG, PNG and WebP. Imagick never scales up, so anything smaller than the target is rejected rather than interpolated
+- `App\EventListener\ReferenceImageListener` listens on VichUploader's `POST_UPLOAD` and `POST_REMOVE` events. On upload it hands the stored file to `App\Service\ImageNormalizer`, which applies the EXIF rotation, crops to the target size, converts to sRGB and strips the remaining metadata. The uploaded original is replaced, there is no archive copy. Both events drop the rendered versions from the LiipImagine cache, because the file name stays the same when an image is replaced
+- Namer: `App\Service\ReferenceImageNamer` builds the filename as `<title-slug>-<uuid-without-dashes>.<extension>` for both mappings
+- VichUploader owns the file lifecycle and needs no help: `delete_on_update` removes the previous picture when a new one is uploaded, even when the title changed the file name in between, and `delete_on_remove` removes both files when the reference is deleted. Renaming without uploading leaves the file under its old name — a cosmetic mismatch, nothing is lost
+- **Display follows the device:** portrait wherever elements stack (mobile), landscape wherever they sit side by side (desktop). This applies to the detail page and the public reference list alike; the admin list always shows the landscape image
+- References created before the split have no portrait image, so `Reference::getImagePortraitPathWithFallback()` falls back to the landscape one
+- Cached thumbnails land in `public/media/cache`
+- **Never call `Imagick::autoOrientImage()` or `Imagick::autoOrient()`.** The name depends on the ImageMagick major version — the sixth binding knows the former, the seventh the latter — so either one works in one environment and fatals in the other. The rotation always goes through `ImageNormalizer::applyOrientation()`, which maps the eight EXIF values onto `flipImage()`, `flopImage()` and `rotateImage()`
+- Known limitation: `Assert\Image` measures the physical pixels and ignores the EXIF orientation. A photo stored sideways is therefore rejected with a ratio message rather than being rotated first
 
 ### Template Organization
 - Base template: `templates/base.html.twig`
@@ -212,6 +224,13 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 | `GOOGLE_REVIEW_URL` | Redirect target of `/bewerten` |
 | `MAILER_DSN` | Symfony Mailer transport |
 
+### Instagram Preview
+- Read-only page reachable from the three dot menu of a reference, rendered by `ReferenceCrudController::instagramPreview()` into `templates/admin/instagram-preview.html.twig`
+- `App\Service\InstagramCaptionBuilder` assembles the caption from three paragraphs: the `#ModellMontag` introduction with the title and the summary, the source sentence (only when all three source fields are set) and the hashtag block
+- Hashtags come from `InstagramCaptionBuilder::GLOBAL_HASHTAGS` plus the printer and the material. Missing fields contribute nothing, duplicates are dropped and the block is always sorted alphabetically
+- Without a summary the introduction ends after the model name
+- The caption sits in a copyable block with a button next to it. The asynchronous clipboard API only exists in a secure context, so the button falls back to a hidden selection when the backend is opened over plain HTTP
+
 ### Fixtures
 - `src/DataFixtures/` contains `CategoryFixtures`, `ReferenceFixtures` and `FaqEntryFixtures`
 - Load them with `ddev exec bin/console doctrine:fixtures:load`, or use `bin/reinstall-db` for a full reset
@@ -219,8 +238,32 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 ### Static Assets
 - Images: `public/images/`
 - Landing page images: `public/images/advintage-landing-page/`
-- Reference images: `public/images/references/` (uploaded via VichUploader)
-- Logo and favicons: `public/images/krausgedruckt-logo.svg`, `krausgedruckt-logo-sharing.png`, `favicon-*.png`, `apple-touch-icon.png`
+- Reference images: `public/images/references/landscape/` and `public/images/references/portrait/` (uploaded via VichUploader)
+- Logo: `public/images/krausgedruckt-logo.svg`
+- Sharing image: `public/images/sharing.png` (1200×630, Open Graph)
+
+### Favicons
+
+Three files at the web root, all derived from the master kachel:
+
+| File | Role |
+|------|------|
+| `favicon.svg` | primary – scales to any size a browser asks for |
+| `favicon.ico` | 16 + 32 px in one file; also answers the implicit `/favicon.ico` request browsers make without a `<link>` |
+| `apple-touch-icon.png` | 180×180, iOS home screen |
+
+The SVG **must** keep its `width`/`height` attributes. Without them it has no
+intrinsic size, so the browser rasterises it into a default box and scales that
+into the tab slot, which leaves a pale rim around the tile. Rasterisation is
+picked per size by measurement: 16 px comes straight out of the browser's own
+rasteriser, 32 px and 180 px are downsampled from a 1024 px raster, which
+measured sharper. Every generated file is checked for a fully opaque,
+single-colour border before it ships.
+
+The tile is `#EA580C`, taken from the master. The icons this set replaced had
+drifted to `#EB5923` – they had been rasterised away from the vector at some
+point and nobody noticed. Master artwork is **not** kept in the repository;
+Marcel supplies it on demand, and every shipped asset is derived from it.
 
 ## Important Notes
 

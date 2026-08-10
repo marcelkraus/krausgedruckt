@@ -8,9 +8,15 @@ liip_imagine:
                 web_root: '%kernel.project_dir%/public'
                 cache_prefix: media/cache
     filter_sets:
-        reference_thumb:
-            quality: 80
+        reference_landscape:
+            quality: 85
             filters:
                 thumbnail:
-                    size: [600, 400]
+                    size: [1080, 864]
+                    mode: outbound
+        reference_portrait:
+            quality: 85
+            filters:
+                thumbnail:
+                    size: [1080, 1350]
                     mode: outbound

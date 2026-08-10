@@ -8,11 +8,15 @@ use App\Repository\ReferenceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Uid\Uuid;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: ReferenceRepository::class)]
 #[ORM\Table(name: 'reference')]
+#[UniqueEntity(fields: ['slug'], message: 'Dieser Slug ist bereits vergeben.')]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class Reference
@@ -28,11 +32,45 @@ class Reference
     #[ORM\Column(type: 'text')]
     protected string $description = '';
 
-    #[Vich\UploadableField(mapping: 'reference_images', fileNameProperty: 'image')]
-    protected ?File $imageFile = null;
+    #[Vich\UploadableField(mapping: 'reference_images_landscape', fileNameProperty: 'imageLandscape')]
+    #[Assert\Image(
+        maxSize: '12M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        minWidth: 1080,
+        minHeight: 864,
+        maxPixels: 30000000,
+        minRatio: 1.2375,
+        maxRatio: 1.2625,
+        mimeTypesMessage: 'Erlaubt sind JPEG, PNG und WebP.',
+        minWidthMessage: 'Das Bild muss mindestens 1080 Pixel breit sein ({{ width }} ist zu wenig).',
+        minHeightMessage: 'Das Bild muss mindestens 864 Pixel hoch sein ({{ height }} ist zu wenig).',
+        minRatioMessage: 'Das Bild muss im Seitenverhältnis 5:4 vorliegen ({{ ratio }} ist zu hoch).',
+        maxRatioMessage: 'Das Bild muss im Seitenverhältnis 5:4 vorliegen ({{ ratio }} ist zu breit).'
+    )]
+    protected ?File $imageFileLandscape = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $image = null;
+    protected ?string $imageLandscape = null;
+
+    #[Vich\UploadableField(mapping: 'reference_images_portrait', fileNameProperty: 'imagePortrait')]
+    #[Assert\Image(
+        maxSize: '12M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        minWidth: 1080,
+        minHeight: 1350,
+        maxPixels: 30000000,
+        minRatio: 0.792,
+        maxRatio: 0.808,
+        mimeTypesMessage: 'Erlaubt sind JPEG, PNG und WebP.',
+        minWidthMessage: 'Das Bild muss mindestens 1080 Pixel breit sein ({{ width }} ist zu wenig).',
+        minHeightMessage: 'Das Bild muss mindestens 1350 Pixel hoch sein ({{ height }} ist zu wenig).',
+        minRatioMessage: 'Das Bild muss im Seitenverhältnis 4:5 vorliegen ({{ ratio }} ist zu schmal).',
+        maxRatioMessage: 'Das Bild muss im Seitenverhältnis 4:5 vorliegen ({{ ratio }} ist zu breit).'
+    )]
+    protected ?File $imageFilePortrait = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $imagePortrait = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
@@ -44,6 +82,10 @@ class Reference
     protected ?Source $source = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\Regex(
+        pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+        message: 'Der Slug darf nur Kleinbuchstaben, Ziffern und einzelne Bindestriche enthalten.'
+    )]
     protected string $slug = '';
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
@@ -54,6 +96,7 @@ class Reference
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(nullable: true)]
+    #[Assert\NotNull(message: 'Eine Kategorie ist erforderlich.')]
     protected ?Category $category = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true, enumType: Material::class)]
@@ -80,30 +123,57 @@ class Reference
         return $this->id;
     }
 
-    public function getImageFile(): ?File
+    public function getImageFileLandscape(): ?File
     {
-        return $this->imageFile;
+        return $this->imageFileLandscape;
     }
 
-    public function setImageFile(?File $imageFile = null): self
+    public function setImageFileLandscape(?File $imageFileLandscape = null): self
     {
-        $this->imageFile = $imageFile;
+        $this->imageFileLandscape = $imageFileLandscape;
 
-        if ($imageFile !== null) {
+        if ($imageFileLandscape !== null) {
             $this->updatedAt = new \DateTime();
         }
 
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImageLandscape(): ?string
     {
-        return $this->image;
+        return $this->imageLandscape;
     }
 
-    public function setImage(?string $image): self
+    public function setImageLandscape(?string $imageLandscape): self
     {
-        $this->image = $image;
+        $this->imageLandscape = $imageLandscape;
+        return $this;
+    }
+
+    public function getImageFilePortrait(): ?File
+    {
+        return $this->imageFilePortrait;
+    }
+
+    public function setImageFilePortrait(?File $imageFilePortrait = null): self
+    {
+        $this->imageFilePortrait = $imageFilePortrait;
+
+        if ($imageFilePortrait !== null) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    public function getImagePortrait(): ?string
+    {
+        return $this->imagePortrait;
+    }
+
+    public function setImagePortrait(?string $imagePortrait): self
+    {
+        $this->imagePortrait = $imagePortrait;
         return $this;
     }
 
@@ -140,9 +210,27 @@ class Reference
         return $this;
     }
 
-    public function getImagePath(): ?string
+    public function getImageLandscapePath(): ?string
     {
-        return $this->image !== null ? '/images/references/' . $this->image : null;
+        return $this->imageLandscape !== null
+            ? '/images/references/landscape/' . $this->imageLandscape
+            : null;
+    }
+
+    public function getImagePortraitPath(): ?string
+    {
+        return $this->imagePortrait !== null
+            ? '/images/references/portrait/' . $this->imagePortrait
+            : null;
+    }
+
+    /**
+     * The portrait image is shown wherever elements stack vertically. Older
+     * references have no portrait image, so the landscape one stands in.
+     */
+    public function getImagePortraitPathWithFallback(): ?string
+    {
+        return $this->getImagePortraitPath() ?? $this->getImageLandscapePath();
     }
 
     public function getDescription(): string
@@ -270,6 +358,27 @@ class Reference
         }
 
         return $label;
+    }
+
+    /**
+     * Both formats are mandatory. The check accepts either a freshly uploaded
+     * file or an already stored one, because VichUploader only writes the file
+     * name while flushing, long after validation has run.
+     */
+    #[Assert\Callback]
+    public function validateImages(ExecutionContextInterface $context): void
+    {
+        if ($this->imageFileLandscape === null && ($this->imageLandscape ?? '') === '') {
+            $context->buildViolation('Ein Bild im Querformat ist erforderlich.')
+                ->atPath('imageFileLandscape')
+                ->addViolation();
+        }
+
+        if ($this->imageFilePortrait === null && ($this->imagePortrait ?? '') === '') {
+            $context->buildViolation('Ein Bild im Hochformat ist erforderlich.')
+                ->atPath('imageFilePortrait')
+                ->addViolation();
+        }
     }
 
     #[ORM\PrePersist]

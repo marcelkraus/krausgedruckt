@@ -7,6 +7,7 @@ use App\Entity\Reference;
 use App\Entity\Source;
 use App\Enum\Material;
 use App\Enum\Printer;
+use App\Service\ImageNormalizer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -17,17 +18,21 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         #[Autowire('%kernel.project_dir%')] private string $projectDir,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
+        private ImageNormalizer $imageNormalizer
     ) {
     }
 
     public function load(ObjectManager $manager): void
     {
         $fixtureImagesPath = $this->projectDir . '/public/images/references/fixtures';
-        $imagesPath = $this->projectDir . '/public/images/references';
+        $landscapePath = $this->projectDir . '/public/images/references/landscape';
+        $portraitPath = $this->projectDir . '/public/images/references/portrait';
 
-        if (is_dir($imagesPath) === false) {
-            mkdir($imagesPath, 0777, true);
+        foreach ([$landscapePath, $portraitPath] as $directory) {
+            if (is_dir($directory) === false) {
+                mkdir($directory, 0777, true);
+            }
         }
 
         $referencesData = [
@@ -52,7 +57,7 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
                 'description' => "Mein Freund James und ich haben eine Werkstatt, und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren.",
                 'category' => CategoryFixtures::CATEGORY_WERKSTATT,
                 'material' => Material::PLA,
-                'printer' => Printer::MK4S_MMU,
+                'printer' => Printer::MK4S_MMU3,
                 'source' => [
                     'title' => 'Rapid Metric Screw Measuring Tool (M2-M5, up to 50mm)',
                     'url' => 'https://www.printables.com/model/208880-rapid-metric-screw-measuring-tool-m2-m5-up-to-50mm',
@@ -66,7 +71,7 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
                 'description' => "Der Abfallbehälter spart mir eine Menge Zeit und Nerven, er wird an der Seite meines Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden, und mir bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt, das Ergebnis kann sich sehen lassen!",
                 'category' => CategoryFixtures::CATEGORY_3D_DRUCKER,
                 'material' => Material::PETG,
-                'printer' => Printer::MK4S_MMU,
+                'printer' => Printer::MK4S_MMU3,
                 'source' => [
                     'title' => 'Prusa MK4 bin',
                     'url' => 'https://www.printables.com/model/526044-prusa-mk4-bin',
@@ -167,10 +172,36 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
                 $slug = $this->slugger->slug($reference->getTitle())->lower()->toString();
                 $uuid = str_replace('-', '', $reference->getId()->toRfc4122());
                 $newFileName = "{$slug}-{$uuid}.jpg";
-                $newImagePath = "{$imagesPath}/{$newFileName}";
 
-                if (copy($oldImagePath, $newImagePath)) {
-                    $reference->setImage($newFileName);
+                // The fixture images have no defined ratio, so both formats are
+                // cropped out of the same source picture.
+                $landscapeFile = "{$landscapePath}/{$newFileName}";
+                $portraitFile = "{$portraitPath}/{$newFileName}";
+
+                if (copy($oldImagePath, $landscapeFile) && copy($oldImagePath, $portraitFile)) {
+                    $this->enlargeToCover(
+                        $landscapeFile,
+                        ImageNormalizer::LANDSCAPE_WIDTH,
+                        ImageNormalizer::LANDSCAPE_HEIGHT
+                    );
+                    $this->imageNormalizer->normalize(
+                        $landscapeFile,
+                        ImageNormalizer::LANDSCAPE_WIDTH,
+                        ImageNormalizer::LANDSCAPE_HEIGHT
+                    );
+                    $this->enlargeToCover(
+                        $portraitFile,
+                        ImageNormalizer::PORTRAIT_WIDTH,
+                        ImageNormalizer::PORTRAIT_HEIGHT
+                    );
+                    $this->imageNormalizer->normalize(
+                        $portraitFile,
+                        ImageNormalizer::PORTRAIT_WIDTH,
+                        ImageNormalizer::PORTRAIT_HEIGHT
+                    );
+
+                    $reference->setImageLandscape($newFileName);
+                    $reference->setImagePortrait($newFileName);
                     $manager->persist($reference);
                 }
             }
@@ -184,5 +215,37 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
         return [
             CategoryFixtures::class,
         ];
+    }
+
+    /**
+     * The fixture pictures are square and smaller than the portrait target, so
+     * they are blown up before the normaliser sees them. Interpolating like
+     * this would be unacceptable for real uploads — the normaliser rejects them
+     * for good reason — but these are sample records.
+     */
+    private function enlargeToCover(string $path, int $targetWidth, int $targetHeight): void
+    {
+        $image = new \Imagick($path);
+
+        try {
+            $factor = max(
+                $targetWidth / $image->getImageWidth(),
+                $targetHeight / $image->getImageHeight()
+            );
+
+            if ($factor <= 1.0) {
+                return;
+            }
+
+            $image->resizeImage(
+                (int) ceil($image->getImageWidth() * $factor),
+                (int) ceil($image->getImageHeight() * $factor),
+                \Imagick::FILTER_LANCZOS,
+                1
+            );
+            $image->writeImage($path);
+        } finally {
+            $image->clear();
+        }
     }
 }

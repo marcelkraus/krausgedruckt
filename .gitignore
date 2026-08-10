@@ -1,6 +1,11 @@
 ###> custom ###
+/.playwright-mcp
+/config/reference.php
+/.claude/
 /node_modules
 /public/images/references/*.jpg
+/public/images/references/landscape/*
+/public/images/references/portrait/*
 ###< custom ###
 
 ###> symfony/framework-bundle ###

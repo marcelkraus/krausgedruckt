@@ -1,0 +1,5 @@
+/* The Instagram caption keeps its line breaks and never overflows the card. */
+.instagram-caption {
+    white-space: pre-wrap;
+    word-break: break-word;
+}

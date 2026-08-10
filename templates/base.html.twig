@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-    <title>{% block title %}krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt{% endblock %}</title>
+    {# Favicons. Three files, all derived from the master Kachel: the SVG scales
+       to any size a browser asks for, the ICO carries 16 and 32 px and answers
+       the implicit /favicon.ico request, the PNG covers the iOS home screen.
+       The SVG must keep its width/height – without them it has no intrinsic
+       size, a browser rasterises it into a default box and scales that into the
+       tab slot, which leaves a pale rim around the tile. #}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln{% endblock %}</title>
     <meta property="description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.krausgedruckt.de" />
     {% block social_media_meta %}
-        <meta property="og:title" content="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
+        <meta property="og:title" content="krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln" />
         <meta property="og:description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
-        <meta property="og:image" content="https://www.krausgedruckt.de/images/krausgedruckt-logo-sharing.png" />
+        <meta property="og:image" content="https://www.krausgedruckt.de/images/sharing.png" />
     {% endblock %}
     {% block meta %}{% endblock %}
     <script type="text/javascript">
@@ -38,8 +44,8 @@
             <div class="container flex flex-row items-center justify-items-end mx-auto p-8">
                 <div class="flex-none">
                     <a href="{{ path('app_homepage') }}">
-                        <h1 class="hidden">krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt</h1>
-                        <img src="/images/krausgedruckt-logo.svg" class="h-10 max-h-10 md:h-14 md:max-h-14" alt="krausgedruckt von Marcel Kraus — Dein 3D-Druck-Dienstleister in Erftstadt" />
+                        <h1 class="hidden">krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln</h1>
+                        <img src="/images/krausgedruckt-logo.svg" class="h-10 max-h-10 md:h-14 md:max-h-14" alt="krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln" />
                     </a>
                 </div>
                 <div class="flex-auto">

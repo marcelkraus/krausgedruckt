@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Reference;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,6 +25,14 @@ class ReferenceRepository extends ServiceEntityRepository
             ->orderBy('r.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function countByCategory(Category $category): int
+    {
+        // Counting through the criteria API keeps Doctrine in charge of
+        // converting the UUID identifier, which a hand written comparison
+        // against the association silently gets wrong.
+        return $this->count(['category' => $category]);
     }
 
     public function findByYearAndSlug(int $year, string $slug): ?Reference

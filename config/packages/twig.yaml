@@ -6,6 +6,11 @@ twig:
 twig_extra:
     markdown:
         enabled: true
+    commonmark:
+        renderer:
+            # A single newline has to survive as a visible line break, because
+            # the descriptions are written in a plain textarea.
+            soft_break: "<br />\n"
 
 when@test:
     twig:
