@@ -2,7 +2,8 @@ name: krausgedruckt
 type: symfony
 docroot: public
 php_version: "8.4"
-webserver_type: nginx-fpm
+webserver_type: apache-fpm
+nodejs_version: "22"
 xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []

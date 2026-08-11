@@ -12,13 +12,14 @@
         "easycorp/easyadmin-bundle": "^5.5",
         "league/commonmark": "^2.4",
         "liip/imagine-bundle": "^2.17",
-        "omines/antispam-bundle": "^0.1.12",
+        "symfony/apache-pack": "*",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
-        "symfony/form": "8.1.*",
         "symfony/framework-bundle": "8.1.*",
         "symfony/mailer": "8.1.*",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/rate-limiter": "8.1.*",
         "symfony/runtime": "8.1.*",
         "symfony/security-csrf": "8.1.*",
         "symfony/serializer": "8.1.*",
@@ -80,6 +81,9 @@
         }
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.3"
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
+        "phpunit/phpunit": "^13.3",
+        "symfony/browser-kit": "8.1.*",
+        "symfony/css-selector": "8.1.*"
     }
 }

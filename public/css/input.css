@@ -1,3 +1,134 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* source(none) switches off Tailwind's automatic project scan. Without it
+   every file in the tree is a candidate source, so a stray word in a
+   Markdown file can end up as a CSS rule in the build. The templates are
+   the only place utilities are written. */
+@import "tailwindcss" source(none);
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+@source "../../templates/**/*.html.twig";
+
+/* Self-hosted fonts — no external requests. Aller carries the wordmark,
+   headlines and body, which ties the type to the logo; JetBrains Mono is
+   the technical voice for eyebrows, labels and spec data. Latin covers the
+   German umlauts (ä ö ü ß). */
+@font-face {
+    font-family: "Aller";
+    src: url("../fonts/aller_regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Aller";
+    src: url("../fonts/aller_bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "JetBrains Mono Variable";
+    src: url("../fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+    font-weight: 100 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    --font-sans: "Aller", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Aller", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+    /* One vocabulary, both brands: the role is in the name, so the
+       difference between the two brands falls into the values and not into
+       the naming.
+
+         accent                 the brand itself — surfaces, borders, markers,
+                                the mark. Never type without a checked step.
+         accent-on-light        type on a light ground
+         accent-on-dark         type on a dark ground
+         accent-hover           hover of a filled surface
+         accent-on-light-hover  hover of type on a light ground
+
+       The papaya is a light colour: it misses AA as type on white (3.56:1)
+       and needs a darker step there, while it carries a dark ground as it
+       is (5.56:1). The sibling's petrol has the mirror problem, which is
+       why its tokens carry different values under the same names.
+
+       The hover of a filled surface moves in whichever direction keeps its
+       label readable — here the label is near-black, so the fill LIGHTENS.
+       Darkening it would drop the label to 3.55:1. */
+    --color-accent: var(--color-orange-600);
+    --color-accent-on-light: var(--color-orange-700);
+    --color-accent-on-dark: var(--color-orange-600);
+    --color-accent-hover: var(--color-orange-500);
+    --color-accent-on-light-hover: var(--color-orange-800);
+
+    /* The warm ground the sections alternate on. */
+    --color-surface-warm: var(--color-orange-50);
+
+    /* Sibling brands in the footer network. Foreign colours carry their own
+       token so they stay out of the accent scale. */
+    --color-brand-marcelkraus: #607e4a;
+    --color-brand-krausgebaut: #005f78;
+    --color-brand-krausgebaut-hover: #004a5e;
+    /* The petrol is too dark to be type on a dark ground — it measures
+       2.74:1 there, where 4.5:1 is required. This is the same split the
+       accent already has, only in the other direction: papaya needs a
+       darker step for light grounds, petrol a brighter one for dark. */
+    --color-brand-krausgebaut-on-dark: var(--color-cyan-600);
+
+    --animate-rise: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Base layer. */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        /* Offset anchor targets for the fixed header. */
+        scroll-padding-top: 5rem;
+    }
+
+    body {
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Contact and postal addresses should not render italic. */
+    address {
+        font-style: normal;
+    }
+
+    ::selection {
+        background-color: var(--color-accent);
+        color: white;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-accent-on-light);
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
