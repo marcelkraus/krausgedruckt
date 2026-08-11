@@ -1,0 +1,16 @@
+framework:
+    rate_limiter:
+        contact_form:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 hour'
+
+# The limiter state outlives a single test run, so the production limit of 5
+# per hour makes the contact-form tests fail once the suite has run a few
+# times within the hour. Raise it out of the way; the throttling behaviour
+# itself is configuration, not something these tests assert.
+when@test:
+    framework:
+        rate_limiter:
+            contact_form:
+                limit: 1000

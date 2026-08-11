@@ -1,58 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ContactRequest
+/**
+ * Carries and validates the data submitted through the contact form.
+ *
+ * The form is hand-rolled — no symfony/form — the same way the sister
+ * project does it, so both sites answer a submission through one mechanism
+ * instead of two. This object is filled from the request and handed to
+ * symfony/validator.
+ *
+ * Constraints are attributes, never doc-block annotations: Symfony 8 does
+ * not read the latter, and the class once shipped with `@Assert\Email` in a
+ * doc block, which let an invalid address through into the mailer.
+ */
+final class ContactRequest
 {
-    /**
-     * @Assert\NotBlank
-     */
-    protected $name = "";
+    #[Assert\NotBlank(message: 'Bitte sag uns, wie du heißt.')]
+    #[Assert\Length(max: 120, maxMessage: 'Der Name ist zu lang.')]
+    public string $name = '';
 
-    /**
-     * @Assert\NotBlank
-     * @Assert\Email
-     */
-    protected $email = "";
+    #[Assert\NotBlank(message: 'Ohne E-Mail-Adresse können wir dir nicht antworten.')]
+    #[Assert\Email(message: 'Diese E-Mail-Adresse sieht nicht gültig aus.')]
+    #[Assert\Length(max: 180, maxMessage: 'Die E-Mail-Adresse ist zu lang.')]
+    public string $email = '';
 
-    /**
-     * @Assert\NotBlank
-     */
-    protected $message = "";
+    #[Assert\Length(max: 40, maxMessage: 'Die Telefonnummer ist zu lang.')]
+    public string $phone = '';
 
-    protected $discountCode = null;
+    #[Assert\Length(max: 60, maxMessage: 'Der Rabattcode ist zu lang.')]
+    public string $discountCode = '';
 
-    public function setName(string $name): void {
-        $this->name = $name;
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
-    public function setEmail(string $email): void {
-        $this->email = $email;
-    }
-
-    public function getEmail(): string {
-        return $this->email;
-    }
-
-    public function getMessage(): string {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): void {
-        $this->message = $message;
-    }
-
-    public function setDiscountCode(?string $discountCode): void {
-        $this->discountCode = $discountCode;
-    }
-
-    public function getDiscountCode(): ?string {
-        return $this->discountCode;
-    }
+    #[Assert\NotBlank(message: 'Erzähl uns kurz, worum es geht.')]
+    #[Assert\Length(min: 10, max: 3000, minMessage: 'Erzähl uns bitte etwas ausführlicher, worum es geht.', maxMessage: 'Deine Nachricht ist zu lang.')]
+    public string $message = '';
 }

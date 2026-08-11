@@ -1,0 +1,3 @@
+# The CSRF message is the one validator string a visitor of this site can
+# reach, and it addressed them formally.
+The CSRF token is invalid. Please try to resubmit the form.: 'Das Formular ist abgelaufen. Bitte schick es noch einmal ab.'
