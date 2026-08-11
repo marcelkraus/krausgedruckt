@@ -35,20 +35,22 @@ fi
 
 echo ""
 echo "Step 4: Cleaning up images..."
+# The empty .gitignore in each directory is what keeps it in the
+# repository, so it is excluded from the sweep.
 if [ -z "$IS_DDEV_PROJECT" ]; then
     # Running outside DDEV - use host filesystem
-    IMAGE_COUNT=$(find public/images/references/landscape public/images/references/portrait -type f 2>/dev/null | wc -l)
+    IMAGE_COUNT=$(find public/images/references/landscape public/images/references/portrait -type f ! -name '.gitignore' 2>/dev/null | wc -l)
     if [ "$IMAGE_COUNT" -gt 0 ]; then
-        find public/images/references/landscape public/images/references/portrait -type f -delete
+        find public/images/references/landscape public/images/references/portrait -type f ! -name '.gitignore' -delete
         echo "Deleted $IMAGE_COUNT uploaded reference images"
     else
         echo "No uploaded reference images found"
     fi
 else
     # Running inside DDEV container
-    IMAGE_COUNT=$(find /var/www/html/public/images/references/landscape /var/www/html/public/images/references/portrait -type f 2>/dev/null | wc -l)
+    IMAGE_COUNT=$(find /var/www/html/public/images/references/landscape /var/www/html/public/images/references/portrait -type f ! -name '.gitignore' 2>/dev/null | wc -l)
     if [ "$IMAGE_COUNT" -gt 0 ]; then
-        find /var/www/html/public/images/references/landscape /var/www/html/public/images/references/portrait -type f -delete
+        find /var/www/html/public/images/references/landscape /var/www/html/public/images/references/portrait -type f ! -name '.gitignore' -delete
         echo "Deleted $IMAGE_COUNT uploaded reference images"
     else
         echo "No uploaded reference images found"
