@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -142,7 +143,7 @@ class DefaultController extends AbstractController
 
         $mailer->send(
             (new TemplatedEmail())
-                ->from($_SERVER['CONTACT_FORM_SENDER_ADDRESS'])
+                ->from(new Address($_SERVER['CONTACT_FORM_SENDER_ADDRESS'], 'krausgedruckt von Marcel Kraus'))
                 ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
                 ->replyTo($contactRequest->email)
                 ->subject('Neue Kontaktanfrage erhalten')

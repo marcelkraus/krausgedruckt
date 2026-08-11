@@ -1,10 +1,10 @@
-Es wurde eine neue Nachricht über das Kontaktformular auf https://www.krausgedruckt.de/kontakt empfangen:
+Es wurde eine neue Nachricht über das Kontaktformular empfangen.
 
-+++
 Name: {{ name }}
-E-Mail: <{{ emailAddress }}>
+E-Mail: {{ emailAddress }}
 Telefon: {{ phone | default('–') }}
 Rabattcode: {{ discountCode | default('–') }}
-+++
+
+Nachricht:
 
 {{ message }}
