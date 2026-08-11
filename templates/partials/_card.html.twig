@@ -1,0 +1,38 @@
+{# The card shell, once. It carries the border, the radius, the shadow, the
+   padding and the footer line — everything that has to look the same on
+   every card, whatever sits inside it.
+
+   Embedded rather than included: the picture and the running text differ per
+   case (a reference needs a <picture> with two formats, the landing page a
+   plain <img>), the shell around them does not. Blocks keep the two apart
+   without the shell having to know the cases.
+
+   A card with a target is one click target, not three. The heading link is
+   stretched over the whole article, so the picture, the summary and the
+   padding all lead where the heading leads — and the hover shadow, which
+   promises exactly that, is only rendered when there is something to
+   promise. A card without a target stays inert.
+
+   Params: title, href (optional — without a target the heading is plain
+   text), meta (optional, the mono line at the foot), external (optional).
+   Blocks: media, body. #}
+{% set has_target = href|default(null) %}
+<article class="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm{% if has_target %} relative transition-shadow hover:shadow-lg hover:shadow-neutral-200/60{% endif %}">
+    {% block media %}{% endblock %}
+
+    <div class="flex flex-1 flex-col p-6">
+        <h3 class="font-display text-base font-bold text-neutral-900">
+            {%- if has_target -%}
+                <a href="{{ href }}" class="transition-colors after:absolute after:inset-0 hover:text-accent-on-light"{% if external|default(false) %} target="_blank" rel="noopener"{% endif %}>{{ title }}</a>
+            {%- else -%}
+                {{ title }}
+            {%- endif -%}
+        </h3>
+
+        {% block body %}{% endblock %}
+
+        {% if meta|default(null) %}
+            <p class="mt-4 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">{{ meta }}</p>
+        {% endif %}
+    </div>
+</article>

@@ -1,0 +1,21 @@
+{# Section eyebrow: mono label preceded by a small square marker.
+   Params: text, tone.
+
+   The tone is not decoration. Papaya on a light ground measures 3.56:1 and
+   misses AA, so type on light carries `accent-on-light`; on a dark ground the
+   full brand colour is the readable one and carries the label itself.
+
+   The third tone belongs to the sibling brand, whose petrol has the mirror
+   problem: it is readable on light and misses on dark. This tone is only
+   ever used inside the dark cross-promo band, so it carries the brighter
+   step for both the label and its marker. #}
+{% set tone = tone|default('light') %}
+{% if tone == 'krausgebaut' %}
+    <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-brand-krausgebaut-on-dark">
+        <span class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-brand-krausgebaut-on-dark"></span>{{ text }}
+    </p>
+{% else %}
+    <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] {{ tone == 'dark' ? 'text-accent-on-dark' : 'text-accent-on-light' }}">
+        <span class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-accent"></span>{{ text }}
+    </p>
+{% endif %}

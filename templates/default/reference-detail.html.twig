@@ -1,89 +1,82 @@
 {% extends 'base.html.twig' %}
+{% import 'partials/_icons.html.twig' as icons %}
 
 {% block title %}{{ reference.title }} · krausgedruckt von Marcel Kraus{% endblock %}
+{% block meta_description %}{{ reference.summary ?: reference.title ~ ' – eine Referenz von krausgedruckt aus Erftstadt bei Köln.' }}{% endblock %}
 
 {% block main %}
-    <section class="bg-background-secondary">
-        <div class="container mx-auto px-8 py-16 lg:py-24">
-            <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <article class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    {% if reference.imageLandscapePath %}
-                        <picture>
-                            <source media="(min-width: 1024px)" srcset="{{ reference.imageLandscapePath }}">
-                            <img class="w-full" src="{{ reference.imagePortraitPathWithFallback }}" alt="Foto zur Referenz „{{ reference.title }}“">
-                        </picture>
+    <article>
+        {# Header on the warm ground, so the picture below it starts on a
+           clean edge rather than inside a card. #}
+        <div class="border-b border-neutral-200 bg-surface-warm">
+            <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8 lg:py-16">
+                <a href="{{ path('app_references') }}" class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-neutral-500 transition-colors hover:text-accent-on-light">
+                    <span class="transition-transform group-hover:-translate-x-1">&larr;</span> Alle Referenzen
+                </a>
+
+                <div class="mt-8 max-w-3xl">
+                    {% if reference.category %}
+                        {{ include('partials/_eyebrow.html.twig', { text: reference.category.name }) }}
                     {% endif %}
-                    <div class="p-8 lg:p-12">
-                        <h2 class="text-4xl font-semibold text-brand-papaya">
-                            {{ reference.title }}
-                        </h2>
-                        <div class="mt-8 flex flex-col lg:flex-row lg:gap-0">
-                            {# Mobile: single line with separators #}
-                            <div class="lg:hidden text-muted text-xs leading-relaxed flex flex-wrap items-center gap-x-1.5 mb-6">
-                                <span class="font-semibold">{{ reference.createdAt | format_datetime('none', 'none', pattern='MMMM yyyy', locale='de') }}</span>
-                                {% if reference.category %}
-                                    <span>&middot;</span>
-                                    <span>{{ reference.category.name }}</span>
-                                {% endif %}
-                                {% if reference.printer or reference.materialLabel %}
-                                    <span>&middot;</span>
-                                    <span>
-                                        {%- if reference.printer %}{{ reference.printer.value }}{% endif %}
-                                        {%- if reference.printer and reference.materialLabel %}, {% endif %}
-                                        {%- if reference.materialLabel %}{{ reference.materialLabel }}{% endif -%}
-                                    </span>
-                                {% endif %}
-                                {% if reference.ratingUrl %}
-                                    <span>&middot;</span>
-                                    <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
-                                       class="hover:text-brand-papaya transition-colors">Kundenbewertung lesen</a>
-                                {% endif %}
-                            </div>
-                            {# Desktop: vertical sidebar #}
-                            <div class="hidden lg:flex lg:flex-col text-muted lg:w-44 flex-shrink-0 lg:pr-8">
-                                <p class="text-xs font-semibold leading-relaxed">{{ reference.createdAt | format_datetime('none', 'none', pattern='MMMM yyyy', locale='de') }}</p>
-                                {% if reference.printer or reference.materialLabel %}
-                                    <div class="mt-3 text-xs leading-relaxed">
-                                        <p class="font-semibold">Druckdaten</p>
-                                        {% if reference.printer %}
-                                            <p>{{ reference.printer.value }}</p>
-                                        {% endif %}
-                                        {% if reference.materialLabel %}
-                                            <p>{{ reference.materialLabel }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                                {% if reference.ratingUrl %}
-                                    <div class="mt-3 text-xs leading-relaxed">
-                                        <p class="font-semibold">Weitere Infos</p>
-                                        <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
-                                           class="hover:text-brand-papaya transition-colors">
-                                            Kundenbewertung lesen
-                                        </a>
-                                    </div>
-                                {% endif %}
-                                {% if reference.category %}
-                                    <div class="mt-auto pt-3">
-                                        <span class="bg-brand-papaya/10 text-brand-papaya rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="hidden lg:block self-stretch border-l border-gray-100"></div>
-                            <div class="mt-6 lg:mt-0 lg:pl-8 prose prose-orange prose-a:no-underline hover:prose-a:underline prose-a:text-brand-papaya prose-a:font-normal max-w-none">
-                                {{ reference.description | markdown_to_html }}
-                            </div>
-                        </div>
-                    </div>
-                    {% if reference.hasSource %}
-                        <div class="px-8 py-6 lg:px-12">
-                            {% include '_model.html.twig' with { 'model': reference.source } %}
-                        </div>
+                    <h1 class="mt-5 font-display text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl">{{ reference.title }}</h1>
+                    {% if reference.summary %}
+                        <p class="mt-5 text-lg leading-relaxed text-neutral-600">{{ reference.summary }}</p>
                     {% endif %}
-                </article>
-                <div class="mt-12">
-                    <a href="{{ path('app_references') }}" class="border border-muted hover:border-brand-papaya hover:text-brand-papaya px-4 py-2 rounded-xl text-muted text-sm uppercase">&larr; Alle Referenzen</a>
                 </div>
+
+                {# Technical data as mono chips. #}
+                <dl class="mt-10 flex flex-wrap gap-3">
+                    <div class="inline-flex items-baseline gap-2 rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 font-mono text-xs uppercase tracking-[0.15em]">
+                        <dt class="text-neutral-600">Gedruckt</dt>
+                        <dd class="font-semibold text-neutral-900">{{ reference.createdAt | format_datetime('none', 'none', pattern='MMMM yyyy', locale='de') }}</dd>
+                    </div>
+                    {% if reference.printer %}
+                        <div class="inline-flex items-baseline gap-2 rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 font-mono text-xs uppercase tracking-[0.15em]">
+                            <dt class="text-neutral-600">Drucker</dt>
+                            <dd class="font-semibold text-neutral-900">{{ reference.printer.value }}</dd>
+                        </div>
+                    {% endif %}
+                    {% if reference.materialLabel %}
+                        <div class="inline-flex items-baseline gap-2 rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 font-mono text-xs uppercase tracking-[0.15em]">
+                            <dt class="text-neutral-600">Material</dt>
+                            <dd class="font-semibold text-neutral-900">{{ reference.materialLabel }}</dd>
+                        </div>
+                    {% endif %}
+                </dl>
             </div>
         </div>
-    </section>
+
+        {% if reference.imageLandscapePath %}
+            <div class="mx-auto max-w-6xl px-6 pt-12 lg:px-8 lg:pt-16">
+                <picture>
+                    <source media="(min-width: 640px)" srcset="{{ reference.imageLandscapePath }}">
+                    <img class="aspect-4/5 max-h-[70vh] w-full rounded-2xl object-cover shadow-sm sm:aspect-5/4" src="{{ reference.imagePortraitPathWithFallback }}" alt="Foto zur Referenz „{{ reference.title }}“">
+                </picture>
+            </div>
+        {% endif %}
+
+        <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8 lg:py-16">
+            <div class="max-w-3xl">
+                <div class="prose prose-neutral max-w-none prose-a:font-semibold prose-a:text-accent-on-light prose-a:no-underline hover:prose-a:underline">
+                    {{ reference.description | markdown_to_html }}
+                </div>
+
+                {% if reference.ratingUrl %}
+                    <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
+                       class="group mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-accent-on-light transition-colors hover:text-accent-on-light-hover">
+                        Kundenbewertung lesen
+                        <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('external', 'h-4 w-4') }}</span>
+                    </a>
+                {% endif %}
+
+                {% if reference.hasSource %}
+                    <div class="mt-12">
+                        {{ include('partials/_model.html.twig', { model: reference.source }) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {{ include('partials/_conversion_band.html.twig', { title: 'Und jetzt deins?', text: 'Erzähle uns von deiner Idee – unverbindlich und ohne Kosten.' }, with_context = false) }}
+    </article>
 {% endblock %}

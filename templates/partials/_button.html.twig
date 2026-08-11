@@ -1,0 +1,10 @@
+{# The primary and secondary button as a link. The classes come from
+   _button_class.html.twig, which is the single place the contrast rule
+   lives — see there.
+   Params: href, label, variant ('solid' default, 'outline'), icon (name from
+   _icons, optional), external (optional, opens off-site), class. #}
+{% import 'partials/_icons.html.twig' as icons %}
+<a href="{{ href }}" class="{{ include('partials/_button_class.html.twig', { variant: variant|default('solid') }, with_context = false) }} {{ class|default('') }}"{% if external|default(false) %} target="_blank" rel="noopener"{% endif %}>
+    {{ label }}
+    {% if icon is defined %}<span class="transition-transform group-hover:translate-x-1">{{ icons.icon(icon, 'h-4 w-4') }}</span>{% endif %}
+</a>

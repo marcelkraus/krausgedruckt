@@ -17,14 +17,25 @@ class ReferenceRepository extends ServiceEntityRepository
         parent::__construct($registry, Reference::class);
     }
 
-    public function findAllOrdered(): array
+    /**
+     * Visible references, newest first. The limit belongs in the query rather
+     * than behind it: the homepage shows three and would otherwise hydrate
+     * every reference plus its category to throw all but three away.
+     *
+     * @return Reference[]
+     */
+    public function findAllOrdered(?int $limit = null): array
     {
-        return $this->createQueryBuilder('r')
+        $queryBuilder = $this->createQueryBuilder('r')
             ->where('r.isVisible = :isVisible')
             ->setParameter('isVisible', true)
-            ->orderBy('r.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('r.createdAt', 'DESC');
+
+        if ($limit !== null) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function countByCategory(Category $category): int

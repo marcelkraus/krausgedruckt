@@ -1,142 +1,236 @@
-<!doctype html>
-
-<html>
+{% import 'partials/_icons.html.twig' as icons %}
+<!DOCTYPE html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/output.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta_robots %}<meta name="robots" content="index,follow">{% endblock %}
+    <meta name="description" content="{% block meta_description %}krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, wir machen sie greifbar!{% endblock %}">
+    <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln{% endblock %}</title>
+
     {# Favicons. Three files, all derived from the master Kachel: the SVG scales
        to any size a browser asks for, the ICO carries 16 and 32 px and answers
        the implicit /favicon.ico request, the PNG covers the iOS home screen.
        The SVG must keep its width/height – without them it has no intrinsic
        size, a browser rasterises it into a default box and scales that into the
        tab slot, which leaves a pale rim around the tile. #}
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln{% endblock %}</title>
-    <meta property="description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.krausgedruckt.de" />
-    {% block social_media_meta %}
-        <meta property="og:title" content="krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln" />
-        <meta property="og:description" content="krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, ich mache sie greifbar!" />
-        <meta property="og:image" content="https://www.krausgedruckt.de/images/sharing.png" />
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
+    <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+
+    {# Open Graph / social sharing. The image block is captured into a
+       variable rather than printed where it is defined, because the card
+       needs the same path twice and a bare block would emit the value into
+       the document at its definition site. #}
+    {% set meta_image %}{% block meta_image %}images/sharing.jpg{% endblock %}{% endset %}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="krausgedruckt">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:title" content="{{ block('title') }}">
+    <meta property="og:description" content="{{ block('meta_description') }}">
+    <meta property="og:url" content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+    <meta property="og:image" content="{{ app.request.schemeAndHttpHost ~ asset(meta_image) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ block('title') }}">
+    <meta name="twitter:description" content="{{ block('meta_description') }}">
+    <meta name="twitter:image" content="{{ app.request.schemeAndHttpHost ~ asset(meta_image) }}">
+
+    {% block structured_data %}{% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/output.css') }}">
     {% endblock %}
-    {% block meta %}{% endblock %}
-    <script type="text/javascript">
-        var _paq = window._paq = window._paq || [];
-        _paq.push(["disableCookies"]);
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function() {
-            var u="https://matomo.marcelkraus.de/";
-            _paq.push(['setTrackerUrl', u+'matomo.php']);
-            _paq.push(['setSiteId', '8']);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-        })();
-    </script>
-</head>
-<body class="antialiased">
-    {% block nav %}
-        <nav class="bg-white">
-            <div class="container flex flex-row items-center justify-items-end mx-auto p-8">
-                <div class="flex-none">
-                    <a href="{{ path('app_homepage') }}">
-                        <h1 class="hidden">krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln</h1>
-                        <img src="/images/krausgedruckt-logo.svg" class="h-10 max-h-10 md:h-14 md:max-h-14" alt="krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln" />
-                    </a>
-                </div>
-                <div class="flex-auto">
-                    <div class="block lg:hidden">
-                        <div class="flex justify-end">
-                            <a class="border border-muted cursor-pointer hover:border-brand-papaya hover:text-brand-papaya px-4 py-2 rounded-xl text-muted" type="button" onclick="toggleNavbar()">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5" id="navbar-icon-open">
-                                    <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-5 w-5" id="navbar-icon-close">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="hidden lg:block">
-                        {%  block main_menu %}
-                            <div class="flex gap-2 justify-end text-sm uppercase">
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_homepage" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_homepage') }}">Übersicht</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') in ["app_references", "app_reference_detail"] %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_references') }}">Referenzen</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_app" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_app') }}">App</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_faq" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_faq') }}">FAQ</a>
-                                <a class="border px-4 py-2 rounded-xl {% if app.request.attributes.get('_route') == "app_contact" %}bg-brand-papaya border-brand-papaya text-white{% else %}border-muted hover:border-brand-papaya hover:text-brand-papaya text-muted{% endif %}" href="{{ path('app_contact') }}">Kontakt</a>
-                            </div>
-                        {% endblock %}
-                    </div>
-                </div>
-            </div>
-            <div class="container hidden mx-auto pb-4 px-8" id="navbar-menu">
-                <hr class="border-background-secondary mb-4" />
-                {%  block mobile_main_menu %}
-                    <ul class="flex flex-row font-semibold gap-4 justify-end list-none text-sm uppercase">
-                        <li class="items-center">
-                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_homepage') }}">Übersicht</a>
-                        </li>
-                        <li class="items-center">
-                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_references') }}">Referenzen</a>
-                        </li>
-                        <li class="items-center">
-                            <a class="hover:text-brand-papaya mb-4 text-muted" href="{{ path('app_app') }}">App</a>
-                        </li>
-                        <li class="flex items-center">
-                            <a class="hover:text-brand-papaya text-muted" href="{{ path('app_faq') }}">FAQ</a>
-                        </li>
-                        <li class="flex items-center">
-                            <a class="hover:text-brand-papaya text-muted" href="{{ path('app_contact') }}">Kontakt</a>
-                        </li>
-                    </ul>
-                {% endblock %}
-            </div>
-        </nav>
-        <script type="text/javascript">
-            function toggleNavbar() {
-                document.getElementById('navbar-menu').classList.toggle('hidden');
-                document.getElementById('navbar-icon-open').classList.toggle('hidden');
-                document.getElementById('navbar-icon-close').classList.toggle('hidden');
-            }
+
+    {% if app.environment == 'prod' %}
+        {# Privacy-first analytics: self-hosted Matomo (SiteId 8), run cookieless
+           via disableCookies. Nothing is stored on or read from the visitor's
+           device, so no consent banner is required. Production only — local and
+           test traffic must not pollute the statistics. #}
+        <script>
+            var _paq = window._paq = window._paq || [];
+            _paq.push(['disableCookies']);
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function () {
+                var u = "https://matomo.marcelkraus.de/";
+                _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                _paq.push(['setSiteId', '8']);
+                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+                g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+            })();
         </script>
-    {% endblock %}
-    <main>
+    {% endif %}
+</head>
+<body class="min-h-screen bg-white font-sans text-neutral-700 antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-neutral-900 focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-wider focus:text-white">Zum Inhalt springen</a>
+
+    {# One list feeds both navigations. Written twice, it has to be maintained
+       in ten places instead of five. A page may narrow it down by setting
+       `nav_items` at its own top level — a landing page that stands apart
+       from the site does that.
+
+       An item names either a `route` inside the site or an external `url`.
+       The shop is the only external one and it sits last, after the pages
+       that belong to the site itself. It earns the place because there are
+       two ways to buy here — commission something or take something ready
+       made — and without it the second one is only reachable from the middle
+       of the homepage. #}
+    {% set nav_items = nav_items|default([
+        { label: 'Übersicht', route: 'app_homepage', matches: ['app_homepage'] },
+        { label: 'Referenzen', route: 'app_references', matches: ['app_references', 'app_reference_detail'] },
+        { label: 'App', route: 'app_app', matches: ['app_app'] },
+        { label: 'FAQ', route: 'app_faq', matches: ['app_faq'] },
+        { label: 'Shop', url: etsy_url, external: true }
+    ]) %}
+    {% set current_route = app.request.attributes.get('_route') %}
+
+    {# ── Header ─────────────────────────────────────────────────── #}
+    {# The three columns are a grid, not a flex row with `justify-between`.
+       In a flex row the navigation is squeezed between logo and actions, so
+       its starting edge follows the total width of its own labels — and
+       lands somewhere else on the sibling site, whose labels are longer.
+       A fixed first column gives both brands the same edge.
+
+       The fixed column only applies from `lg` up, where the navigation is
+       visible and the shared edge is actually perceived. Below that it would
+       reserve 160 pixels for a logo that needs less and push the actions off
+       a 320 pixel screen, which WCAG 1.4.10 forbids. #}
+    <header class="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
+        <div class="mx-auto grid h-20 max-w-6xl grid-cols-[auto_1fr_auto] lg:grid-cols-[10rem_1fr_auto] items-center gap-6 px-6 lg:px-8">
+            <a href="{{ path('app_homepage') }}" class="inline-flex items-center" aria-label="Startseite">
+                {{ include('partials/_logo.html.twig', { class: 'h-8 w-auto md:h-9' }, with_context = false) }}
+            </a>
+
+            {# Desktop navigation #}
+            <nav class="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
+                {% for item in nav_items %}
+                    {% set is_current = current_route in item.matches|default([]) %}
+                    <a href="{{ item.url|default(null) ?: path(item.route) }}"
+                       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] transition-colors hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-500' }}"
+                       {% if is_current %}aria-current="page"{% endif %}
+                       {% if item.external|default(false) %}target="_blank" rel="noopener"{% endif %}>{{ item.label }}{% if item.external|default(false) %}{{ icons.icon('external', 'h-3.5 w-3.5') }}{% endif %}</a>
+                {% endfor %}
+            </nav>
+
+            <div class="col-start-3 flex items-center justify-self-end gap-3">
+                <a href="{{ path('app_contact') }}" class="inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-4 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-neutral-900 transition-colors hover:bg-accent-hover sm:px-5">
+                    <span class="sm:hidden">{{ icons.icon('mail', 'h-5 w-5') }}</span>
+                    <span class="sr-only sm:not-sr-only">Jetzt anfragen</span>
+                </a>
+
+                <button type="button" id="menu-toggle" class="inline-flex h-11 w-11 items-center justify-center rounded-lg text-neutral-900 lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menü öffnen">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
+                </button>
+            </div>
+        </div>
+
+        {# Mobile menu #}
+        <div id="mobile-menu" class="hidden border-t border-neutral-200 bg-white lg:hidden">
+            <nav class="mx-auto flex max-w-6xl flex-col px-6 py-2" aria-label="Mobile Navigation">
+                {% for item in nav_items %}
+                    {% set is_current = current_route in item.matches|default([]) %}
+                    <a href="{{ item.url|default(null) ?: path(item.route) }}"
+                       class="inline-flex items-center gap-1.5 border-b border-neutral-100 py-3 font-mono text-sm uppercase tracking-[0.15em] hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
+                       {% if is_current %}aria-current="page"{% endif %}
+                       {% if item.external|default(false) %}target="_blank" rel="noopener"{% endif %}
+                       data-menu-link>{{ item.label }}{% if item.external|default(false) %}{{ icons.icon('external', 'h-3.5 w-3.5') }}{% endif %}</a>
+                {% endfor %}
+                <a href="{{ path('app_contact') }}" class="mt-4 mb-3 rounded-lg bg-accent px-5 py-3 text-center font-mono text-sm font-semibold uppercase tracking-[0.15em] text-neutral-900 transition-colors hover:bg-accent-hover" data-menu-link>Jetzt anfragen</a>
+            </nav>
+        </div>
+    </header>
+
+    {# ── Content ────────────────────────────────────────────────── #}
+    <main id="main" class="pt-20">
         {% block main %}{% endblock %}
     </main>
+
+    {# ── Footer ─────────────────────────────────────────────────── #}
     {% block footer %}
-        <footer class="bg-muted text-white">
-            <div class="container mx-auto pb-8 pt-16 px-8 lg:pt-24">
-                <h4 class="font-semibold mb-8 text-2xl">
-                    <span class="text-brand-papaya">Dein heisser Draht.</span><br/>
-                    Lass uns schreiben.
-                </h4>
-                <div class="flex flex-wrap">
-                    <div class="w-full xl:w-1/2">
-                        <span class="font-semibold"><span class="text-brand-papaya">kraus</span><span class="text-white">gedruckt</span></span> ist eine Nebenbeschäftigung, am besten erreichst du mich daher schriftlich. <span class="font-semibold">Ich freue mich auf deine Nachricht!</span>
+        <footer class="border-t border-neutral-200 bg-neutral-900 text-neutral-400">
+            <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+                <div class="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
+                    <div>
+                        {{ include('partials/_logo.html.twig', { class: 'h-9 w-auto text-white', mono: true }, with_context = false) }}
+                        <p class="mt-5 max-w-xs text-sm leading-relaxed">krausgedruckt von Marcel Kraus steht für individuelle 3D-Druck-Dienstleistungen. Ob Druck eines einzelnen Teils, einer Kleinserie mit mehreren hundert Stück oder einer komplexen Prototypentwicklung – es beginnt mit deiner Anfrage.</p>
+
                     </div>
-                    <div class="w-full xl:w-1/2">
-                        <div class="flex flex-wrap gap-4 justify-start mt-4 xl:justify-end xl:mt-0">
-                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="http://instagram.com/krausgedruckt/" title="krausgedruckt auf Instagram">Instagram</a>
-                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact') }}">Kontakt</a>
-                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact_email') }}">E-Mail</a>
-                            <a class="bg-background-primary border-2 border-brand-papaya flex-none font-semibold hover:bg-brand-papaya hover:text-white px-4 py-2 rounded-xl text-brand-papaya text-sm" href="{{ path('app_contact_whats_app') }}">WhatsApp</a>
-                        </div>
+
+                    <div>
+                        <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">Kontakt &amp; Kanäle</h2>
+                        <ul class="mt-4 space-y-1 text-sm">
+                            <li><a href="{{ path('app_contact') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Kontaktformular</a></li>
+                            <li><a href="{{ path('app_contact_email') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>E-Mail</a></li>
+                            <li><a href="{{ path('app_contact_whats_app') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>WhatsApp</a></li>
+                            <li><a href="{{ etsy_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Etsy-Shop</a></li>
+                            <li><a href="{{ instagram_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Instagram</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">Mehr von Marcel</h2>
+                        <ul class="mt-4 space-y-1 text-sm">
+                            <li><a href="https://www.marcelkraus.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-marcelkraus"></span>Persönliche Homepage</a></li>
+                            <li><a href="https://www.krausgebaut.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-krausgebaut"></span>krausgebaut</a></li>
+                        </ul>
                     </div>
                 </div>
-                <hr class="border-brand-papaya mb-4 mt-8" />
-                <div class="md:flex md:justify-end">
-                    <div class="ml-4 mt-4 text-xs md:ml-0 md:mt-0 md:text-right">
-                        Copyright © {{ 'now' | date('Y') }} krausgedruckt von Marcel Kraus<br/>
-                        <a href="{{ path('app_review') }}">Bewerten</a> &middot; <a href="{{ path('app_imprint') }}">Impressum</a> &middot; <a href="{{ path('app_data_privacy') }}">Datenschutz</a>
-                    </div>
+
+                <div class="mt-14 flex flex-col gap-4 border-t border-neutral-800 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+                    <p class="font-mono uppercase tracking-wider text-neutral-400">© {{ 'now'|date('Y') }} krausgedruckt von Marcel Kraus</p>
+                    <nav class="flex gap-6" aria-label="Rechtliches">
+                        <a href="{{ path('app_review') }}" class="py-2 transition-colors hover:text-white">Bewerten</a>
+                        <a href="{{ path('app_imprint') }}" class="py-2 transition-colors hover:text-white">Impressum</a>
+                        <a href="{{ path('app_data_privacy') }}" class="py-2 transition-colors hover:text-white">Datenschutz</a>
+                    </nav>
                 </div>
             </div>
         </footer>
+    {% endblock %}
+
+    {% block javascript %}
+        <script>
+            // Mobile menu toggle.
+            (function () {
+                const toggle = document.getElementById('menu-toggle');
+                const menu = document.getElementById('mobile-menu');
+                if (toggle === null || menu === null) {
+                    return;
+                }
+
+                const setOpen = (open) => {
+                    menu.classList.toggle('hidden', open === false);
+                    toggle.setAttribute('aria-expanded', String(open));
+                    toggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+                };
+
+                toggle.addEventListener('click', () => {
+                    setOpen(menu.classList.contains('hidden'));
+                });
+
+                menu.querySelectorAll('[data-menu-link]').forEach((link) => {
+                    link.addEventListener('click', () => setOpen(false));
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && menu.classList.contains('hidden') === false) {
+                        setOpen(false);
+                        toggle.focus();
+                    }
+                });
+
+                // Close when resizing up to desktop.
+                window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+                    if (event.matches) {
+                        setOpen(false);
+                    }
+                });
+            }());
+        </script>
     {% endblock %}
 </body>
 </html>

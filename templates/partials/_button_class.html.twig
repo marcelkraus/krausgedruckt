@@ -1,0 +1,14 @@
+{# The button skin as a bare class string, so a <button> that Symfony renders
+   can wear the same clothes as the <a> in _button.html.twig without either
+   copy drifting from the other. The contrast rule lives here and nowhere
+   else: papaya fill with a near-black label, and a hover that LIGHTENS —
+   darkening the fill drops the label to 3.55:1.
+
+   Emits no markup. Pull it with include(), assign it, hand it to `attr`.
+   Params: variant ('solid' default, 'outline'). #}
+{%- set variant = variant|default('solid') -%}
+{%- set base = 'group inline-flex items-center gap-2 rounded-lg px-6 py-3.5 font-mono text-sm font-semibold uppercase tracking-[0.15em] transition-colors' -%}
+{%- set skin = variant == 'outline'
+    ? 'border-2 border-accent text-accent-on-light hover:bg-accent hover:text-neutral-900'
+    : 'bg-accent text-neutral-900 hover:bg-accent-hover' -%}
+{{- base ~ ' ' ~ skin -}}

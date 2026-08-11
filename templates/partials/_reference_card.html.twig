@@ -1,0 +1,35 @@
+{# Binds a reference to the card shell. Shared by the homepage teaser and
+   the overview so the two cannot drift apart.
+
+   The picture follows the device, not just the window width: portrait where
+   the cards stack, landscape where they sit side by side — the same
+   breakpoint the grid uses.
+   Expects: reference. #}
+{% set detail_path = path('app_reference_detail', { year: reference.year, slug: reference.slug }) %}
+
+{% embed 'partials/_card.html.twig' with {
+    href: detail_path,
+    title: reference.title,
+    meta: reference.category ? reference.category.name : null,
+    landscape: reference.imageLandscapePath,
+    portrait: reference.imagePortraitPath,
+    alt: 'Foto zur Referenz „' ~ reference.title ~ '“',
+    summary: reference.summary
+} only %}
+    {% block media %}
+        {% if landscape %}
+            <picture>
+                <source media="(min-width: 640px)" srcset="{{ landscape | imagine_filter('reference_landscape') }}">
+                <img class="aspect-4/5 w-full object-cover sm:aspect-5/4" src="{{ portrait ? portrait | imagine_filter('reference_portrait') : landscape | imagine_filter('reference_landscape') }}" alt="{{ alt }}" loading="lazy">
+            </picture>
+        {% endif %}
+    {% endblock %}
+
+    {% block body %}
+        {% if summary %}
+            {# `flex-1` so the footer line sits at the same height across every
+               card in a row. #}
+            <p class="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-neutral-600">{{ summary }}</p>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

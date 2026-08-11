@@ -1,0 +1,12 @@
+{# Attribution for a printed model: a hairline divider carrying a mono label,
+   then title and author. Used on the reference detail page.
+   Expects: model with url, title and author. #}
+<div class="flex items-center gap-4 font-mono text-xs uppercase tracking-[0.2em] text-neutral-500">
+    <span class="h-px flex-1 bg-neutral-200"></span>
+    <span>Verwendetes 3D-Modell</span>
+    <span class="h-px flex-1 bg-neutral-200"></span>
+</div>
+<div class="mt-4 text-center text-sm">
+    <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ model.url }}" target="_blank" rel="noopener">&bdquo;{{ model.title }}&ldquo;</a><br>
+    <span class="text-neutral-600">Erstellt und bereitgestellt von {{ model.author }}</span>
+</div>

@@ -1,36 +1,55 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Impressum · krausgedruckt von Marcel Kraus{% endblock %}
-
-{% block meta %}
-    <meta name="robots" content="noindex">
-{% endblock %}
+{% block meta_description %}Impressum von krausgedruckt von Marcel Kraus. krausgedruckt bietet individuelle 3D-Druck-Dienstleistungen aus Erftstadt bei Köln.{% endblock %}
+{% block meta_robots %}<meta name="robots" content="noindex,follow">{% endblock %}
 
 {% block main %}
-    <section class="bg-brand-papaya">
-        <div class="container mx-auto px-8 py-16 lg:py-24">
-            <div class="flex justify-center">
-                <div class="bg-background-primary hover:prose-a:underline max-w-none mshadow-xl p-8 prose prose-a:no-underline prose-a:text-brand-papaya prose-h2:text-brand-papaya prose-headings:text-brand-primary-text prose-p:text-brand-primary-text rounded-xl w-full lg:w-2/3 xl:w-1/2">
-                    <h2 class="text-brand-papaya">Impressum</h2>
-                    <p>Stand: 13. März 2026</p>
-                    <p>Die folgenden Adressinformationen werden nur aus Gründen der Rechtssicherheit gegeben. Jeglicher Missbrauch wird entsprechend geahndet.</p>
-                    <h3>Diensteanbieter</h3>
-                    <p>
-                        krausgedruckt von Marcel Kraus<br/>
-                        Bonner Straße 88<br/>
-                        50374 Erftstadt
-                    </p>
-                    <p>
-                        Umsatzsteuer Identifikationsnummer (USt-ID): DE225346678
-                    </p>
-                    <p>
-                        E-Mail: <a href="{{ path('app_contact_email') }}">hallo (at) krausgedruckt (punkt) de</a><br/>
-                        Telefon: Erstkontakt bitte <a href="{{ path('app_contact') }}">per Kontaktformular</a>, <a href="{{ path('app_contact_email') }}">E-Mail</a> oder <a href="{{ path('app_contact_whats_app') }}">WhatsApp</a>
-                    </p>
-                    <h3>Bildnachweise</h3>
-                    <p>Die Bilder der 3D-Drucker (Original Prusa MK4S, Original Prusa CORE One) sind von der Firma <a href="https://www.prusa3d.com/de/page/media-ressourcen_987/">Prusa Research</a>.</p>
+    <article class="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
+        {{ include('partials/_eyebrow.html.twig', { text: 'Rechtliches' }) }}
+        <h1 class="mt-5 font-display text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">Impressum</h1>
+        <p class="mt-4 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Stand: 11. August 2026</p>
+
+        <div class="mt-12 space-y-12">
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Angaben gemäß § 5 DDG</h2>
+                <div class="mt-4 space-y-1 text-neutral-800">
+                    <p class="font-display text-lg font-bold text-neutral-900">krausgedruckt von Marcel Kraus</p>
+                    <p>Marcel Kraus</p>
+                    <p>Bonner Straße 88</p>
+                    <p>50374 Erftstadt</p>
+                    <p>Deutschland</p>
                 </div>
-            </div>
+            </section>
+
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Kontakt</h2>
+                <dl class="mt-4 space-y-2 text-neutral-800">
+                    <div class="flex gap-3"><dt class="w-24 shrink-0 text-neutral-600">E-Mail</dt><dd>mail(at)krausgedruckt(dot)de</dd></div>
+                    <div class="flex gap-3"><dt class="w-24 shrink-0 text-neutral-600">WhatsApp</dt><dd><a href="{{ path('app_contact_whats_app') }}" class="transition-colors hover:text-accent-on-light">Über den WhatsApp-Link auf dieser Seite</a></dd></div>
+                    <div class="flex gap-3"><dt class="w-24 shrink-0 text-neutral-600">Telefon</dt><dd>Erstkontakt bitte per <a href="{{ path('app_contact') }}" class="transition-colors hover:text-accent-on-light">Kontaktformular</a>, per E-Mail oder per WhatsApp</dd></div>
+                </dl>
+            </section>
+
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Umsatzsteuer</h2>
+                <p class="mt-4 text-neutral-800">Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br><span class="font-mono">DE225346678</span></p>
+            </section>
+
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Redaktionell verantwortlich</h2>
+                <p class="mt-4 text-neutral-800">Marcel Kraus, Anschrift wie oben.</p>
+            </section>
+
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Verbraucherstreitbeilegung</h2>
+                <p class="mt-4 leading-relaxed text-neutral-700">Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+            </section>
+
+            <section>
+                <h2 class="font-display text-xl font-bold text-neutral-900">Bildnachweise</h2>
+                <p class="mt-4 leading-relaxed text-neutral-700">Die Bilder der 3D-Drucker (Original Prusa MK4S, Original Prusa CORE One) stammen von der Firma <a href="https://www.prusa3d.com/de/page/media-ressourcen_987/" class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover">Prusa Research</a>.</p>
+            </section>
         </div>
-    </section>
+    </article>
 {% endblock %}

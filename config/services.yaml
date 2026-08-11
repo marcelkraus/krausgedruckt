@@ -4,6 +4,14 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Outbound targets. Each of them appears in more than one place — the
+    # footer, a page, a redirect route — and a changed address must not have
+    # to be hunted through the templates. Values that differ per machine
+    # belong in .env instead; these do not.
+    app.contact_email_address: 'mail@krausgedruckt.de'
+    app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
+    app.instagram_url: 'https://www.instagram.com/krausgedruckt'
+    app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
 
 services:
     # default configuration for services in *this* file

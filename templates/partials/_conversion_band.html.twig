@@ -1,0 +1,58 @@
+{# The closing invitation. It sat written out on two pages and as a variant on
+   a third, so a change to the wording or the button had to be found in three
+   places.
+
+   The `actions` block is the enquiry button by default, which is what every
+   caller wants — those keep using {% include %} and never see the block. A
+   page whose closing action is not a button (the app, which offers two store
+   badges) reaches for {% embed %} and overrides it, so the ground, the
+   measurements and the rhythm still come from here.
+
+   An `image` turns the band into a two column block: picture on one side,
+   type on the other. The shop needs that — two identically shaped bands say
+   the two ways to buy are equivalent, and a strip of type between two blocks
+   of nine hundred pixels says the opposite. The picture also answers the one
+   question the band could not: what is actually in there.
+
+   Params: title, text, label (optional), href (optional), icon (optional),
+   external (optional), image (optional, path), imageAlt (required with an
+   image), boxed (optional — renders as an inset card instead of a full-width
+   band), tone ('warm' default, 'plain' for a white ground where the band
+   would otherwise sit on the same colour as the section above it and merge
+   into it). #}
+{% set href = href|default(path('app_contact')) %}
+{% set label = label|default('Jetzt anfragen') %}
+{% set icon = icon|default('arrow') %}
+
+{% if boxed|default(false) %}
+    <div class="rounded-2xl border border-neutral-200 bg-surface-warm p-8">
+        <h2 class="font-display text-xl font-bold text-neutral-900">{{ title }}</h2>
+        <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
+        <div class="mt-6">{% block actions_boxed %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}{% endblock %}</div>
+    </div>
+{% elseif image|default(null) %}
+    {% set ground = tone|default('warm') == 'plain' ? 'border-y border-neutral-200 bg-white' : 'border-t border-neutral-200 bg-surface-warm' %}
+    <section class="{{ ground }}">
+        <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+            <div class="grid items-center gap-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:grid-cols-2 lg:gap-12">
+                <img class="aspect-square w-full object-cover" src="{{ image }}" alt="{{ imageAlt }}" loading="lazy">
+                <div class="p-8 sm:pr-10 sm:pl-0 lg:pr-12">
+                    <h2 class="font-display text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ title }}</h2>
+                    <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
+                    <div class="mt-6">{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% else %}
+    {% set ground = tone|default('warm') == 'plain' ? 'border-y border-neutral-200 bg-white' : 'border-t border-neutral-200 bg-surface-warm' %}
+    <section class="{{ ground }}">
+        <div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-8">
+            <div class="max-w-2xl">
+                <h2 class="font-display text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ title }}</h2>
+                <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
+            </div>
+            <div class="shrink-0 self-start lg:self-auto">{% block actions %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}{% endblock %}</div>
+        </div>
+    </section>
+{% endif %}

@@ -39,7 +39,7 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 1,
                 'title' => 'Ein Klassiker zu Beginn',
-                'summary' => 'Der erste Druck auf einem neuen Prusa MK4 — natürlich ein Schlüsselanhänger als standesgemäßes Beispielmodell.',
+                'summary' => 'Der erste Druck auf einem neuen Prusa MK4 – natürlich ein Schlüsselanhänger als standesgemäßes Beispielmodell.',
                 'description' => "Ein neuer Drucker, ein neuer Schlüsselanhänger.\n\nNatürlich ist der erste Druck auf einem neuen Prusa MK4 standesgemäß genau dieses Beispielmodell.",
                 'category' => CategoryFixtures::CATEGORY_3D_DRUCKER,
                 'material' => Material::PLA,
@@ -53,8 +53,8 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 2,
                 'title' => 'Ein unscheinbares Helferlein',
-                'summary' => 'Ein praktisches Werkzeug zum Sortieren von Schrauben und Muttern — und ein Test für den Farbwechsel am Prusa MK4.',
-                'description' => "Mein Freund James und ich haben eine Werkstatt, und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren.",
+                'summary' => 'Ein praktisches Werkzeug zum Sortieren von Schrauben und Muttern – und ein Test für den Farbwechsel am Prusa MK4.',
+                'description' => "Zusammen mit unserem Freund James betreiben wir eine Werkstatt, und dort gibt es jede Menge Schrauben und Muttern.\n\nDieses unscheinbare Werkzeug ist ein hervorragendes Helferlein beim Sortieren eben dieser Schrauben und Muttern. Die Skala ermöglicht es, Schrauben bis 50 mm Länge und Muttern bis M5 schnell zuzuordnen.\n\nNeben der Nützlichkeit wurde das Modell allerdings vor allem gedruckt, um den Farbwechsel am Prusa MK4 auszuprobieren.",
                 'category' => CategoryFixtures::CATEGORY_WERKSTATT,
                 'material' => Material::PLA,
                 'printer' => Printer::MK4S_MMU3,
@@ -67,8 +67,8 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 3,
                 'title' => 'Ein Abfallbehälter mit Akzenten',
-                'summary' => 'Ein Abfallbehälter für den Prusa MK4, der Filamentreste auffängt — mit orangem Farbakzent.',
-                'description' => "Der Abfallbehälter spart mir eine Menge Zeit und Nerven, er wird an der Seite meines Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden, und mir bleibt mehr Zeit zum drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt, das Ergebnis kann sich sehen lassen!",
+                'summary' => 'Ein Abfallbehälter für den Prusa MK4, der Filamentreste auffängt – mit orangem Farbakzent.',
+                'description' => "Der Abfallbehälter spart uns eine Menge Zeit und Nerven, er wird an der Seite unseres Hauptdruckers, dem Prusa MK4, montiert und nimmt alle Reste auf, der beim Hantieren mit Filamenten so anfällt.\n\nNun landet der ganze Kram nicht mehr auf dem Boden, und uns bleibt mehr Zeit zum Drucken!\n\nAls kleines optisches Highlight wurden die oberen 2 mm des schwarzen Behälters in orange abgesetzt, das Ergebnis kann sich sehen lassen!",
                 'category' => CategoryFixtures::CATEGORY_3D_DRUCKER,
                 'material' => Material::PETG,
                 'printer' => Printer::MK4S_MMU3,
@@ -81,8 +81,8 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 4,
                 'title' => 'Werkzeuge für 3D-Drucker aus dem 3D-Drucker',
-                'summary' => '3D-Drucker drucken Werkzeuge für andere 3D-Drucker — hier zwei Tools zum Nozzle-Wechsel am Prusa MK4.',
-                'description' => "Die Idee ist so simpel wie genial: 3D-Drucker drucken Werkzeuge (und Teile) für andere 3D-Drucker.\n\nHier als Beispiel zwei Werkzeuge zum Wechsel der Nozzle (= Düse) eines Prusa MK4, den ich für meine Kunden einsetze.",
+                'summary' => '3D-Drucker drucken Werkzeuge für andere 3D-Drucker – hier zwei Tools zum Nozzle-Wechsel am Prusa MK4.',
+                'description' => "Die Idee ist so simpel wie genial: 3D-Drucker drucken Werkzeuge (und Teile) für andere 3D-Drucker.\n\nHier als Beispiel zwei Werkzeuge zum Wechsel der Nozzle (= Düse) eines Prusa MK4, den wir für unsere Kunden einsetzen.",
                 'category' => CategoryFixtures::CATEGORY_3D_DRUCKER,
                 'material' => Material::PLA,
                 'printer' => Printer::MK4S,
@@ -95,7 +95,7 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 5,
                 'title' => 'Ein Halter für Visitenkarten',
-                'summary' => 'Ein Visitenkartenhalter im Jurassic-Park-Stil — passend zum Postkarten-Aufsteller.',
+                'summary' => 'Ein Visitenkartenhalter im Jurassic-Park-Stil – passend zum Postkarten-Aufsteller.',
                 'description' => "Analog zum Postkarten-Aufsteller (siehe oben) gibt es das passende Modell natürlich auch für Visitenkarten.\n\nAuch hier war der \"Jurassic Jeep\" der Grund, ein solches Modell zu entwicklen und der Allgemeinheit bereitzustellen.",
                 'category' => CategoryFixtures::CATEGORY_AUTOS,
                 'material' => Material::PLA,
@@ -109,8 +109,8 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 6,
                 'title' => 'Eine Postkarte in Ehren',
-                'summary' => 'Ein Postkarten-Aufsteller im Jurassic-Park-Design — inspiriert von den Betonblöcken der Zäune.',
-                'description' => "Als großer Fan von Postkarten musste ich natürlich eine Möglichkeit finden, die Postkarten meines \"Jurassic Jeep\" zu präsentieren.\n\nDas simple Design ist schnell zu drucken und orientiert sich in der Optik passenderweise an den Betonblöcken der Zäune aus \"Jurassic Park\".",
+                'summary' => 'Ein Postkarten-Aufsteller im Jurassic-Park-Design – inspiriert von den Betonblöcken der Zäune.',
+                'description' => "Als große Fans von Postkarten mussten wir natürlich eine Möglichkeit finden, die Postkarten unseres „Jurassic Jeep“ zu präsentieren.\n\nDas simple Design ist schnell zu drucken und orientiert sich in der Optik passenderweise an den Betonblöcken der Zäune aus „Jurassic Park“.",
                 'category' => CategoryFixtures::CATEGORY_AUTOS,
                 'material' => Material::PLA,
                 'printer' => Printer::MK4S,
@@ -123,8 +123,8 @@ class ReferenceFixtures extends Fixture implements DependentFixtureInterface
             [
                 'legacyId' => 7,
                 'title' => 'Bequemes Schrauben am Tamiya BBX',
-                'summary' => 'Ein 3D-gedruckter Ständer für den Tamiya BBX Buggy — für bequemes Arbeiten am RC-Car.',
-                'description' => "Als großer Fan von RC-Cars aller Art lässt sich dieses Hobby auch mit dem 3D-Druck verbinden.\n\nFür den neuen Buggy von Tamiya, dem Tamiya BBX, habe ich einen passenden Ständer gedruckt, so lässt sich bequem daran arbeiten.\n\nSobald die MMU-Einheit für den Mehrfarbdruck verfügbar ist, erfolgt ein Neuausdruck mit farbigem Tamiya-Logo.",
+                'summary' => 'Ein 3D-gedruckter Ständer für den Tamiya BBX Buggy – für bequemes Arbeiten am RC-Car.',
+                'description' => "Als große Fans von RC-Cars aller Art lässt sich dieses Hobby auch mit dem 3D-Druck verbinden.\n\nFür den neuen Buggy von Tamiya, dem Tamiya BBX, haben wir einen passenden Ständer gedruckt, so lässt sich bequem daran arbeiten.\n\nSobald die MMU-Einheit für den Mehrfarbdruck verfügbar ist, erfolgt ein Neuausdruck mit farbigem Tamiya-Logo.",
                 'category' => CategoryFixtures::CATEGORY_RC_MODELLBAU,
                 'material' => Material::PLA,
                 'printer' => Printer::MK4S,

@@ -1,43 +1,44 @@
 {% extends 'base.html.twig' %}
+{% import 'partials/_icons.html.twig' as icons %}
 
 {% block title %}Referenzen · krausgedruckt von Marcel Kraus{% endblock %}
+{% block meta_description %}Ein Einblick in unsere bunte Welt: gedruckte Ersatzteile, Werkzeuge und Dekostücke aus der Werkstatt von krausgedruckt in Erftstadt bei Köln.{% endblock %}
 
 {% block main %}
-    <section class="bg-background-secondary">
-        <div class="container mx-auto px-8 py-16 lg:py-24">
-            <div class="mx-auto max-w-2xl lg:max-w-4xl">
-                <h2 class="mb-8 text-4xl font-semibold text-brand-papaya lg:mb-12">
-                    Meine Referenzen.<br/>
-                    <span class="text-muted">Ein kleiner Einblick in meine bunte Welt.</span>
-                </h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {% for reference in references %}
-                        <article class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
-                            {% if reference.imageLandscapePath %}
-                                <a href="{{ path('app_reference_detail', {year: reference.year, slug: reference.slug}) }}">
-                                    <picture>
-                                        <source media="(min-width: 1024px)" srcset="{{ reference.imageLandscapePath | imagine_filter('reference_landscape') }}">
-                                        <img class="w-full object-cover aspect-[4/5] lg:aspect-[5/4]" src="{{ reference.imagePortraitPath ? reference.imagePortraitPath | imagine_filter('reference_portrait') : reference.imageLandscapePath | imagine_filter('reference_landscape') }}" alt="{{ reference.title }}">
-                                    </picture>
-                                </a>
-                            {% endif %}
-                            <div class="p-6 flex flex-col flex-1">
-                                <h3 class="text-xl font-semibold text-brand-papaya">
-                                    <a href="{{ path('app_reference_detail', {year: reference.year, slug: reference.slug}) }}" class="hover:underline">{{ reference.title }}</a>
-                                </h3>
-                                {% if reference.summary %}
-                                    <p class="mt-2 text-muted line-clamp-3">{{ reference.summary }}</p>
-                                {% endif %}
-                                {% if reference.category %}
-                                    <div class="mt-auto pt-4">
-                                        <span class="bg-brand-papaya/10 text-brand-papaya rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide">{{ reference.category.name }}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </article>
-                    {% endfor %}
-                </div>
+    <section class="border-b border-neutral-200 bg-surface-warm">
+        <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
+            <div class="max-w-2xl">
+                {{ include('partials/_eyebrow.html.twig', { text: 'Referenzen' }) }}
+                <h1 class="mt-5 font-display text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
+                    Unsere Referenzen.
+                    <span class="mt-3 block text-[0.8em] text-accent-on-light">Ein kleiner Einblick in unsere bunte Welt.</span>
+                </h1>
             </div>
         </div>
     </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
+        <h2 class="sr-only">Alle Referenzen</h2>
+        {% if references %}
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {% for reference in references %}
+                    {{ include('partials/_reference_card.html.twig', { reference: reference }) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-base leading-relaxed text-neutral-600">Hier ist gerade nichts zu sehen – wir arbeiten daran.</p>
+        {% endif %}
+
+        {# Der Bezug ist echt, nicht dekorativ: Aus jeder Referenz baut das
+           Backend eine Instagram-Bildunterschrift — die Referenzen sind die
+           Beiträge. Wer hier durch ist, findet dort die Fortsetzung. #}
+        <div class="mt-12">
+            <a href="{{ instagram_url }}" target="_blank" rel="noopener" class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-accent-on-light transition-colors hover:text-accent-on-light-hover">
+                Laufend weitere Inhalte auf Instagram
+                <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('external', 'h-4 w-4') }}</span>
+            </a>
+        </div>
+    </section>
+
+    {{ include('partials/_conversion_band.html.twig', { title: 'Und jetzt deins?', text: 'Erzähle uns von deiner Idee – unverbindlich und ohne Kosten.' }, with_context = false) }}
 {% endblock %}

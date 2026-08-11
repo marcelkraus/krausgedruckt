@@ -1,7 +1,10 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-    form_themes:
-        - 'form_layout.html.twig'
+    # The shop and the Instagram account are linked from several templates;
+    # as a global the address sits in exactly one place in the project.
+    globals:
+        etsy_url: '%app.etsy_url%'
+        instagram_url: '%app.instagram_url%'
 
 twig_extra:
     markdown:
