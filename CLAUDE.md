@@ -2,12 +2,13 @@
 
 ## Project Overview
 
-This is a Symfony 8.1 website for krausgedruckt (3D printing services), hosted with DDEV. The site uses Twig templates with Tailwind CSS for styling and EasyAdmin for backend management.
+This is a Symfony 8.1 website for krausgedruckt (3D printing services), hosted with DDEV. The site uses Twig templates with Tailwind CSS 4 for styling and EasyAdmin for backend management. It is the sibling of krausgebaut and shares its design skeleton.
 
 ## Development Environment
 
 ### DDEV Setup
-- Project runs in DDEV with PHP 8.4, nginx-fpm, and MariaDB 10.11
+- Project runs in DDEV with PHP 8.4, apache-fpm, Node 22 and MariaDB 10.11
+- The web server is Apache so that `public/.htaccess` is exercised locally; under nginx it was ignored and only ever ran in production
 - URL: https://krausgedruckt.ddev.site
 - Start: `ddev start`
 - Stop: `ddev stop`
@@ -29,11 +30,14 @@ ddev exec bin/console cache:clear
 
 **Compile Tailwind CSS:**
 ```bash
-# Watch mode (wrapper script, minified output, no arguments):
-ddev exec bin/tailwindcss
-
 # Production build (minified):
-ddev exec npx tailwindcss -i public/css/input.css -o public/css/output.css --minify
+ddev exec npm run build
+
+# Watch mode:
+ddev exec npm run dev
+
+# Watch mode via the wrapper script (no arguments):
+ddev exec bin/tailwindcss
 ```
 
 **Composer:**
@@ -91,8 +95,9 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 | `/kontakt` | `app_contact` | Contact form (GET, POST) |
 | `/kontakt-per-email` | `app_contact_email` | Redirect to `mailto:` |
 | `/kontakt-per-whats-app` | `app_contact_whats_app` | Redirect to WhatsApp |
-| `/kontakt/bestaetigung` | `app_contact_confirmation` | Confirmation after form submission |
 | `/referenzen` | `app_references` | Reference list, database-backed |
+| `/robots.txt` | `app_robots` | robots, with an absolute sitemap URL |
+| `/sitemap.xml` | `app_sitemap` | Sitemap, public pages plus visible references |
 | `/referenzen/{year}/{slug}` | `app_reference_detail` | Reference detail page |
 | `/admin` | `admin` | EasyAdmin dashboard |
 | `/admin/logout` | `admin_logout` | Logout, intercepted by the firewall |
@@ -100,11 +105,12 @@ All frontend routes are defined in `src/Controller/DefaultController.php` with P
 ### Controller Structure
 - `DefaultController` instantiates a Symfony Serializer in its constructor for JSON-based content
 - **Database-backed routes:**
+  - `/` loads the three most recent visible references for the homepage teaser (`HOMEPAGE_REFERENCE_LIMIT`)
   - `/referenzen` loads visible references via `ReferenceRepository::findAllOrdered()` (sorted by `createdAt` descending)
   - `/referenzen/{year}/{slug}` resolves a single reference via `ReferenceRepository::findByYearAndSlug()`; invisible or unknown references return 404
   - `/haeufig-gestellte-fragen` loads visible FAQ entries via `FaqEntryRepository::findAllOrdered()` (sorted by `sortOrder` ascending)
 - **JSON-backed routes:**
-  - `/advintage` loads `config/advintage-landing-page.json` and deserializes to `PrintableModel[]`
+  - `/advintage` loads `config/advintage-landing-page.json` and deserializes to `PrintableModel[]`. The path is anchored to `kernel.project_dir`; a relative path resolves against the working directory, which holds for the web server and breaks in the test runner
 - **Admin controllers** are located in `src/Controller/Admin/` for EasyAdmin CRUD operations
 
 ### Entities
@@ -181,32 +187,217 @@ Every reference carries two images. Both are capped at a width of 1080 pixels, m
 - Known limitation: `Assert\Image` measures the physical pixels and ignores the EXIF orientation. A photo stored sideways is therefore rejected with a ratio message rather than being rotated first
 
 ### Template Organization
-- Base template: `templates/base.html.twig`
+- Base template: `templates/base.html.twig` — head, header, footer and the mobile menu
 - Page templates: `templates/default/*.html.twig`
 - Admin template: `templates/admin/dashboard.html.twig`
-- Reusable components: `templates/_*.html.twig` (e.g., `_model.html.twig`)
-- Custom form layout: `templates/form_layout.html.twig`
+- Patterns: `templates/partials/_*.html.twig`
 - Email template: `templates/default/contact.txt.twig`
 
-### Styling with Tailwind
-- Input CSS: `public/css/input.css`
-- Output CSS: `public/css/output.css` (generated via the Tailwind CSS CLI)
-- Config: `tailwind.config.js`
-- The default palette is reduced to `transparent`, `current`, `black` and `white`; everything else is defined explicitly:
-  - `background-primary` (orange-100), `background-secondary` (gray-200)
-  - `brand-papaya` (`#EA580C`), `brand-primary-text` (`#171717`)
-  - `muted` (gray-600), `placeholder` (gray-400)
-- Plugins: `@tailwindcss/forms` and `@tailwindcss/typography` are active
-- Templates must be defined in the `content` array of Tailwind config
-- **Important:** Tailwind must be recompiled after template changes
+Each partial is the single source for its pattern and is never written by
+hand in a page: `_logo` (brand lockup), `_eyebrow` (mono label with square
+marker), `_icons` (line-icon macro), `_card` (the card shell),
+`_reference_card` (shared by the homepage teaser and the overview),
+`_model` (attribution of a printed model), `_button` (the two button steps),
+`_button_class` (their classes as a bare string), `_contact_form` (the
+hand-rolled form), `_conversion_band` (the closing invitation) and
+`_sibling_band` (the nod to krausgebaut).
 
-### Forms & Anti-Spam
-- Contact form uses `ContactRequestType` with the Omines Anti-Spam Bundle (profile `default`)
-- The profile combines a honeypot field (`email_address`), a submission timer (3 seconds to 1 hour), banned markup detection and a URL limit (max. 2 URLs, max. 1 identical); anti-spam is disabled in the test environment
-- Email sending via Symfony Mailer with `TemplatedEmail`; the reply-to address is the sender of the contact request
-- Form has 4 fields: `name`, `email`, `message`, `discountCode`, plus a submit button
-- Discount code can be pre-filled via query parameter: `/kontakt?discount-code=CODE`
-- A successful submission redirects to `/kontakt/bestaetigung`
+Three of them carry rules rather than just markup:
+
+- **`_button_class`** holds the contrast rule for the filled button and
+  emits nothing but a class string. `_button` renders the link version;
+  a `<button>` that Symfony renders — the contact form's submit — pulls the
+  same string through `include()`. Neither copy can drift from the other, and
+  the rule below hangs on exactly one place.
+- **`_card`** is embedded, not included, because the picture and the running
+  text differ per case while the shell does not. A card **with** an `href`
+  is one click target: the heading link stretches over the whole article
+  (`after:absolute after:inset-0`) and the hover shadow is rendered. A card
+  **without** one — the team — stays inert, because a growing shadow is a
+  promise of a click.
+- **`_conversion_band`** has three shapes. Plain band, `boxed` as an inset
+  card, and — with an `image` — a two column block with a picture. Its
+  `actions` block defaults to the enquiry button; a page whose closing action
+  is something else (the app, with two store badges) embeds it and overrides
+  the block, so ground, measurements and rhythm still come from one place.
+
+The navigation is built once from the `nav_items` list in
+`base.html.twig`. An item names either a `route` inside the site or an
+external `url` with `external: true`, which gets the off-site icon and opens
+in a new tab; the shop is the only one and sits last, after the pages that
+belong to the site itself. A page that stands apart may narrow the list down
+by setting `nav_items` at its own top level, which is what the adVintage
+landing page does.
+
+### Design system
+
+krausgedruckt and krausgebaut are one brand family, and the family lives in
+the shared skeleton: header dimensions (`h-20`, `max-w-6xl`,
+`px-6 lg:px-8`, fixed, hairline, backdrop blur), the three-column dark
+footer, the container widths, the typographic roles and the token
+architecture. What differs is deliberate — papaya instead of petrol, the
+nozzle instead of the gear, a warm ground instead of a cool one, soft cards
+with a shadow instead of flat hairline cards, and a product photo where the
+sibling uses typography. Both wordmarks are built identically, so the logo
+partials mirror each other.
+
+- **Typography:** `font-display` = `font-sans` = Aller (wordmark, headlines
+  and body, which ties the type to the logo); `font-mono` = JetBrains Mono
+  for eyebrows, labels and technical data. Both are self-hosted in
+  `public/fonts`, no external requests.
+- **Container:** `max-w-6xl mx-auto px-6 lg:px-8`; text pages and legal
+  pages `max-w-3xl`.
+- **Section rhythm:** warm → white → warm → dark → white. The single dark
+  block (`Ablauf`) arrives late on purpose.
+- **Corners:** `rounded-lg` for buttons and fields, `rounded-2xl` for cards
+  and containers. Cards are free-standing: border, white ground, soft
+  shadow.
+- **Two-tone headings:** the statement comes first in `neutral-900` (or white
+  on a dark ground), the flourish follows underneath, smaller and in the
+  accent — `<span class="mt-3 block text-[0.8em] text-accent-on-light">`. This
+  holds on every page. **The homepage hero is the only exception**, and it is
+  the only one allowed: reversing the order or inventing a third form
+  elsewhere is drift, not personality.
+
+#### Colour tokens
+
+Defined in `public/css/input.css` under `@theme`. **No hex values in
+templates** — use the tokens. Everything outside them is Tailwind's
+`neutral-*`, hairlines are `neutral-200`.
+
+**One vocabulary, both brands.** The role is in the name, so the difference
+between krausgedruckt and krausgebaut falls into the values and not into the
+naming. The same five tokens exist over there under the same names.
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `accent` | `orange-600` | the brand: surfaces, borders, markers, the mark — **never type** |
+| `accent-on-light` | `orange-700` | type on a light ground |
+| `accent-on-dark` | `orange-600` | type on a dark ground |
+| `accent-hover` | `orange-500` | hover of a filled surface |
+| `accent-on-light-hover` | `orange-800` | hover of type on a light ground |
+| `surface-warm` | `orange-50` | the warm section ground |
+| `brand-marcelkraus`, `brand-krausgebaut`, `brand-krausgebaut-hover`, `brand-krausgebaut-on-dark` | own hex / `cyan-600` | sibling markers and the krausgebaut band |
+
+The earlier names mixed two axes — one suffix named a role, another named a
+state — and the two projects used different words for the same thing. That
+is how a missing token went unnoticed: there was no name for "the brand as
+type on a dark ground", so nobody saw it was never defined.
+
+The naming makes the rule checkable: **`text-accent` without a role suffix
+must not appear anywhere.** Neither project has one.
+
+The split is measured, not cosmetic. Papaya is a *light* colour: it misses
+AA as type on white (3.56:1) and carries a dark ground as it is (5.56:1).
+The sibling's petrol has the mirror problem, which is why its tokens hold
+different values under the same names.
+
+0. **`neutral-400` is never type on a light ground** — it measures 2.58:1
+   on white. Use `neutral-500` at the very least, `neutral-600` for anything
+   that carries meaning, which includes form labels, help text and
+   placeholders. On a dark ground the value is fine and `neutral-500` is the
+   one that misses (3.78:1 on `neutral-900`).
+1. **On a light ground type carries `accent-on-light`, never `accent`.**
+2. **On a dark ground type carries `accent-on-dark`** — there it measures
+   5.52:1.
+3. **The filled button is `accent` with a `neutral-900` label** (5.04:1) and
+   **lightens** to `accent-hover` on hover. The hover of a filled surface
+   always moves in whichever direction keeps its label readable; here the
+   label is near-black, so darkening would drop it to 3.55:1 on `orange-700`.
+   The outline button is the secondary step.
+
+Sibling colours stay out of the accent scale and carry their own
+`brand-<name>` token. `brand-krausgebaut` is too dark to be read on a dark
+ground (2.74:1), so the band that points at the sister brand uses
+`brand-krausgebaut-on-dark` for anything that is type — the same split the
+accent has, only in the other direction.
+
+### Styling with Tailwind
+- Tailwind 4, CSS-first. Input `public/css/input.css`, output
+  `public/css/output.css` (committed, linked statically)
+- `@import "tailwindcss" source(none)` plus an explicit `@source` for the
+  templates. Without `source(none)` Tailwind scans the whole tree and a
+  stray word in a Markdown file turns into a CSS rule
+- Plugins are loaded with `@plugin`: `@tailwindcss/forms` and
+  `@tailwindcss/typography`
+- There is **no** `tailwind.config.js`. Theme values live in `@theme`
+- **Important:** Tailwind must be recompiled after every template change —
+  the stylesheet is committed, so an un-rebuilt build ships silently broken
+
+### Contact form and anti-spam
+
+**The form is hand-rolled — no `symfony/form`.** It is the same mechanism the
+sister project uses, so the family answers a submission through one path
+instead of two. `symfony/form` is still installed, but only as a transitive
+dependency of EasyAdmin, which needs it for the backend; the frontend does
+not touch it.
+
+- `App\Entity\ContactRequest` is a plain object with public properties and
+  validation attributes. It is filled from the request in the controller and
+  handed to `symfony/validator`
+- **Constraints are PHP attributes, never doc-block annotations.** The class
+  shipped once with `@Assert\Email` in a doc block, which Symfony 8 does not
+  read: the form accepted anything and an invalid address ended as a 500
+  inside the mailer
+- `templates/partials/_contact_form.html.twig` renders it and holds the field
+  classes. There is no form theme any more
+- 5 fields: `name`, `email`, `phone`, `discountCode`, `message`. The two
+  required ones open the form and the optional ones follow, because a private
+  customer is the majority here and should not have to skip a field before
+  starting. The sister site orders its own form differently on purpose —
+  there a company is the normal case
+
+**Three defences, and they behave differently on purpose:**
+
+| Signal | Answer |
+| --- | --- |
+| Honeypot `website` filled | silent drop — fake success, nothing sent |
+| Timestamp missing, tampered or younger than 3 seconds | silent drop |
+| Timestamp older than 2 hours | **422 with a message**: this is a person whose form sat open |
+| CSRF token invalid | 422 with a message |
+| More than 5 submissions per hour and address | 422 with a message |
+
+The timestamp is signed with `hash_hmac` against `kernel.secret` — that is
+what makes its age trustworthy, because otherwise a bot would simply post a
+value that looks old enough. A bot learns nothing from a silent drop; a
+person is never dropped without being told.
+
+The rate limiter is configured in `config/packages/rate_limiter.yaml` and
+raised out of the way in the test environment, because its state outlives a
+single test run.
+
+- A rejected submission answers **422**, not 200, and re-renders with the
+  submitted values, the first violation per field, and the visitor's still
+  valid timestamp so a quick fix-and-resend is not read as a bot
+- Fields carry **real labels**, not placeholders — a placeholder disappears on
+  the first keystroke and leaves the field unnamed. A required field is marked
+  once, by the accent asterisk on its label, with the `Pflichtfelder *` legend
+  above the button
+- The field keeps the **browser focus ring** (`focus:outline-2`) on top of the
+  accent border. Replacing the ring with a one pixel border change made the
+  form the only place on the site where the keyboard focus was weaker than the
+  default
+- The submit button pulls its classes from `_button_class.html.twig` rather
+  than writing them out, so the contrast rule lives in exactly one place
+- Errors are `red-600`, not the accent: on this brand an orange error would be
+  indistinguishable from an orange heading
+- Discount code can be pre-filled via query parameter:
+  `/kontakt?discount-code=CODE`
+- A successful submission sets a `contact_success` flash and redirects back
+  onto `/kontakt`, where the confirmation takes the form's place. This is the
+  sister site's behaviour one to one. The redirect is what matters: without it
+  a reload would send the message a second time
+- Email sending via Symfony Mailer with `TemplatedEmail`; the reply-to address
+  is the sender of the contact request
+
+### Logging
+
+`symfony/monolog-bundle`, configured identically to the sister project because
+both run on the same host. Production writes to a **rotating file** rather than
+the recipe's `php://stderr`: on the Uberspace host the FastCGI error stream is
+not readable from the account, so an error would leave no trace that can be
+looked at over SSH. Only errors are kept, together with the request that led up
+to them; deprecations go to their own file.
 
 ### Environment Variables
 Defaults live in `.env`, overrides in `.env.local` (never committed).
@@ -231,6 +422,70 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 - Without a summary the introduction ends after the model name
 - The caption sits in a copyable block with a button next to it. The asynchronous clipboard API only exists in a secure context, so the button falls back to a hidden selection when the backend is opened over plain HTTP
 
+### Tests
+
+PHPUnit 13 with browser-kit and css-selector, matching the sibling project.
+`tests/Controller/RouteSmokeTest.php` calls every frontend route once and
+asserts that it answers and carries exactly one `h1`.
+`tests/Controller/ContactFormTest.php` pins the contact form: an invalid
+submission is refused with 422, names the field and sends nothing; a valid one
+redirects and sends exactly one mail; the confirmation takes the form's place;
+the discount code arrives from the query string; a filled honeypot and a
+tampered signature are dropped silently while a stale form is asked to resend.
+
+```bash
+ddev exec bin/phpunit
+```
+
+The test environment ignores `.env.local` by design and appends `_test` to
+the database name. That database needs to exist once per machine:
+
+```bash
+ddev mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS db_test; GRANT ALL PRIVILEGES ON db_test.* TO 'db'@'%'; FLUSH PRIVILEGES;"
+ddev exec bin/console doctrine:migrations:migrate --no-interaction --env=test
+ddev exec bin/console doctrine:fixtures:load --no-interaction --env=test
+```
+
+### SEO and meta
+
+Centralised in `base.html.twig`: `lang`, canonical, description, Open Graph
+and Twitter card, all overridable per page through the `title`,
+`meta_description`, `meta_robots` and `meta_image` blocks. `meta_image` is
+captured into a variable rather than printed where it is defined, because
+the card needs the path twice.
+
+Every page carries exactly one visible `h1`. Legal pages and the contact
+confirmation are `noindex,follow`. JSON-LD sits in the `structured_data`
+block: `ProfessionalService` on the homepage, `FAQPage` on the FAQ. Reference
+detail pages carry none — the benefit is limited to image search.
+
+`/robots.txt` and `/sitemap.xml` are generated by `DefaultController`. The
+sitemap lists the public pages and every visible reference; legal pages, the
+confirmation and the adVintage landing page stay out.
+
+`App\EventListener\SecurityHeadersListener` sets `X-Content-Type-Options`,
+`Referrer-Policy` and `X-Frame-Options` on every main response.
+
+### Analytics
+
+Self-hosted Matomo (**SiteId 8**), inlined in `base.html.twig` behind
+`{% if app.environment == 'prod' %}` — development and test never track.
+Cookieless via `disableCookies`, so no consent banner is required.
+
+### Keeping empty directories
+
+A directory that has to exist in the repository but carries no tracked
+content is held by an **empty `.gitignore`**, never by a `.gitkeep`. This
+applies project-wide, including directories a Symfony recipe scaffolds.
+
+Currently: `public/images/references/landscape/` and
+`public/images/references/portrait/`. `translations/` carries content again
+and needs no placeholder.
+
+`bin/reinstall-db` sweeps the two image directories and excludes
+`.gitignore` from the sweep — without that exclusion the reset silently
+removes the placeholders and the directories fall out of the repository.
+
 ### Fixtures
 - `src/DataFixtures/` contains `CategoryFixtures`, `ReferenceFixtures` and `FaqEntryFixtures`
 - Load them with `ddev exec bin/console doctrine:fixtures:load`, or use `bin/reinstall-db` for a full reset
@@ -238,9 +493,22 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 ### Static Assets
 - Images: `public/images/`
 - Landing page images: `public/images/advintage-landing-page/`
+- Shop photo: `public/images/etsy-shop.jpg` (1080 × 1080, shown in the shop band on the homepage)
 - Reference images: `public/images/references/landscape/` and `public/images/references/portrait/` (uploaded via VichUploader)
-- Logo: `public/images/krausgedruckt-logo.svg`
-- Sharing image: `public/images/sharing.png` (1200×630, Open Graph)
+- Logo: `templates/partials/_logo.html.twig` — a Twig partial, not an image file
+- Sharing image: `public/images/sharing.jpg` (1200×630, Open Graph)
+
+The sharing image is a **finished asset, not a build product** — the same
+rule the sister project follows, and its composition is deliberately the
+mirror of it. Should it ever be redrawn: white ground, the eyebrow with its
+square marker at the top left, the logo lockup below it, a two line claim in
+`neutral-600`, and the domain with the location as a mono line at the foot.
+The nozzle is oversized, **solid** accent and cropped off the right edge,
+where the sibling crops its gear. Type is sized for a chat card around
+320 pixels wide rather than for the canvas, which is why the mono lines sit
+well above their on-site sizes and why the mark is opaque instead of a tint.
+The mono type is `accent-on-light` and `neutral-600`, never `accent` — the
+contrast rule holds on the card as it does on the site.
 
 ### Favicons
 
@@ -270,6 +538,7 @@ Marcel supplies it on demand, and every shipped asset is derived from it.
 - **Reference, category and FAQ updates:** managed via the EasyAdmin interface at `/admin`
 - **Other content updates:** To change landing pages, edit the JSON files in `config/`
 - **Routing:** All frontend routes use German URLs (e.g., `/kontakt`, `/referenzen`, `/haeufig-gestellte-fragen`)
+- **Voice:** the business speaks as „wir“ and addresses the customer as „du“. In the FAQ the customer speaks too, and keeps „ich“ for itself while addressing the business as „ihr“ — the same word therefore moves in one entry and stays in the next
 - **Database:** MariaDB stores references, categories and FAQ entries — use Doctrine migrations for schema changes
 - **Admin access:** EasyAdmin at `/admin`, protected by HTTP Basic
 - **Environment:** `.env.local` should never be committed and contains local overrides
