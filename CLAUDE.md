@@ -533,6 +533,48 @@ drifted to `#EB5923` – they had been rasterised away from the vector at some
 point and nobody noticed. Master artwork is **not** kept in the repository;
 Marcel supplies it on demand, and every shipped asset is derived from it.
 
+## Deployment
+
+Rolled out with `bin/deploy`, which is the sister project's script plus one
+step:
+
+```bash
+ssh kraus 'cd ~/html/krausgedruckt && bin/deploy'
+```
+
+It fetches, resets hard to `origin/main`, installs the production
+dependencies, **removes** `var/cache/prod`, rebuilds it and then runs the
+migrations. The reset is hard, but `.env.local`, `vendor/` and `var/` are
+ignored and survive it. `public/css/output.css` is committed, so the server
+needs no npm run.
+
+The cache is removed rather than cleared, and that is not a detail:
+`cache:clear` loads the existing compiled container before it replaces it, so
+a release that drops a bundle dies on a class that no longer exists. It has
+happened once here, when the anti-spam bundle went.
+
+Migrations run **after** the rebuild so they meet the new container rather
+than the old one.
+
+**Two things do not travel with the repository.** A fresh server is not
+complete after a clone:
+
+1. **The database** — references, categories and FAQ entries live in MariaDB.
+   Eight migrations build the schema; the content needs a dump.
+2. **The uploaded reference images** — `public/images/references/landscape/`
+   and `portrait/` are ignored, so only the two empty `.gitignore`
+   placeholders and the fixture pictures are versioned. Without copying them
+   across, every reference loses its picture.
+
+`public/media/cache/` does **not** need to travel; LiipImagine rebuilds it on
+demand. What it does need is a writable `public/media/`, writable upload
+directories and a writable `var/`.
+
+`.env.local` has to exist on the server and override `APP_ENV`, `APP_SECRET`,
+`DATABASE_URL` and `MAILER_DSN`. The last one is the quiet one: it defaults to
+`null://null`, so an unset `MAILER_DSN` swallows every contact request without
+raising an error.
+
 ## Important Notes
 
 - **Reference, category and FAQ updates:** managed via the EasyAdmin interface at `/admin`

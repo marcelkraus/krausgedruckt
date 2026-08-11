@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# Rolls the checked-out branch out. Run it on the server, inside the
+# application directory:
+#
+#     ssh kraus 'cd ~/html/krausgedruckt && bin/deploy'
+#
+# `set -e` matters here: without it a failed `composer install` would be
+# followed by a cache rebuild against half-installed dependencies, and the
+# site would come back up broken instead of staying on the old release.
+set -euo pipefail
+
+git fetch --all
+git reset --hard origin/main
+
+composer install --no-dev --optimize-autoloader
+
+# The compiled container is moved aside rather than cleared. `cache:clear`
+# loads the existing container before it replaces it, so a release that drops
+# a bundle makes it die on a class that no longer exists — reproduced once,
+# and it takes the site down for the length of the fix.
+#
+# Moved rather than deleted outright, because a plain `rm -rf` races the web
+# server: PHP-FPM writes into the directory while rm walks it and rm gives up
+# with "Directory not empty". Under `set -e` that aborts the deployment right
+# between removing the cache and rebuilding it, which is the worst possible
+# moment. The rename is atomic and cannot race; sweeping the leftovers
+# afterwards may fail harmlessly, so it is allowed to.
+if [ -d var/cache/prod ]; then
+    discard="var/cache/prod.discard.$$"
+    mv var/cache/prod "$discard"
+    rm -rf "$discard" || true
+fi
+
+bin/console cache:clear --env=prod --no-debug
+
+# Migrations run against the rebuilt container, not the old one, so a
+# migration that relies on a new entity has it available. This is the one
+# step the sister project does not need — it has no database.
+bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug
