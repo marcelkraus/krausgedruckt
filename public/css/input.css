@@ -70,9 +70,15 @@
 
     /* Sibling brands in the footer network. Foreign colours carry their own
        token so they stay out of the accent scale. */
-    --color-brand-marcelkraus: #607e4a;
-    --color-brand-krausgebaut: #005f78;
-    --color-brand-krausgebaut-hover: #004a5e;
+    --color-brand-marcelkraus: var(--color-purple-700);
+    --color-brand-krausgebaut: var(--color-cyan-800);
+    --color-brand-krausgebaut-hover: var(--color-cyan-900);
+    /* marcelkraus is purple now — the left square of the new family logo,
+       which stands for the employment career. Like the petrol below it is a
+       dark colour and measures 2.53:1 on the footer's neutral-900, so the
+       marker there uses the brighter step. All of these bind to the palette
+       instead of carrying a copied hex, so they cannot drift from it. */
+    --color-brand-marcelkraus-on-dark: var(--color-purple-400);
     /* The petrol is too dark to be type on a dark ground — it measures
        2.74:1 there, where 4.5:1 is required. This is the same split the
        accent already has, only in the other direction: papaya needs a

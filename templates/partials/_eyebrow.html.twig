@@ -12,10 +12,10 @@
 {% set tone = tone|default('light') %}
 {% if tone == 'krausgebaut' %}
     <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-brand-krausgebaut-on-dark">
-        <span class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-brand-krausgebaut-on-dark"></span>{{ text }}
+        <span aria-hidden="true" class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-brand-krausgebaut-on-dark"></span>{{ text }}
     </p>
 {% else %}
     <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] {{ tone == 'dark' ? 'text-accent-on-dark' : 'text-accent-on-light' }}">
-        <span class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-accent"></span>{{ text }}
+        <span aria-hidden="true" class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-accent"></span>{{ text }}
     </p>
 {% endif %}

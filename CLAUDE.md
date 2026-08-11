@@ -277,7 +277,11 @@ naming. The same five tokens exist over there under the same names.
 | `accent-hover` | `orange-500` | hover of a filled surface |
 | `accent-on-light-hover` | `orange-800` | hover of type on a light ground |
 | `surface-warm` | `orange-50` | the warm section ground |
-| `brand-marcelkraus`, `brand-krausgebaut`, `brand-krausgebaut-hover`, `brand-krausgebaut-on-dark` | own hex / `cyan-600` | sibling markers and the krausgebaut band |
+| `brand-marcelkraus` | `purple-700` | the sibling brand — 2.53:1 on `neutral-900`, so not for the dark footer |
+| `brand-marcelkraus-on-dark` | `purple-400` | the marcelkraus marker dot in the footer (6.42:1) |
+| `brand-krausgebaut` | `cyan-800` | the sibling brand and the filled button of its band |
+| `brand-krausgebaut-hover` | `cyan-900` | hover of that button |
+| `brand-krausgebaut-on-dark` | `cyan-600` | type and markers on a dark ground (6.00:1) |
 
 The earlier names mixed two axes — one suffix named a role, another named a
 state — and the two projects used different words for the same thing. That
@@ -307,10 +311,18 @@ different values under the same names.
    The outline button is the secondary step.
 
 Sibling colours stay out of the accent scale and carry their own
-`brand-<name>` token. `brand-krausgebaut` is too dark to be read on a dark
-ground (2.74:1), so the band that points at the sister brand uses
-`brand-krausgebaut-on-dark` for anything that is type — the same split the
-accent has, only in the other direction.
+`brand-<name>` token, and all of them bind to the palette instead of carrying
+a copied hex, so they cannot drift from it.
+
+Both sibling brands are *dark* colours and neither can be seen on a dark
+ground: `brand-krausgebaut` measures 2.74:1 there, `brand-marcelkraus` 2.53:1.
+Anything on a dark ground therefore uses the `-on-dark` step — the band that
+points at the sister brand for its type, and the footer for both marker dots.
+That is the same split the accent has, only in the other direction.
+
+**marcelkraus is purple**, not the olive it used to be: the personal site now
+carries the family logo, whose left square — the employment career — is that
+purple.
 
 ### Styling with Tailwind
 - Tailwind 4, CSS-first. Input `public/css/input.css`, output
@@ -356,11 +368,16 @@ not touch it.
 | Timestamp older than 2 hours | **422 with a message**: this is a person whose form sat open |
 | CSRF token invalid | 422 with a message |
 | More than 5 submissions per hour and address | 422 with a message |
+| Mail transport fails | 422 with a message — `send()` is wrapped, a `TransportExceptionInterface` goes through the normal form-error path |
 
 The timestamp is signed with `hash_hmac` against `kernel.secret` — that is
 what makes its age trustworthy, because otherwise a bot would simply post a
 value that looks old enough. A bot learns nothing from a silent drop; a
 person is never dropped without being told.
+
+The catch on `send()` matters on this host: the sendmail DSN has two
+documented ways of being wrong, and Apache replaces the Symfony error page
+with its own — without it the enquiry is lost behind a bare 500.
 
 The rate limiter is configured in `config/packages/rate_limiter.yaml` and
 raised out of the way in the test environment, because its state outlives a
@@ -528,10 +545,13 @@ rasteriser, 32 px and 180 px are downsampled from a 1024 px raster, which
 measured sharper. Every generated file is checked for a fully opaque,
 single-colour border before it ships.
 
-The tile is `#EA580C`, taken from the master. The icons this set replaced had
-drifted to `#EB5923` – they had been rasterised away from the vector at some
-point and nobody noticed. Master artwork is **not** kept in the repository;
-Marcel supplies it on demand, and every shipped asset is derived from it.
+The tile is `#F54900`, taken from the master — and that is exactly what the
+`accent` token resolves to. **Artwork and palette agree to the digit, and they
+have to stay that way.** When the artwork changes, the three icon files are
+re-derived from the master rather than edited.
+
+Master artwork is **not** kept in the repository; Marcel supplies it on demand,
+and every shipped asset is derived from it.
 
 ## Deployment
 

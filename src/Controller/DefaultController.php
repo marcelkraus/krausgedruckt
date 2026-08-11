@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
@@ -141,21 +142,31 @@ class DefaultController extends AbstractController
             ]);
         }
 
-        $mailer->send(
-            (new TemplatedEmail())
-                ->from(new Address($_SERVER['CONTACT_FORM_SENDER_ADDRESS'], 'krausgedruckt von Marcel Kraus'))
-                ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
-                ->replyTo($contactRequest->email)
-                ->subject('Neue Kontaktanfrage erhalten')
-                ->textTemplate('default/contact.txt.twig')
-                ->context([
-                    'discountCode' => $contactRequest->discountCode,
-                    'emailAddress' => $contactRequest->email,
-                    'message' => $contactRequest->message,
-                    'name' => $contactRequest->name,
-                    'phone' => $contactRequest->phone,
-                ])
-        );
+        // A transport failure must not cost the enquiry and must not hand a
+        // visitor a bare error page: the sendmail DSN has two documented ways
+        // of being wrong on this host, and Apache replaces the Symfony error
+        // page with its own.
+        try {
+            $mailer->send(
+                (new TemplatedEmail())
+                    ->from(new Address($_SERVER['CONTACT_FORM_SENDER_ADDRESS'], 'krausgedruckt von Marcel Kraus'))
+                    ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
+                    ->replyTo($contactRequest->email)
+                    ->subject('Neue Kontaktanfrage erhalten')
+                    ->textTemplate('default/contact.txt.twig')
+                    ->context([
+                        'discountCode' => $contactRequest->discountCode,
+                        'emailAddress' => $contactRequest->email,
+                        'message' => $contactRequest->message,
+                        'name' => $contactRequest->name,
+                        'phone' => $contactRequest->phone,
+                    ])
+            );
+        } catch (TransportExceptionInterface) {
+            return $this->renderContactErrors($request, [
+                'form' => 'Die Anfrage konnte gerade nicht zugestellt werden. Bitte versuche es später noch einmal oder schreibe mir per E-Mail.',
+            ]);
+        }
 
         // Redirect back onto the same address, as the sister site does: the
         // confirmation takes the form's place instead of living on a page of

@@ -110,7 +110,7 @@
                 {% for item in nav_items %}
                     {% set is_current = current_route in item.matches|default([]) %}
                     <a href="{{ item.url|default(null) ?: path(item.route) }}"
-                       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] transition-colors hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-500' }}"
+                       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] transition-colors hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
                        {% if is_current %}aria-current="page"{% endif %}
                        {% if item.external|default(false) %}target="_blank" rel="noopener"{% endif %}>{{ item.label }}{% if item.external|default(false) %}{{ icons.icon('external', 'h-3.5 w-3.5') }}{% endif %}</a>
                 {% endfor %}
@@ -123,7 +123,8 @@
                 </a>
 
                 <button type="button" id="menu-toggle" class="inline-flex h-11 w-11 items-center justify-center rounded-lg text-neutral-900 lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menü öffnen">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
+                    <svg data-menu-icon="closed" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
+                    <svg data-menu-icon="open" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
                 </button>
             </div>
         </div>
@@ -151,7 +152,7 @@
 
     {# ── Footer ─────────────────────────────────────────────────── #}
     {% block footer %}
-        <footer class="border-t border-neutral-200 bg-neutral-900 text-neutral-400">
+        <footer class="border-t border-neutral-800 bg-neutral-900 text-neutral-400">
             <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8">
                 <div class="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
                     <div>
@@ -174,8 +175,8 @@
                     <div>
                         <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">Mehr von Marcel</h2>
                         <ul class="mt-4 space-y-1 text-sm">
-                            <li><a href="https://www.marcelkraus.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-marcelkraus"></span>Persönliche Homepage</a></li>
-                            <li><a href="https://www.krausgebaut.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-krausgebaut"></span>krausgebaut</a></li>
+                            <li><a href="https://www.marcelkraus.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-marcelkraus-on-dark"></span>marcelkraus</a></li>
+                            <li><a href="https://www.krausgebaut.de" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-brand-krausgebaut-on-dark"></span>krausgebaut</a></li>
                         </ul>
                     </div>
                 </div>
@@ -206,6 +207,8 @@
                     menu.classList.toggle('hidden', open === false);
                     toggle.setAttribute('aria-expanded', String(open));
                     toggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+                    toggle.querySelector('[data-menu-icon="closed"]').classList.toggle('hidden', open);
+                    toggle.querySelector('[data-menu-icon="open"]').classList.toggle('hidden', open === false);
                 };
 
                 toggle.addEventListener('click', () => {
@@ -214,6 +217,18 @@
 
                 menu.querySelectorAll('[data-menu-link]').forEach((link) => {
                     link.addEventListener('click', () => setOpen(false));
+                });
+
+                // A tap next to an open menu is a request to close it — without
+                // this the panel stays open until the burger is hit again.
+                document.addEventListener('click', (event) => {
+                    if (menu.classList.contains('hidden')) {
+                        return;
+                    }
+
+                    if (menu.contains(event.target) === false && toggle.contains(event.target) === false) {
+                        setOpen(false);
+                    }
                 });
 
                 document.addEventListener('keydown', (event) => {
