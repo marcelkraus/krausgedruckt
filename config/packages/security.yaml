@@ -2,12 +2,11 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\InMemoryUser: 'auto'
     providers:
+        # Name and hash both come from the environment. A memory provider
+        # would put the user name into this file as a YAML key, where
+        # `%env()%` is not resolved.
         admin_user:
-            memory:
-                users:
-                    krausgedruckt:
-                        password: '%env(ADMIN_PASSWORD)%'
-                        roles: ['ROLE_ADMIN']
+            id: App\Security\EnvironmentUserProvider
     firewalls:
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
@@ -29,6 +28,13 @@ security:
 when@test:
     security:
         password_hashers:
+            # The in-memory user is bound to `auto` above, and that binding is
+            # more specific than the interface below it — without naming the
+            # class here too, the backend test pays for a cost-13 hash on
+            # every attempt it makes.
+            Symfony\Component\Security\Core\User\InMemoryUser:
+                algorithm: auto
+                cost: 4
             Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt

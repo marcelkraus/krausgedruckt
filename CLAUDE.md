@@ -96,7 +96,10 @@ src/Controller/     DefaultController – all frontend routes
 src/Controller/Admin/  Dashboard and the three CRUD controllers
 src/Entity/         Reference, Category, FaqEntry (ORM)
 src/Dto/            ContactRequest – the contact form payload, no ORM binding
-src/EventListener/  ReferenceImageListener, SecurityHeadersListener
+src/EventListener/  AdminLoginThrottleListener, ReferenceImageListener,
+                    SecurityHeadersListener
+src/Security/       EnvironmentUserProvider – the admin user from the
+                    environment
 src/Service/        ImageNormalizer, ReferenceImageNamer,
                     InstagramCaptionBuilder
 templates/          base.html.twig, default/, admin/, partials/
@@ -270,9 +273,33 @@ EasyAdmin 5 at `/admin`.
 ### Authentication
 
 Firewall `admin` covers `^/admin` and uses **HTTP Basic** with realm
-`krausgedruckt:admin`. One in-memory user `krausgedruckt` with `ROLE_ADMIN`;
-the password hash comes from `ADMIN_PASSWORD`. Access control requires
-`ROLE_ADMIN` for `^/admin`.
+`krausgedruckt:admin`. Access control requires `ROLE_ADMIN` for `^/admin`.
+
+**Both halves of the credential come from the environment**, through
+`App\Security\EnvironmentUserProvider`: `ADMIN_USERNAME` and the hash in
+`ADMIN_PASSWORD`. A memory provider cannot do this — it spells the user name
+out as a YAML key, and a key is one of the few places Symfony does not
+resolve `%env()%`. That put the name in the repository next to the path it
+unlocks, which on a public repository is half a set of credentials given
+away. The committed `.env` carries placeholders only.
+
+**Failed attempts are counted and then refused.** Symfony ships
+`login_throttling` and it does not reach this firewall: that mechanism only
+covers authenticators it considers interactive, and HTTP Basic is not one —
+measured, not assumed. `App\EventListener\AdminLoginThrottleListener` spends
+the `admin_login` limiter instead: five failures per address per fifteen
+minutes, checked before the password is verified, so an exhausted budget
+refuses the correct password too. A successful login costs nothing, which
+matters because Basic sends the credential on every single request.
+
+One detail worth keeping: the check reads `getRemainingTokens()` rather than
+`isAccepted()`. Asking the limiter for zero tokens is always granted, so the
+accepted flag stays true long after the budget is gone.
+
+`BackendThrottleTest` pins all of it. It cannot read the status code for an
+answer — Basic returns 401 either way — so it asks the only question that
+distinguishes the two: once the budget is spent, is the correct password
+refused as well?
 
 ## Images
 
@@ -713,7 +740,8 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 
 | Variable | Purpose |
 | --- | --- |
-| `ADMIN_PASSWORD` | Password hash for the in-memory admin user |
+| `ADMIN_PASSWORD` | Password hash of the single admin user |
+| `ADMIN_USERNAME` | Name of that user — never committed with a real value |
 | `APP_ENV` | Symfony environment, overridden to `prod` in deployments |
 | `APP_SECRET` | Symfony application secret |
 | `APP_STORE_URL_DESKTOP` | App Store link used on `/app` for desktop visitors |
