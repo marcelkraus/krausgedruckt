@@ -25,13 +25,13 @@
         <input type="{{ options.type|default('text') }}" id="f_{{ name }}" name="{{ name }}" value="{{ old[name]|default('') }}"
                {% if options.autocomplete is defined %}autocomplete="{{ options.autocomplete }}"{% endif %}
                {% if required %}aria-required="true"{% endif %}
-               {% if error %}aria-invalid="true" aria-describedby="e_{{ name }}"{% endif %}
-               class="{{ options.field_class }} {{ error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-accent' }}">
+               class="{{ options.field_class }} {{ error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-accent' }}"
+               {% if error %}aria-invalid="true" aria-describedby="e_{{ name }}"{% endif %}>
         {% if error %}<p id="e_{{ name }}" class="mt-2 text-sm font-semibold text-red-600">{{ error }}</p>{% endif %}
     </div>
 {% endmacro %}
 
-<form method="post" action="{{ path('app_contact') }}" novalidate{% if focus %} data-error-focus="{{ focus }}"{% endif %}>
+<form method="post" action="{{ path('app_contact') }}" novalidate{% if focus is defined and focus %} data-error-focus="{{ focus }}"{% endif %}>
     <input type="hidden" name="_token" value="{{ csrf_token('contact') }}">
     <input type="hidden" name="ts" value="{{ ts }}">
     <input type="hidden" name="ts_sig" value="{{ ts_sig }}">
@@ -44,7 +44,7 @@
     </div>
 
     {% if errors.form is defined %}
-        <p class="mb-5 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{{ errors.form }}</p>
+        <p class="mb-5 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">{{ errors.form }}</p>
     {% endif %}
 
     {# The two required fields open the form. Anything optional follows in the

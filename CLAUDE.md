@@ -87,7 +87,8 @@ config/             advintage-landing-page.json and the Symfony configuration
 migrations/         eight Doctrine migrations
 src/Controller/     DefaultController – all frontend routes
 src/Controller/Admin/  Dashboard and the three CRUD controllers
-src/Entity/         Reference, Category, FaqEntry (ORM) + DTOs
+src/Entity/         Reference, Category, FaqEntry (ORM)
+src/Dto/            ContactRequest – the contact form payload, no ORM binding
 src/EventListener/  ReferenceImageListener, SecurityHeadersListener
 src/Service/        ImageNormalizer, ReferenceImageNamer,
                     InstagramCaptionBuilder

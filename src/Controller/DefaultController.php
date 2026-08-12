@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\ContactRequest;
+use App\Dto\ContactRequest;
 use App\Repository\FaqEntryRepository;
 use App\Repository\ReferenceRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -48,7 +48,7 @@ class DefaultController extends AbstractController
         #[Autowire('%kernel.secret%')]
         private readonly string $appSecret,
         #[Autowire(service: 'limiter.contact_form')]
-        private readonly RateLimiterFactory $contactFormLimiter,
+        private readonly RateLimiterFactoryInterface $contactFormLimiter,
     ) {
         $this->serializer = new Serializer(
             [new ObjectNormalizer(), new ArrayDenormalizer()],
