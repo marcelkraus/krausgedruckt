@@ -97,6 +97,22 @@
             transform: translateY(0);
         }
     }
+    /* Error is the second semantic color of the interface and gets the same
+       role treatment as the accent, so its contrast is checkable by name.
+
+         error             type on a light ground (4.77:1 on white)
+         error-surface     the tinted panel behind a form-level message
+         error-on-surface  type on that panel (5.87:1)
+         error-border      the outline of an invalid field and of the panel
+                           (3.81:1 on white, 3.48:1 on the panel)
+
+       The border step used to be red-300, which measures 1.75:1 on the panel
+       and misses the 3:1 WCAG 1.4.11 asks of a state indicator. */
+    --color-error: var(--color-red-600);
+    --color-error-surface: var(--color-red-50);
+    --color-error-on-surface: var(--color-red-700);
+    --color-error-border: var(--color-red-500);
+
 }
 
 /* Base layer. */

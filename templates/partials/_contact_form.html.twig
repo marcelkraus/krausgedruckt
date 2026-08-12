@@ -25,9 +25,9 @@
         <input type="{{ options.type|default('text') }}" id="f_{{ name }}" name="{{ name }}" value="{{ old[name]|default('') }}"
                {% if options.autocomplete is defined %}autocomplete="{{ options.autocomplete }}"{% endif %}
                {% if required %}aria-required="true"{% endif %}
-               class="{{ options.field_class }} {{ error ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-accent' }}"
+               class="{{ options.field_class }} {{ error ? 'border-error-border focus:border-error-border' : 'border-neutral-200 focus:border-accent' }}"
                {% if error %}aria-invalid="true" aria-describedby="e_{{ name }}"{% endif %}>
-        {% if error %}<p id="e_{{ name }}" class="mt-2 text-sm font-semibold text-red-600">{{ error }}</p>{% endif %}
+        {% if error %}<p id="e_{{ name }}" class="mt-2 text-sm font-semibold text-error">{{ error }}</p>{% endif %}
     </div>
 {% endmacro %}
 
@@ -44,7 +44,7 @@
     </div>
 
     {% if errors.form is defined %}
-        <p class="mb-5 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">{{ errors.form }}</p>
+        <p class="mb-5 rounded-lg border border-error-border bg-error-surface px-4 py-3 text-sm font-semibold text-error-on-surface" role="alert">{{ errors.form }}</p>
     {% endif %}
 
     {# The two required fields open the form. Anything optional follows in the
@@ -64,8 +64,8 @@
         {{ field.label('message', 'Nachricht', true) }}
         <textarea id="f_message" name="message" rows="6" aria-required="true"
                   {% if errors.message is defined %}aria-invalid="true" aria-describedby="e_message"{% endif %}
-                  class="{{ field_class }} {{ errors.message is defined ? 'border-red-500 focus:border-red-500' : 'border-neutral-200 focus:border-accent' }}">{{ old.message|default('') }}</textarea>
-        {% if errors.message is defined %}<p id="e_message" class="mt-2 text-sm font-semibold text-red-600">{{ errors.message }}</p>{% endif %}
+                  class="{{ field_class }} {{ errors.message is defined ? 'border-error-border focus:border-error-border' : 'border-neutral-200 focus:border-accent' }}">{{ old.message|default('') }}</textarea>
+        {% if errors.message is defined %}<p id="e_message" class="mt-2 text-sm font-semibold text-error">{{ errors.message }}</p>{% endif %}
         <p class="mt-2 text-sm text-neutral-600">Falls du auf der Suche nach einem Rabattcode bist, schau doch mal in unsere App.</p>
     </div>
 
