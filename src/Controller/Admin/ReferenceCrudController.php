@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Reference;
@@ -27,7 +29,7 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 /**
  * @extends AbstractCrudController<Reference>
  */
-class ReferenceCrudController extends AbstractCrudController
+final class ReferenceCrudController extends AbstractCrudController
 {
     public function __construct(
         private InstagramCaptionBuilder $instagramCaptionBuilder

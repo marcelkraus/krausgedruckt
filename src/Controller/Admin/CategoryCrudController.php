@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
@@ -15,7 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 /**
  * @extends AbstractCrudController<Category>
  */
-class CategoryCrudController extends AbstractCrudController
+final class CategoryCrudController extends AbstractCrudController
 {
     public function __construct(
         private ReferenceRepository $referenceRepository

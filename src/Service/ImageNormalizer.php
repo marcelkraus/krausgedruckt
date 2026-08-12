@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 /**
@@ -10,7 +12,7 @@ namespace App\Service;
  * The uploaded file is replaced in place, so every transformation here is
  * irreversible and has to be correct on the first attempt.
  */
-class ImageNormalizer
+final class ImageNormalizer
 {
     public const LANDSCAPE_WIDTH = 1080;
     public const LANDSCAPE_HEIGHT = 864;

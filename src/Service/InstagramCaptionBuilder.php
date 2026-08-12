@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Reference;
@@ -8,7 +10,7 @@ use App\Entity\Reference;
  * Builds the caption for an Instagram post from a reference. The result is
  * meant to be copied into Instagram as it is.
  */
-class InstagramCaptionBuilder
+final class InstagramCaptionBuilder
 {
     /**
      * Hashtags that every post carries, independent of the reference.

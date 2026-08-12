@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Reference;
@@ -7,7 +9,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
-class ReferenceImageNamer implements NamerInterface
+final class ReferenceImageNamer implements NamerInterface
 {
     public function __construct(
         private SluggerInterface $slugger

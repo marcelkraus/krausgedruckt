@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use App\Entity\FaqEntry;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class FaqEntryFixtures extends Fixture
+final class FaqEntryFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

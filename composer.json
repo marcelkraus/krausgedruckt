@@ -69,6 +69,11 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "test-db": [
+            "php bin/console doctrine:database:create --env=test --if-not-exists --quiet",
+            "php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet",
+            "php bin/console doctrine:fixtures:load --env=test --no-interaction --quiet"
         ]
     },
     "conflict": {

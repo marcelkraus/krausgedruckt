@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use App\Entity\Category;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class ReferenceFixtures extends Fixture implements DependentFixtureInterface
+final class ReferenceFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         #[Autowire('%kernel.project_dir%')] private string $projectDir,

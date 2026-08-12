@@ -80,6 +80,13 @@ ddev exec bin/phpunit
 ddev exec npm run build
 ```
 
+**The test database is built, not maintained by hand.** `ddev exec composer
+test-db` creates it, runs the migrations and loads the fixtures. Two tests
+depend on a visible reference existing; without that step they skip rather
+than fail, which reads as green on a machine that never had the data. The
+two skips that remain are correct — `robots.txt` and `sitemap.xml` carry no
+heading, so the heading test steps over them.
+
 ## Layout
 
 ```

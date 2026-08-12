@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
 use App\Entity\Reference;
@@ -18,7 +20,7 @@ use Vich\UploaderBundle\Mapping\PropertyMapping;
  * the file into place when these events fire, so the listener works on the
  * final path.
  */
-class ReferenceImageListener
+final class ReferenceImageListener
 {
     private const FILTER_SETS = ['reference_landscape', 'reference_portrait'];
 

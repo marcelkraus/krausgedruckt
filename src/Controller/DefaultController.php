@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\ContactRequest;
@@ -22,7 +24,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DefaultController extends AbstractController
+final class DefaultController extends AbstractController
 {
     /**
      * The number of references the homepage teaser shows before it hands
@@ -43,10 +45,21 @@ class DefaultController extends AbstractController
 
     protected Serializer $serializer;
 
-    function __construct(
+    public function __construct(
         private readonly ValidatorInterface $validator,
+        private readonly MailerInterface $mailer,
         #[Autowire('%kernel.secret%')]
         private readonly string $appSecret,
+        #[Autowire('%env(CONTACT_FORM_SENDER_ADDRESS)%')]
+        private readonly string $contactFrom,
+        #[Autowire('%env(CONTACT_FORM_RECIPIENT_ADDRESS)%')]
+        private readonly string $contactTo,
+        #[Autowire('%env(GOOGLE_REVIEW_URL)%')]
+        private readonly string $googleReviewUrl,
+        #[Autowire('%env(APP_STORE_URL_MOBILE)%')]
+        private readonly string $appStoreUrlMobile,
+        #[Autowire('%env(APP_STORE_URL_DESKTOP)%')]
+        private readonly string $appStoreUrlDesktop,
         #[Autowire(service: 'limiter.contact_form')]
         private readonly RateLimiterFactoryInterface $contactFormLimiter,
     ) {
@@ -57,7 +70,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/', name: 'app_homepage', methods: ['GET'])]
-    function homepage(ReferenceRepository $referenceRepository): Response
+    public function homepage(ReferenceRepository $referenceRepository): Response
     {
         return $this->render('default/homepage.html.twig', [
             'references' => $referenceRepository->findAllOrdered(self::HOMEPAGE_REFERENCE_LIMIT),
@@ -65,7 +78,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/advintage', name: 'app_landing_page_advintage', methods: ['GET'])]
-    function advintage(): Response
+    public function advintage(): Response
     {
         // Anchored to the project directory rather than to the working
         // directory: a relative path resolves against wherever the process
@@ -83,7 +96,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/kontakt', name: 'app_contact', methods: ['GET', 'POST'])]
-    function contact(Request $request, MailerInterface $mailer): Response
+    public function contact(Request $request): Response
     {
         if ($request->isMethod('POST') === false) {
             // A code handed over in the address pre-fills the field, so a
@@ -147,10 +160,10 @@ class DefaultController extends AbstractController
         // of being wrong on this host, and Apache replaces the Symfony error
         // page with its own.
         try {
-            $mailer->send(
+            $this->mailer->send(
                 (new TemplatedEmail())
-                    ->from(new Address($_SERVER['CONTACT_FORM_SENDER_ADDRESS'], 'krausgedruckt von Marcel Kraus'))
-                    ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
+                    ->from(new Address($this->contactFrom, 'krausgedruckt von Marcel Kraus'))
+                    ->to($this->contactTo)
                     ->replyTo(new Address($contactRequest->email, $contactRequest->name))
                     ->subject(sprintf('Nachricht von %s', $contactRequest->name))
                     ->textTemplate('default/contact.txt.twig')
@@ -276,17 +289,17 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/kontakt-per-email', name: 'app_contact_email', methods: ['GET'])]
-    function emailRedirect(): Response {
+    public function emailRedirect(): Response {
         return $this->redirect('mailto:' . $this->getParameter('app.contact_email_address'));
     }
 
     #[Route('/kontakt-per-whats-app', name: 'app_contact_whats_app', methods: ['GET'])]
-    function whatsAppRedirect(): Response {
+    public function whatsAppRedirect(): Response {
         return $this->redirect($this->getParameter('app.whats_app_url'));
     }
 
     #[Route('/robots.txt', name: 'app_robots', methods: ['GET'])]
-    function robots(): Response
+    public function robots(): Response
     {
         $sitemap = $this->generateUrl('app_sitemap', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -314,7 +327,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'])]
-    function sitemap(ReferenceRepository $referenceRepository): Response
+    public function sitemap(ReferenceRepository $referenceRepository): Response
     {
         // The public pages plus every visible reference. The legal pages and
         // the confirmation are noindex and stay out, and so does the landing
@@ -353,21 +366,21 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/bewerten', name: 'app_review', methods: ['GET'])]
-    function review(): Response {
-        return $this->redirect($_SERVER['GOOGLE_REVIEW_URL']);
+    public function review(): Response {
+        return $this->redirect($this->googleReviewUrl);
     }
 
     #[Route('/app', name: 'app_app', methods: ['GET'])]
-    function app(): Response
+    public function app(): Response
     {
         return $this->render('default/app.html.twig', [
-            'appStoreUrlMobile' => $_SERVER['APP_STORE_URL_MOBILE'],
-            'appStoreUrlDesktop' => $_SERVER['APP_STORE_URL_DESKTOP'],
+            'appStoreUrlMobile' => $this->appStoreUrlMobile,
+            'appStoreUrlDesktop' => $this->appStoreUrlDesktop,
         ]);
     }
 
     #[Route('/referenzen', name: 'app_references', methods: ['GET'])]
-    function references(ReferenceRepository $referenceRepository): Response
+    public function references(ReferenceRepository $referenceRepository): Response
     {
         $references = $referenceRepository->findAllOrdered();
 
@@ -377,7 +390,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/referenzen/{year}/{slug}', name: 'app_reference_detail', methods: ['GET'])]
-    function referenceDetail(int $year, string $slug, ReferenceRepository $referenceRepository): Response
+    public function referenceDetail(int $year, string $slug, ReferenceRepository $referenceRepository): Response
     {
         $reference = $referenceRepository->findByYearAndSlug($year, $slug);
 
@@ -391,7 +404,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
-    function faq(FaqEntryRepository $faqEntryRepository): Response
+    public function faq(FaqEntryRepository $faqEntryRepository): Response
     {
         $faqEntries = $faqEntryRepository->findAllOrdered();
 
@@ -401,13 +414,13 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/datenschutz', name: 'app_data_privacy', methods: ['GET'])]
-    function dataPrivacy(): Response
+    public function dataPrivacy(): Response
     {
         return $this->render('default/data-privacy.html.twig');
     }
 
     #[Route('/impressum', name: 'app_imprint', methods: ['GET'])]
-    function imprint(): Response
+    public function imprint(): Response
     {
         return $this->render('default/imprint.html.twig');
     }

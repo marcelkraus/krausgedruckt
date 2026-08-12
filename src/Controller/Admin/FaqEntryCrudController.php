@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\FaqEntry;
@@ -19,7 +21,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 /**
  * @extends AbstractCrudController<FaqEntry>
  */
-class FaqEntryCrudController extends AbstractCrudController
+final class FaqEntryCrudController extends AbstractCrudController
 {
     private const SORT_CSRF_TOKEN_IDENTIFIER = 'faq-entry-sort';
 
