@@ -25,7 +25,7 @@ final class ContactRequest
     public string $name = '';
 
     #[Assert\NotBlank(message: 'Ohne E-Mail-Adresse können wir dir nicht antworten.')]
-    #[Assert\Email(message: 'Diese E-Mail-Adresse sieht nicht gültig aus.')]
+    #[Assert\Email(message: 'Diese E-Mail-Adresse sieht nicht gültig aus.', mode: 'strict')]
     #[Assert\Length(max: 180, maxMessage: 'Die E-Mail-Adresse ist zu lang.')]
     public string $email = '';
 
