@@ -356,22 +356,22 @@ same five tokens exist on krausgebaut and marcelkraus under the same names.
 | Token | Value | Role |
 | --- | --- | --- |
 | `accent` | `orange-600` | the brand: surfaces, borders, markers, the mark — **never type** |
-| `accent-on-light` | `orange-700` | type on a light ground (5.23:1 on white) |
-| `accent-on-dark` | `orange-600` | type on a dark ground (4.99:1 on `neutral-900`) |
+| `accent-on-light` | `orange-700` | type on a light ground (5.22:1 on white) |
+| `accent-on-dark` | `orange-600` | type on a dark ground (4.98:1 on `neutral-900`) |
 | `accent-hover` | `orange-500` | hover of a filled surface |
 | `accent-on-light-hover` | `orange-800` | hover of type on a light ground |
 | `surface-warm` | `orange-50` | the warm section ground |
-| `brand-marcelkraus` | `purple-700` | the sibling brand — 2.53:1 on `neutral-900`, so not for the dark footer |
+| `brand-marcelkraus` | `purple-700` | the sibling brand — 2.54:1 on `neutral-900`, so not for the dark footer |
 | `brand-marcelkraus-on-dark` | `purple-400` | the marcelkraus marker dot in the footer (6.42:1) |
 | `brand-krausgebaut` | `cyan-800` | the sibling brand and the filled button of its band |
 | `brand-krausgebaut-hover` | `cyan-900` | hover of that button |
-| `brand-krausgebaut-on-dark` | `cyan-600` | type and markers on a dark ground (4.97:1) |
+| `brand-krausgebaut-on-dark` | `cyan-600` | type and markers on a dark ground (4.95:1) |
 
 The naming makes the rule checkable: **`text-accent` without a role suffix must
 not appear anywhere.** No project in the family has one.
 
 The split is measured, not cosmetic. Papaya is a *light* color: it misses AA
-as type on white (3.59:1) and carries a dark ground as it is. Petrol and purple
+as type on white (3.60:1) and carries a dark ground as it is. Petrol and purple
 have the mirror problem, which is why their tokens hold different values under
 the same names.
 
@@ -379,19 +379,19 @@ the same names.
 
 - **On a light ground type carries `accent-on-light`, never `accent`.**
 - **On a dark ground type carries `accent-on-dark`.**
-- **The filled button is `accent` with a `neutral-900` label** (4.99:1) and
-  **lightens** to `accent-hover` on hover (6.19:1). The hover of a filled
+- **The filled button is `accent` with a `neutral-900` label** (4.98:1) and
+  **lightens** to `accent-hover` on hover (6.21:1). The hover of a filled
   surface always moves in whichever direction keeps its label readable; here the
   label is near-black, so darkening would drop it to 3.43:1 on `orange-700`. The
   outline button is the secondary step.
-- **`neutral-400` is never type on a light ground** — 2.59:1 on white. Use
+- **`neutral-400` is never type on a light ground** — 2.58:1 on white. Use
   `neutral-500` at the very least, `neutral-600` for anything that carries
   meaning, which includes form labels, help text and placeholders. On a dark
-  ground `neutral-400` is fine (6.91:1) and `neutral-500` is the one that misses
-  (3.79:1).
+  ground `neutral-400` is fine (6.94:1) and `neutral-500` is the one that misses
+  (3.78:1).
 - **Both sibling brands are dark colors** and neither can be read on a dark
-  ground: `brand-krausgebaut` measures 2.47:1 there, `brand-marcelkraus`
-  2.53:1. Anything on a dark ground therefore uses the `-on-dark` step — the
+  ground: `brand-krausgebaut` measures 2.48:1 there, `brand-marcelkraus`
+  2.54:1. Anything on a dark ground therefore uses the `-on-dark` step — the
   band that points at the sister brand for its type, and the footer for both
   marker dots. That is the same split the accent has, only in the other
   direction.
@@ -452,7 +452,7 @@ from the master rather than edited.
 **Hand-rolled — no `symfony/form`.** It is the same mechanism both sibling
 sites use, so the family answers a submission through one path instead of three.
 
-- `App\Entity\ContactRequest` is a plain object with public properties and
+- `App\Dto\ContactRequest` is a plain object with public properties and
   validation attributes. It is filled from the request in the controller and
   handed to `symfony/validator`
 - **Constraints are PHP attributes, never doc-block annotations.** The class

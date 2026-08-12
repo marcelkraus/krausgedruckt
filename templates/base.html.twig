@@ -151,7 +151,7 @@
     </header>
 
     {# ── Content ────────────────────────────────────────────────── #}
-    <main id="main" class="pt-20">
+    <main id="main" tabindex="-1" class="pt-20">
         {% block main %}{% endblock %}
     </main>
 
@@ -169,11 +169,11 @@
                     <div>
                         <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">Kontakt &amp; Kanäle</h2>
                         <ul class="mt-4 space-y-1 text-sm">
-                            <li><a href="{{ path('app_contact') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Kontaktformular</a></li>
-                            <li><a href="{{ path('app_contact_email') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>E-Mail</a></li>
-                            <li><a href="{{ path('app_contact_whats_app') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>WhatsApp</a></li>
-                            <li><a href="{{ etsy_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Etsy-Shop</a></li>
-                            <li><a href="{{ instagram_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent" aria-hidden="true"></span>Instagram</a></li>
+                            <li><a href="{{ path('app_contact') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Kontaktformular</a></li>
+                            <li><a href="{{ path('app_contact_email') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>E-Mail</a></li>
+                            <li><a href="{{ path('app_contact_whats_app') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>WhatsApp</a></li>
+                            <li><a href="{{ etsy_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Etsy-Shop</a></li>
+                            <li><a href="{{ instagram_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Instagram</a></li>
                         </ul>
                     </div>
 
