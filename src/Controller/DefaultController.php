@@ -58,8 +58,6 @@ final class DefaultController extends AbstractController
         private readonly string $googleReviewUrl,
         #[Autowire('%env(APP_STORE_URL_MOBILE)%')]
         private readonly string $appStoreUrlMobile,
-        #[Autowire('%env(APP_STORE_URL_DESKTOP)%')]
-        private readonly string $appStoreUrlDesktop,
         #[Autowire(service: 'limiter.contact_form')]
         private readonly RateLimiterFactoryInterface $contactFormLimiter,
     ) {
@@ -375,7 +373,6 @@ final class DefaultController extends AbstractController
     {
         return $this->render('default/app.html.twig', [
             'appStoreUrlMobile' => $this->appStoreUrlMobile,
-            'appStoreUrlDesktop' => $this->appStoreUrlDesktop,
         ]);
     }
 

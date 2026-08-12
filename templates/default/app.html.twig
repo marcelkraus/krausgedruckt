@@ -2,21 +2,20 @@
 {% import 'partials/_icons.html.twig' as icons %}
 
 {% block title %}Der 3D-Druck-Kostenrechner · krausgedruckt von Marcel Kraus{% endblock %}
-{% block meta_description %}Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte. Für iPhone, iPad und Mac.{% endblock %}
+{% block meta_description %}Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte. Für iPhone und iPad.{% endblock %}
 
 {% block main %}
     {# ── Hero ───────────────────────────────────────────────────── #}
     <section class="border-b border-neutral-200 bg-surface-warm">
         <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-8 lg:py-20">
             <div class="order-2 lg:order-1">
-                {{ include('partials/_eyebrow.html.twig', { text: 'App für iPhone, iPad und Mac' }) }}
+                {{ include('partials/_eyebrow.html.twig', { text: 'App für iPhone und iPad' }) }}
                 <h1 class="mt-5 font-display text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
                     Der 3D-Druck-Kostenrechner.
                     <span class="mt-3 block text-[0.8em] text-accent-on-light">Alles, was du für deine Kalkulation brauchst.</span>
                 </h1>
                 <div class="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                     <a href="{{ appStoreUrlMobile }}"><img src="{{ asset('images/app-store-badge-mobile.svg') }}" alt="Laden im App Store" class="h-14"></a>
-                    <a href="{{ appStoreUrlDesktop }}"><img src="{{ asset('images/app-store-badge-desktop.svg') }}" alt="Laden im Mac App Store" class="h-14"></a>
                 </div>
             </div>
             <div class="order-1 justify-self-center lg:order-2 lg:justify-self-end">
@@ -67,18 +66,14 @@
 
     {# ── Konversionsband ────────────────────────────────────────── #}
     {# Same shell as every other closing band; only the action differs, because
-       here it is two store badges rather than the enquiry button. #}
+       here it is a store badge rather than the enquiry button. #}
     {% embed 'partials/_conversion_band.html.twig' with {
         title: 'Jetzt kostenlos herunterladen.',
-        text: 'Verfügbar für iPhone, iPad und Mac.',
-        appStoreUrlMobile: appStoreUrlMobile,
-        appStoreUrlDesktop: appStoreUrlDesktop
+        text: 'Verfügbar für iPhone und iPad.',
+        appStoreUrlMobile: appStoreUrlMobile
     } only %}
         {% block actions %}
-            <div class="flex flex-wrap items-center gap-4">
-                <a href="{{ appStoreUrlMobile }}"><img src="{{ asset('images/app-store-badge-mobile.svg') }}" alt="Laden im App Store" class="h-14"></a>
-                <a href="{{ appStoreUrlDesktop }}"><img src="{{ asset('images/app-store-badge-desktop.svg') }}" alt="Laden im Mac App Store" class="h-14"></a>
-            </div>
+            <a href="{{ appStoreUrlMobile }}"><img src="{{ asset('images/app-store-badge-mobile.svg') }}" alt="Laden im App Store" class="h-14"></a>
         {% endblock %}
     {% endembed %}
 

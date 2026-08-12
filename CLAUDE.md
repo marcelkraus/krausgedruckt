@@ -131,7 +131,7 @@ Three of them carry rules rather than just markup:
 - **`_conversion_band`** has three shapes: plain band, `boxed` as an inset
   card, and — with an `image` — a two column block with a picture. Its
   `actions` block defaults to the enquiry button; a page whose closing action
-  is something else (the app, with two store badges) embeds it and overrides
+  is something else (the app, with its store badge) embeds it and overrides
   the block, so ground, measurements and rhythm still come from one place.
 
 The navigation is built once from the `nav_items` list in `base.html.twig`. An
@@ -744,8 +744,7 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 | `ADMIN_USERNAME` | Name of that user — never committed with a real value |
 | `APP_ENV` | Symfony environment, overridden to `prod` in deployments |
 | `APP_SECRET` | Symfony application secret |
-| `APP_STORE_URL_DESKTOP` | App Store link used on `/app` for desktop visitors |
-| `APP_STORE_URL_MOBILE` | App Store link used on `/app` for mobile visitors |
+| `APP_STORE_URL_MOBILE` | App Store link used on `/app`. The app is promoted for iOS only; the Mac badge and its variable are gone |
 | `CONTACT_FORM_RECIPIENT_ADDRESS` | Recipient of contact form emails |
 | `CONTACT_FORM_SENDER_ADDRESS` | Sender of contact form emails |
 | `DATABASE_URL` | Doctrine connection string |
