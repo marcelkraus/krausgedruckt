@@ -1,8 +1,8 @@
 {# Brand logo — wordmark and nozzle as one lockup. The nozzle and "kraus"
    carry the accent, "gedruckt" the dark neutral; the wordmark is outlined,
    so the logo needs no font. Its construction matches the sibling brand:
-   same height, same baseline, only mark and colour differ.
-   Params: class (sizing), mono (single colour via currentColor), aria_label. #}
+   same height, same baseline, only mark and color differ.
+   Params: class (sizing), mono (single color via currentColor), aria_label. #}
 {% set mark_fill = mono|default(false) ? 'fill-current' : 'fill-accent' %}
 {% set word_fill = mono|default(false) ? 'fill-current' : 'fill-neutral-900' %}
 <svg viewBox="0 0 2341 591" role="img" aria-label="{{ aria_label|default('krausgedruckt') }}" class="{{ class|default('') }}" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">

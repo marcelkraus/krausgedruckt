@@ -49,7 +49,7 @@ class ReferenceImageListener
             // disk without a record pointing at it. The failure has to reach
             // the editor though, otherwise a broken image pipeline looks like
             // a successful upload.
-            $this->logger->error('Could not normalise a reference image.', [
+            $this->logger->error('Could not normalize a reference image.', [
                 'path' => $path,
                 'exception' => $exception,
             ]);

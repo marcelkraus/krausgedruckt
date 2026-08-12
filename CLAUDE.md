@@ -340,7 +340,7 @@ cards, and a product photo where the sibling uses typography.
   one allowed: reversing the order or inventing a third form elsewhere is drift,
   not personality.
 
-### Colour tokens
+### Color tokens
 
 Defined in `public/css/input.css` under `@theme`. **No hex values in
 templates** — use the tokens. Everything outside them is Tailwind's
@@ -369,7 +369,7 @@ same five tokens exist on krausgebaut and marcelkraus under the same names.
 The naming makes the rule checkable: **`text-accent` without a role suffix must
 not appear anywhere.** No project in the family has one.
 
-The split is measured, not cosmetic. Papaya is a *light* colour: it misses AA
+The split is measured, not cosmetic. Papaya is a *light* color: it misses AA
 as type on white (3.59:1) and carries a dark ground as it is. Petrol and purple
 have the mirror problem, which is why their tokens hold different values under
 the same names.
@@ -388,7 +388,7 @@ the same names.
   meaning, which includes form labels, help text and placeholders. On a dark
   ground `neutral-400` is fine (6.91:1) and `neutral-500` is the one that misses
   (3.79:1).
-- **Both sibling brands are dark colours** and neither can be read on a dark
+- **Both sibling brands are dark colors** and neither can be read on a dark
   ground: `brand-krausgebaut` measures 2.47:1 there, `brand-marcelkraus`
   2.53:1. Anything on a dark ground therefore uses the `-on-dark` step — the
   band that points at the sister brand for its type, and the footer for both
@@ -397,7 +397,7 @@ the same names.
 
 ### The family bracket
 
-**Header and footer are binding.** Position, measurements, grid and behaviour
+**Header and footer are binding.** Position, measurements, grid and behavior
 stay identical across all three sites; the content of the lists does not.
 
 - **The mobile menu** closes on the burger, on Escape (focus returns to the
@@ -415,7 +415,7 @@ stay identical across all three sites; the content of the lists does not.
 `_logo.html.twig` is the nozzle and the wordmark as one lockup. The nozzle and
 "kraus" carry the accent, "gedruckt" the dark neutral; `mono: true` renders
 everything in `fill-current`. Its construction matches the sibling brand: same
-height, same baseline, only mark and colour differ.
+height, same baseline, only mark and color differ.
 
 **The wordmark must stay outlined.** A master that keeps it as `<text>` carries
 a `font-family` and therefore a dependency the logo is not allowed to have — it
@@ -439,7 +439,7 @@ Three files at the web root, all derived from the master tile:
 The SVG **must** keep its `width`/`height` attributes. Without them it has no
 intrinsic size, so the browser rasterises it into a default box and scales that
 into the tab slot, which leaves a pale rim around the tile. Every generated file
-is checked for a fully opaque, single-colour border before it ships.
+is checked for a fully opaque, single-color border before it ships.
 
 The tile is `#F54900`, taken from the master — and that is exactly what the
 `accent` token resolves to. **Artwork and palette agree to the digit, and they
@@ -676,7 +676,7 @@ raising an error.
 
 - **Comments, identifiers and this documentation are English.** Visible site
   content is German, with correct German quotation marks „…“.
-- **No hex colour values in templates** — use the design tokens. Standalone
+- **No hex color values in templates** — use the design tokens. Standalone
   asset files such as `favicon.svg` may carry hex.
 - **Voice:** the business speaks as „wir“ and addresses the customer as „du“.
   In the FAQ the customer speaks too, and keeps „ich“ for itself while

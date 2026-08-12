@@ -13,6 +13,21 @@ set -euo pipefail
 git fetch --all
 git reset --hard origin/main
 
+# The secret keys CSRF and the anti-spam timestamp of the contact form, and
+# the repository carries a placeholder for it. A missing or unedited
+# .env.local therefore does not break the site — it silently ships a secret
+# that anybody can read here, which makes both tokens forgeable. Checked on
+# every release, because the failure is invisible from the outside.
+if [ ! -f .env.local ]; then
+    echo "bin/deploy: .env.local is missing — aborting." >&2
+    exit 1
+fi
+
+if grep -qE '^APP_SECRET=(<ChangeMe|\s*$|""$)' .env.local || ! grep -q '^APP_SECRET=' .env.local; then
+    echo "bin/deploy: .env.local has no usable APP_SECRET — aborting." >&2
+    exit 1
+fi
+
 composer install --no-dev --optimize-autoloader
 
 # The compiled container is moved aside rather than cleared. `cache:clear`

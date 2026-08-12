@@ -307,7 +307,7 @@ class DefaultController extends AbstractController
         }
 
         return new Response(
-            $rules . "Allow: /\n\nSitemap: {$sitemap}\n",
+            $rules . "\nSitemap: {$sitemap}\n",
             Response::HTTP_OK,
             ['Content-Type' => 'text/plain; charset=UTF-8'],
         );

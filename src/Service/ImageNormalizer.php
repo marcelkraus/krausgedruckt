@@ -44,7 +44,7 @@ class ImageNormalizer
                 $image->cropThumbnailImage($targetWidth, $targetHeight);
             }
 
-            // The colour profile is converted rather than discarded, otherwise
+            // The color profile is converted rather than discarded, otherwise
             // a picture exported in Display P3 would be read as sRGB and look
             // washed out.
             $image->transformImageColorspace(\Imagick::COLORSPACE_SRGB);

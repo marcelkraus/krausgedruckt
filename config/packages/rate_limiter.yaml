@@ -7,7 +7,7 @@ framework:
 
 # The limiter state outlives a single test run, so the production limit of 5
 # per hour makes the contact-form tests fail once the suite has run a few
-# times within the hour. Raise it out of the way; the throttling behaviour
+# times within the hour. Raise it out of the way; the throttling behavior
 # itself is configuration, not something these tests assert.
 when@test:
     framework:

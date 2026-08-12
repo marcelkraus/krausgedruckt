@@ -51,7 +51,7 @@
          accent-hover           hover of a filled surface
          accent-on-light-hover  hover of type on a light ground
 
-       The papaya is a light colour: it misses AA as type on white (3.56:1)
+       The papaya is a light color: it misses AA as type on white (3.56:1)
        and needs a darker step there, while it carries a dark ground as it
        is (5.56:1). The sibling's petrol has the mirror problem, which is
        why its tokens carry different values under the same names.
@@ -68,14 +68,14 @@
     /* The warm ground the sections alternate on. */
     --color-surface-warm: var(--color-orange-50);
 
-    /* Sibling brands in the footer network. Foreign colours carry their own
+    /* Sibling brands in the footer network. Foreign colors carry their own
        token so they stay out of the accent scale. */
     --color-brand-marcelkraus: var(--color-purple-700);
     --color-brand-krausgebaut: var(--color-cyan-800);
     --color-brand-krausgebaut-hover: var(--color-cyan-900);
     /* marcelkraus is purple now — the left square of the new family logo,
        which stands for the employment career. Like the petrol below it is a
-       dark colour and measures 2.53:1 on the footer's neutral-900, so the
+       dark color and measures 2.53:1 on the footer's neutral-900, so the
        marker there uses the brighter step. All of these bind to the palette
        instead of carrying a copied hex, so they cannot drift from it. */
     --color-brand-marcelkraus-on-dark: var(--color-purple-400);
