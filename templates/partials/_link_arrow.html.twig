@@ -1,0 +1,26 @@
+{# A text link that ends in an arrow — the quiet counterpart to the button.
+   It stood five times in four shapes, two of them with a colour and an icon
+   that nothing justified, and the back link drew its arrow with an HTML
+   entity, so it came out of the mono font while every other arrow on the
+   site is a drawn line.
+
+   Params: href, label; optional icon ('arrow' or 'external', default arrow),
+   external (adds target and rel), back (the arrow leads and points left),
+   tone ('accent' or 'muted'), class (layout classes for the caller).
+
+   Muted is `neutral-600`, not `neutral-500`: the rule is that anything
+   carrying meaning takes the darker step, and a link carries meaning. #}
+{%- import 'partials/_icons.html.twig' as icons -%}
+{%- set base = 'group inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-[0.15em] transition-colors' -%}
+{%- set colours = tone|default('accent') == 'muted'
+    ? 'text-neutral-600 hover:text-accent-on-light'
+    : 'text-accent-on-light hover:text-accent-on-light-hover' -%}
+<a href="{{ href }}" class="{{ base }} {{ colours }}{% if class is defined %} {{ class }}{% endif %}"{% if external|default(false) %} target="_blank" rel="noopener"{% endif %}>
+    {%- if back|default(false) -%}
+        <span class="transition-transform group-hover:-translate-x-1">{{ icons.icon('arrow', 'h-4 w-4 rotate-180') }}</span>
+        {{ label }}
+    {%- else -%}
+        {{ label }}
+        <span class="transition-transform group-hover:translate-x-1">{{ icons.icon(icon|default('arrow'), 'h-4 w-4') }}</span>
+    {%- endif -%}
+</a>

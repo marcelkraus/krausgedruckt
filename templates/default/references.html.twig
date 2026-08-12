@@ -33,10 +33,12 @@
            Backend eine Instagram-Bildunterschrift — die Referenzen sind die
            Beiträge. Wer hier durch ist, findet dort die Fortsetzung. #}
         <div class="mt-12">
-            <a href="{{ instagram_url }}" target="_blank" rel="noopener" class="group inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-[0.15em] text-accent-on-light transition-colors hover:text-accent-on-light-hover">
-                Laufend weitere Inhalte auf Instagram
-                <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('external', 'h-4 w-4') }}</span>
-            </a>
+            {{ include('partials/_link_arrow.html.twig', {
+                href: instagram_url,
+                label: 'Laufend weitere Inhalte auf Instagram',
+                icon: 'external',
+                external: true,
+            }, with_context = false) }}
         </div>
     </section>
 
