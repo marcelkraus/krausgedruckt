@@ -5,6 +5,12 @@
    darkening the fill drops the label to 3.43:1.
 
    Emits no markup. Pull it with include(), assign it, hand it to `attr`.
-   Takes no parameters — there is one button, and it looks like this. #}
-{%- set base = 'group inline-flex items-center gap-2 rounded-lg px-6 py-3.5 font-mono text-sm font-semibold uppercase tracking-[0.15em] transition-colors' -%}
-{{- base ~ ' bg-accent text-neutral-900 hover:bg-accent-hover' -}}
+   Params: size ('default' or 'compact'). Compact is for buttons that share a
+   row with something else — the header bar, where the button sits next to the
+   burger; it holds 44 pixels so a thumb still finds it on a phone. #}
+{%- set size = size|default('default') -%}
+{%- set base = 'group inline-flex items-center gap-2 rounded-lg bg-accent font-mono font-semibold uppercase tracking-[0.15em] text-neutral-900 transition-colors hover:bg-accent-hover' -%}
+{%- set measures = size == 'compact'
+    ? 'h-11 px-4 text-xs sm:px-5'
+    : 'px-6 py-3.5 text-sm' -%}
+{{- base ~ ' ' ~ measures -}}
