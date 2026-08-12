@@ -17,7 +17,7 @@
    text), meta (optional, the mono line at the foot), external (optional).
    Blocks: media, body. #}
 {% set has_target = href|default(null) %}
-<article class="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm{% if has_target %} relative transition-shadow hover:shadow-lg hover:shadow-neutral-200/60{% endif %}">
+<article class="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm{% if has_target %} relative transition-shadow hover:shadow-lg hover:shadow-neutral-200/60{% endif %}{% if class is defined and class %} {{ class }}{% endif %}">
     {% block media %}{% endblock %}
 
     <div class="flex flex-1 flex-col p-6">

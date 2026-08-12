@@ -9,8 +9,7 @@
        under the logo in the footer. One source, so they cannot drift apart.
        Subpages override meta_description alone; the footer keeps naming the
        brand rather than the page. #}
-    {% block brand_description %}krausgedruckt von Marcel Kraus: individueller 3D-Druck aus Erftstadt bei Köln – Einzelteile, Kleinserien und Prototypen nach deinen Vorgaben.{% endblock %}
-    <meta name="description" content="{% block meta_description %}{{ block('brand_description') }}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% block brand_description %}krausgedruckt von Marcel Kraus: individueller 3D-Druck aus Erftstadt bei Köln – Einzelteile, Kleinserien und Prototypen nach deinen Vorgaben.{% endblock %}{% endblock %}">
     <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln{% endblock %}</title>
 
     {# Favicons. Three files, all derived from the master Kachel: the SVG scales
@@ -151,7 +150,7 @@
     </header>
 
     {# ── Content ────────────────────────────────────────────────── #}
-    <main id="main" tabindex="-1" class="pt-20">
+    <main id="main" tabindex="-1">
         {% block main %}{% endblock %}
     </main>
 

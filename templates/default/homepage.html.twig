@@ -68,7 +68,7 @@
     </section>
 
     {# ── Angebot ────────────────────────────────────────────────── #}
-    <section class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
+    <section class="mx-auto max-w-6xl px-6 pt-40 pb-20 lg:px-8 lg:pt-48 lg:pb-28">
         <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
                 {{ include('partials/_eyebrow.html.twig', { text: 'Angebot' }) }}
@@ -111,8 +111,15 @@
                 </div>
 
                 <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {# Three cards, and the grid holds two between `sm` and `lg`.
+                       Rather than leaving the third one alone on its own row,
+                       that width shows two: the section is a teaser, and the
+                       link below it leads to all of them anyway. #}
                     {% for reference in references %}
-                        {{ include('partials/_reference_card.html.twig', { reference: reference }) }}
+                        {{ include('partials/_reference_card.html.twig', {
+                            reference: reference,
+                            class: loop.index > 2 ? 'sm:hidden lg:flex' : ''
+                        }) }}
                     {% endfor %}
                 </div>
 

@@ -8,6 +8,7 @@
 {% set detail_path = path('app_reference_detail', { year: reference.year, slug: reference.slug }) %}
 
 {% embed 'partials/_card.html.twig' with {
+    class: class|default(''),
     href: detail_path,
     title: reference.title,
     meta: reference.category ? reference.category.name : null,
