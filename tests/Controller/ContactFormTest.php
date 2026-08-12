@@ -60,7 +60,7 @@ final class ContactFormTest extends WebTestCase
         $client->request('POST', '/kontakt', $this->payload($client));
         $client->followRedirect();
 
-        self::assertSelectorTextContains('body', 'Danke für deine Nachricht.');
+        self::assertSelectorTextContains('body', 'Vielen Dank für deine Nachricht!');
         self::assertSelectorNotExists('form[action="/kontakt"]');
     }
 

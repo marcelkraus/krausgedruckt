@@ -138,7 +138,7 @@ class DefaultController extends AbstractController
         // flood.
         if ($this->contactFormLimiter->create($request->getClientIp() ?? 'anonymous')->consume(1)->isAccepted() === false) {
             return $this->renderContactErrors($request, [
-                'form' => 'Es sind zu viele Anfragen eingegangen. Bitte versuche es später noch einmal.',
+                'form' => 'Es sind zu viele Nachrichten eingegangen. Bitte versuche es später noch einmal.',
             ]);
         }
 
@@ -151,8 +151,8 @@ class DefaultController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address($_SERVER['CONTACT_FORM_SENDER_ADDRESS'], 'krausgedruckt von Marcel Kraus'))
                     ->to($_SERVER['CONTACT_FORM_RECIPIENT_ADDRESS'])
-                    ->replyTo($contactRequest->email)
-                    ->subject('Neue Kontaktanfrage erhalten')
+                    ->replyTo(new Address($contactRequest->email, $contactRequest->name))
+                    ->subject(sprintf('Nachricht von %s', $contactRequest->name))
                     ->textTemplate('default/contact.txt.twig')
                     ->context([
                         'discountCode' => $contactRequest->discountCode,
@@ -164,7 +164,7 @@ class DefaultController extends AbstractController
             );
         } catch (TransportExceptionInterface) {
             return $this->renderContactErrors($request, [
-                'form' => 'Die Anfrage konnte gerade nicht zugestellt werden. Bitte versuche es später noch einmal oder schreibe mir per E-Mail.',
+                'form' => 'Die Nachricht konnte gerade nicht zugestellt werden. Bitte versuche es später noch einmal oder schreibe mir per E-Mail.',
             ]);
         }
 
