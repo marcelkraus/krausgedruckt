@@ -107,8 +107,9 @@ Each partial is the single source for its pattern and is never written by hand
 in a page: `_logo` (brand lockup), `_eyebrow` (mono label with square marker),
 `_icons` (line-icon macro), `_card` (the card shell), `_reference_card` (shared
 by the homepage teaser and the overview), `_model` (attribution of a printed
-model), `_button` (the two button steps), `_button_class` (their classes as a
-bare string), `_contact_form`, `_conversion_band` (the closing invitation) and
+model), `_button` (the button as a link), `_button_class` (its classes as a
+bare string, in two sizes), `_link_arrow` (the text link that ends in an
+arrow), `_contact_form`, `_conversion_band` (the closing invitation) and
 `_sibling_band` (the nod to krausgebaut).
 
 Three of them carry rules rather than just markup:
@@ -529,8 +530,10 @@ run.
 - Errors are `red-600`, not the accent: on this brand an orange error would be
   indistinguishable from an orange heading
 - The form-wide message is a live region (`role="alert"`); the honeypot is
-  hidden with `sr-only` and carries an instruction rather than `aria-hidden`,
-  which would hide a focusable field from assistive technology
+  `sr-only` **and** `aria-hidden`, and it keeps `tabindex="-1"`. The tab order
+  alone is not enough: a screen reader's reading mode walks the document, not
+  the tab chain, so without `aria-hidden` the trap gets read out to exactly the
+  visitors who cannot see that it is one
 - Discount code can be pre-filled: `/kontakt?discount-code=CODE`
 - A successful submission sets a `contact_success` flash and redirects back onto
   `/kontakt`, where the confirmation takes the form's place. The redirect is
