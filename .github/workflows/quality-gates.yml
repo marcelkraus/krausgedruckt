@@ -1,0 +1,97 @@
+# The quality gates from CLAUDE.md, run by a machine instead of by hand.
+#
+# This one carries a database, so it differs from both sibling workflows in
+# exactly two places: the MariaDB service, and `composer test-db` before the
+# test run. Two tests need a visible reference to exist; without that step
+# they skip rather than fail, which reads as green on a machine that never
+# had the data.
+#
+# There is deliberately no deployment step: rolling out stays a decision, and
+# `bin/deploy` on the Uberspace is where that decision is carried out.
+name: Quality gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: db
+          MARIADB_USER: db
+          MARIADB_PASSWORD: db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      # The test environment appends `_test` to the database name, so this
+      # points at `db` and Doctrine creates `db_test` next to it.
+      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/db?serverVersion=10.11.0-mariadb&charset=utf8mb4"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: ctype, iconv, imagick, pdo_mysql
+          coverage: none
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # A lock file that no longer matches composer.json installs versions
+      # nobody chose. It went unnoticed in the sibling project once already.
+      - name: Validate the composer files
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Lint Twig
+        run: php bin/console lint:twig templates
+
+      - name: Lint YAML
+        run: php bin/console lint:yaml config
+
+      - name: Lint the service container
+        run: php bin/console lint:container
+
+      - name: Lint PHP
+        run: find src tests -name "*.php" -exec php -l {} \;
+
+      - name: Build the test database
+        run: composer test-db
+
+      - name: Test
+        run: php bin/phpunit
+
+      - name: Build the stylesheet
+        run: npm run build
+
+      # `output.css` is committed and linked statically, so a template that
+      # introduces a utility class without a rebuild ships a stylesheet that
+      # silently lacks it. If the build changes the file, the commit is
+      # incomplete.
+      - name: Check the committed stylesheet is current
+        run: git diff --exit-code --stat public/css/output.css
