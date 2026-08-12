@@ -339,6 +339,17 @@ cards, and a product photo where the sibling uses typography.
   `max-w-3xl`.
 - **Section rhythm:** warm → white → warm → dark → white. The single dark block
   (`Ablauf`) arrives late on purpose.
+- **Body text is `neutral-600`; the legal pages are `neutral-700`.** The
+  declaration on `<body>` said `neutral-700` while every page overrode it, so
+  the stated base colour was the one colour the site did not use. It now names
+  the normal case. The darker step stays where it belongs — the long reading
+  texts of the imprint and the privacy policy, which set it explicitly.
+- **The mono scale has three trackings and no fourth.** `0.2em` marks a
+  heading role — the eyebrow and the footer's column headings. `0.15em` is
+  every other run of capitals: navigation, buttons, tags, micro labels, the
+  copyright line. Mixed-case mono carries **none**, because tracking is what
+  makes capitals legible and it only loosens everything else. Sizes: `text-sm`
+  in the mobile menu and on the button, `text-xs` everywhere else.
 - **Corners:** `rounded-lg` for buttons and fields, `rounded-2xl` for cards and
   containers. Cards are free-standing: border, white ground, soft shadow.
 - **Two-tone headings:** the statement comes first in `neutral-900` (or white on
