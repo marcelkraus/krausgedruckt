@@ -389,8 +389,9 @@ the same names.
 - **The filled button is `accent` with a `neutral-900` label** (4.98:1) and
   **lightens** to `accent-hover` on hover (6.21:1). The hover of a filled
   surface always moves in whichever direction keeps its label readable; here the
-  label is near-black, so darkening would drop it to 3.43:1 on `orange-700`. The
-  outline button is the secondary step.
+  label is near-black, so darkening would drop it to 3.43:1 on `orange-700`.
+  There is one button and no second step: an outline variant existed in the
+  partial without a single caller and has been removed.
 - **`neutral-400` is never type on a light ground** — 2.58:1 on white. Use
   `neutral-500` at the very least, `neutral-600` for anything that carries
   meaning, which includes form labels, help text and placeholders. On a dark

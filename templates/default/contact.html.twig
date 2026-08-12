@@ -82,11 +82,11 @@
         // visitor sees exactly what to fix.
         (function () {
             const form = document.querySelector('[data-error-focus]');
-            if (!form) {
+            if (form === null) {
                 return;
             }
             const field = document.getElementById('f_' + form.dataset.errorFocus);
-            if (field) {
+            if (field !== null) {
                 field.focus();
                 field.scrollIntoView({ block: 'center' });
             }

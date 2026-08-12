@@ -5,10 +5,6 @@
    darkening the fill drops the label to 3.43:1.
 
    Emits no markup. Pull it with include(), assign it, hand it to `attr`.
-   Params: variant ('solid' default, 'outline'). #}
-{%- set variant = variant|default('solid') -%}
+   Takes no parameters — there is one button, and it looks like this. #}
 {%- set base = 'group inline-flex items-center gap-2 rounded-lg px-6 py-3.5 font-mono text-sm font-semibold uppercase tracking-[0.15em] transition-colors' -%}
-{%- set skin = variant == 'outline'
-    ? 'border-2 border-accent text-accent-on-light hover:bg-accent hover:text-neutral-900'
-    : 'bg-accent text-neutral-900 hover:bg-accent-hover' -%}
-{{- base ~ ' ' ~ skin -}}
+{{- base ~ ' bg-accent text-neutral-900 hover:bg-accent-hover' -}}
