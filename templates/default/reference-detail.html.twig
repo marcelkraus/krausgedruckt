@@ -10,7 +10,7 @@
            clean edge rather than inside a card. #}
         <div class="border-b border-neutral-200 bg-surface-warm">
             <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8 lg:py-16">
-                <a href="{{ path('app_references') }}" class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-neutral-500 transition-colors hover:text-accent-on-light">
+                <a href="{{ path('app_references') }}" class="group inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-[0.15em] text-neutral-500 transition-colors hover:text-accent-on-light">
                     <span class="transition-transform group-hover:-translate-x-1">&larr;</span> Alle Referenzen
                 </a>
 
@@ -63,7 +63,7 @@
 
                 {% if reference.ratingUrl %}
                     <a href="{{ reference.ratingUrl }}" target="_blank" rel="noopener noreferrer"
-                       class="group mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-accent-on-light transition-colors hover:text-accent-on-light-hover">
+                       class="group mt-8 inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-[0.15em] text-accent-on-light transition-colors hover:text-accent-on-light-hover">
                         Kundenbewertung lesen
                         <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('external', 'h-4 w-4') }}</span>
                     </a>
