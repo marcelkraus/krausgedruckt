@@ -5,7 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block meta_robots %}<meta name="robots" content="index,follow">{% endblock %}
-    <meta name="description" content="{% block meta_description %}krausgedruckt von Marcel Kraus bietet dir individuellen 3D-Druck und handgemachte Produkte. Du hast die Idee, wir machen sie greifbar!{% endblock %}">
+    {# The brand description feeds two places: the meta tag and the paragraph
+       under the logo in the footer. One source, so they cannot drift apart.
+       Subpages override meta_description alone; the footer keeps naming the
+       brand rather than the page. #}
+    {% block brand_description %}krausgedruckt von Marcel Kraus: individueller 3D-Druck aus Erftstadt bei Köln – Einzelteile, Kleinserien und Prototypen nach deinen Vorgaben.{% endblock %}
+    <meta name="description" content="{% block meta_description %}{{ block('brand_description') }}{% endblock %}">
     <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck-Dienstleistungen aus Erftstadt bei Köln{% endblock %}</title>
 
     {# Favicons. Three files, all derived from the master Kachel: the SVG scales
@@ -157,7 +162,7 @@
                 <div class="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
                     <div>
                         {{ include('partials/_logo.html.twig', { class: 'h-9 w-auto text-white', mono: true }, with_context = false) }}
-                        <p class="mt-5 max-w-xs text-sm leading-relaxed">krausgedruckt von Marcel Kraus steht für individuelle 3D-Druck-Dienstleistungen. Ob Druck eines einzelnen Teils, einer Kleinserie mit mehreren hundert Stück oder einer komplexen Prototypentwicklung – es beginnt mit deiner Anfrage.</p>
+                        <p class="mt-5 max-w-xs text-sm leading-relaxed">{{ block('brand_description') }}</p>
 
                     </div>
 
