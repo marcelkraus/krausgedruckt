@@ -662,6 +662,22 @@ PHPUnit 13 with browser-kit and css-selector, matching the sibling projects.
   redirects and sends exactly one mail; the confirmation takes the form's place;
   the discount code arrives from the query string; a filled honeypot and a
   tampered signature are dropped silently while a stale form is asked to resend
+- `tests/Controller/BackendThrottleTest.php` pins the throttle in front of the
+  backend: after the budget is spent the **correct** password is refused too,
+  which is the only question a status code can answer here
+- `tests/Entity/ReferenceHashtagsTest.php` and
+  `tests/Service/InstagramCaptionBuilderTest.php` cover the Instagram texts.
+  **Both are plain `TestCase`s without kernel and without database**, because
+  the logic behind them is pure — that is what makes them cheap enough to pin
+  every case rather than a sample
+
+The two Instagram classes carry the invariant the feature stands on:
+`testNoHashtagReachesInstagramTwice` compares the hashtags of the caption
+against those of the comment, folded to lower case. It was written after four
+defects had shipped — a missing subtraction of the introduction hashtag, a byte
+sort that puts umlauts behind the alphabet, a missing length constraint against
+a `VARCHAR(255)` column and a space behind a hash that survived normalising —
+and each of the four was reproduced against it before the fix was kept.
 
 ```bash
 ddev exec bin/phpunit
@@ -790,6 +806,7 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
    that with `markTestSkipped` when the table is empty, so on a fresh machine
    the test is silently green. `bin/reinstall-db` runs against the development
    database, not `db_test`.
-2. **Most of `src/` is untested.** The services, the image listener, the
-   repositories, the admin controllers and the entities have no tests; only
-   `DefaultController` is touched, through the smoke test.
+2. **Most of `src/` is untested.** The image listener, the repositories, the
+   admin controllers and the image services have no tests; `DefaultController`
+   is touched through the smoke test, and the only unit-tested ground is the
+   Instagram caption with the hashtag notation of `Reference`.
