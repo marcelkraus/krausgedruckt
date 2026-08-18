@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('[data-instagram-caption-copy]');
-    const caption = document.querySelector('[data-instagram-caption]');
+    const triggers = document.querySelectorAll('[data-instagram-copy-trigger]');
 
-    if (button === null || caption === null) {
+    if (triggers.length === 0) {
         return;
     }
-
-    const originalLabel = button.innerHTML;
 
     // The asynchronous clipboard API only exists in a secure context, so a
     // hidden selection serves as the fallback over plain HTTP.
@@ -33,16 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    button.addEventListener('click', async () => {
-        try {
-            await copyToClipboard(caption.textContent);
-            button.innerHTML = '<i class="fa fa-check"></i> Kopiert';
-        } catch (error) {
-            button.innerHTML = '<i class="fa fa-xmark"></i> Kopieren nicht möglich';
+    triggers.forEach((trigger) => {
+        const name = trigger.dataset.instagramCopyTrigger;
+        const source = document.querySelector(`[data-instagram-copy-source="${name}"]`);
+
+        if (source === null) {
+            return;
         }
 
-        window.setTimeout(() => {
-            button.innerHTML = originalLabel;
-        }, 2000);
+        const originalLabel = trigger.innerHTML;
+
+        trigger.addEventListener('click', async () => {
+            try {
+                await copyToClipboard(source.textContent);
+                trigger.innerHTML = '<i class="fa fa-check"></i> Kopiert';
+            } catch (error) {
+                trigger.innerHTML = '<i class="fa fa-xmark"></i> Kopieren nicht möglich';
+            }
+
+            window.setTimeout(() => {
+                trigger.innerHTML = originalLabel;
+            }, 2000);
+        });
     });
 });

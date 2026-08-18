@@ -91,7 +91,7 @@ heading, so the heading test steps over them.
 
 ```
 config/             advintage-landing-page.json and the Symfony configuration
-migrations/         eight Doctrine migrations
+migrations/         nine Doctrine migrations
 src/Controller/     DefaultController – all frontend routes
 src/Controller/Admin/  Dashboard and the three CRUD controllers
 src/Entity/         Reference, Category, FaqEntry (ORM)
@@ -201,6 +201,14 @@ breaks in the test runner.
   `imageFilePortrait`
 - Classification: `category` (ManyToOne, nullable), `material` and `printer`
   (enums, nullable)
+- Free tags: `hashtags` (nullable), the reference's own Instagram tags. The
+  setter owns the notation — lower case, one leading hash per tag, no
+  duplicates, alphabetical, joined with `", "` — so the field accepts a sloppy
+  input and stores the form the comment needs. What normalising cannot fix, a
+  hyphen or a space inside a tag, a `Regex` constraint reports; `Assert\Length`
+  guards the 255 characters of the column, because a longer value would reach
+  the database as an exception instead of a form error. `getHashtagList()`
+  hands the parsed list to the caption builder
 - Visibility: `isVisible`, defaults to `false`
 - Attribution: embedded `Source` (`title`, `url`, `author`, all optional)
 - Google rating: `ratingUrl` (nullable); timestamps `createdAt` (midnight on
@@ -231,7 +239,7 @@ EasyAdmin field rendering.
 - `App\Enum\Material`: ASA, FLEX, PA12-CF, PC, PC-CF, PETG, PLA
 - `App\Enum\Printer`: Prusa CORE One INDX, CORE One L, CORE One+, MINI+, MK4S,
   MK4S + MMU3; `isMultiColor()` is true for the INDX and the MMU3 variant
-- Both carry a `getHashtags()` method feeding the Instagram caption. **Keep the
+- Both carry a `getHashtags()` method feeding the Instagram comment. **Keep the
   hashtags next to the case, never in a second place.**
 
 ## Backend
@@ -574,17 +582,40 @@ Read-only page reachable from the three-dot menu of a reference, rendered by
 `ReferenceCrudController::instagramPreview()` into
 `templates/admin/instagram-preview.html.twig`.
 
-`App\Service\InstagramCaptionBuilder` assembles the caption from three
-paragraphs: the `#ModellMontag` introduction with the title and the summary,
-the source sentence (only when all three source fields are set) and the hashtag
-block. Hashtags come from `InstagramCaptionBuilder::GLOBAL_HASHTAGS` plus the
-printer and the material; missing fields contribute nothing, duplicates are
-dropped and the block is always sorted alphabetically. Without a summary the
-introduction ends after the model name.
+**Instagram counts five hashtags per post, so the tags are split over two
+texts** and `App\Service\InstagramCaptionBuilder` builds both.
 
-The caption sits in a copyable block with a button next to it. The asynchronous
-clipboard API only exists in a secure context, so the button falls back to a
-hidden selection when the backend is opened over plain HTTP.
+`buildCaption()` assembles the post from three paragraphs: the `#ModellMontag`
+introduction with the title and the summary, the source sentence (only when all
+three source fields are set) and `POST_HASHTAGS`. Without a summary the
+introduction ends after the model name. That constant holds four tags —
+`#krausgedruckt #3ddruck #erftstadt #rheinerftkreis` — because the introduction
+already spends the fifth on `#ModellMontag`. **Its order is the published one
+and therefore not alphabetical**, which is the one place in this project where
+a constant list is not sorted.
+
+`buildHashtagComment()` builds the block that goes under the post as the first
+comment: `COMMENT_HASHTAGS` plus the printer, the material and the reference's
+own `hashtags`. Missing fields contribute nothing, duplicates are dropped, and
+**everything the caption already carries is subtracted** — `POST_HASHTAGS` and
+`INTRODUCTION_HASHTAG` alike, compared without regard to case, because
+Instagram reads a hashtag that way. No tag therefore appears twice.
+
+**Sorting runs through `App\Service\HashtagSorter`, never through `sort()`.**
+A byte comparison puts every umlaut behind the whole alphabet, and the tags may
+carry one; the sorter folds `ä ö ü ß` onto their base letters without a locale
+and without the intl extension. The entity uses the same sorter for what it
+stores, so the two orders cannot drift.
+
+A tag belongs in `POST_HASHTAGS` only when it never varies. A hashtag cannot
+carry a hyphen — Instagram ends the tag there, which turns `#rhein-erft-kreis`
+into `#rhein` — so the joined spelling is the correct one, not a shortening.
+
+Both texts sit in a copyable block with a button next to it, paired through
+`data-instagram-copy-trigger` and `data-instagram-copy-source` so the script
+serves any number of them. The asynchronous clipboard API only exists in a
+secure context, so the button falls back to a hidden selection when the backend
+is opened over plain HTTP.
 
 ## SEO / meta
 

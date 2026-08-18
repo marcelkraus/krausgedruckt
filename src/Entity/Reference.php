@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Enum\Material;
 use App\Enum\Printer;
 use App\Repository\ReferenceRepository;
+use App\Service\HashtagSorter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -109,6 +110,19 @@ class Reference
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $ratingUrl = null;
+
+    /**
+     * Free tags for this single reference, stored in the notation the
+     * Instagram comment needs: "#tag, #tag". The setter brings a sloppier
+     * input into that shape, the constraint reports what it cannot.
+     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255, maxMessage: 'Die Hashtags dürfen zusammen maximal {{ limit }} Zeichen lang sein.')]
+    #[Assert\Regex(
+        pattern: '/^#[a-z0-9\x{00e4}\x{00f6}\x{00fc}\x{00df}_]+(?:, #[a-z0-9\x{00e4}\x{00f6}\x{00fc}\x{00df}_]+)*$/u',
+        message: 'Hashtags bestehen aus Buchstaben, Ziffern und Unterstrichen und werden durch Komma getrennt. Beispiele: #ambiente, #lampe, #mond.'
+    )]
+    protected ?string $hashtags = null;
 
     public function __construct()
     {
@@ -345,6 +359,64 @@ class Reference
     {
         $this->ratingUrl = $ratingUrl;
         return $this;
+    }
+
+    public function getHashtags(): ?string
+    {
+        return $this->hashtags;
+    }
+
+    public function setHashtags(?string $hashtags): self
+    {
+        $this->hashtags = $this->normalizeHashtags($hashtags);
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getHashtagList(): array
+    {
+        if ($this->hashtags === null || $this->hashtags === '') {
+            return [];
+        }
+
+        return explode(', ', $this->hashtags);
+    }
+
+    /**
+     * Brings the entered tags into the stored notation: one leading hash per
+     * tag, lower case, without duplicates, alphabetical and separated by
+     * ", ". A character the notation does not allow inside a tag — a hyphen or
+     * a space — is left untouched, so the constraint reports it instead of the
+     * setter hiding it.
+     */
+    private function normalizeHashtags(?string $hashtags): ?string
+    {
+        if ($hashtags === null) {
+            return null;
+        }
+
+        $tags = [];
+
+        foreach (explode(',', $hashtags) as $tag) {
+            // Hashes and surrounding white space are the notation, so they are
+            // stripped rather than reported. \p{Zs} catches the non-breaking
+            // space that arrives with text copied out of another application.
+            $tag = preg_replace('/^[\s\p{Zs}#]+|[\s\p{Zs}]+$/u', '', mb_strtolower($tag));
+
+            if ($tag === null || $tag === '') {
+                continue;
+            }
+
+            $tags[] = '#' . $tag;
+        }
+
+        if ($tags === []) {
+            return null;
+        }
+
+        return implode(', ', HashtagSorter::sort(array_unique($tags)));
     }
 
     public function getMaterialLabel(): ?string

@@ -70,7 +70,8 @@ final class ReferenceCrudController extends AbstractCrudController
 
         return $this->render('admin/instagram-preview.html.twig', [
             'reference' => $reference,
-            'caption' => $this->instagramCaptionBuilder->build($reference),
+            'caption' => $this->instagramCaptionBuilder->buildCaption($reference),
+            'hashtags' => $this->instagramCaptionBuilder->buildHashtagComment($reference),
         ]);
     }
 
@@ -102,6 +103,11 @@ final class ReferenceCrudController extends AbstractCrudController
         yield TextareaField::new('description', 'Beschreibung')
             ->setRequired(true)
             ->setNumOfRows(10)
+            ->hideOnIndex();
+
+        yield TextField::new('hashtags', 'Tags')
+            ->setMaxLength(255)
+            ->setHelp('Diese auf diese Referenz bezogenen Hashtags werden mit den globalen Hashtags kombiniert und sortiert dargestellt. Beispiele: #ambiente, #lampe, #mond.')
             ->hideOnIndex();
 
         yield AssociationField::new('category', 'Kategorie')

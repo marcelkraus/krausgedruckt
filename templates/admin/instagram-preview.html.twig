@@ -19,7 +19,7 @@
         <div class="col-md-5">
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fa fa-image"></i> Bild im Hochformat
+                    <i class="fa fa-image"></i> Bild
                 </div>
                 {% if reference.imagePortraitPathWithFallback %}
                     <img src="{{ reference.imagePortraitPathWithFallback }}" alt="Bild zur Referenz „{{ reference.title }}“" class="img-fluid">
@@ -41,15 +41,30 @@
         <div class="col-md-7">
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fa fa-align-left"></i> Text zum Kopieren</span>
-                    <button type="button" class="btn btn-primary btn-sm" data-instagram-caption-copy>
+                    <span><i class="fa fa-align-left"></i> Beitragstext</span>
+                    <button type="button" class="btn btn-primary btn-sm" data-instagram-copy-trigger="caption">
                         <i class="fa fa-clipboard"></i> In Zwischenablage kopieren
                     </button>
                 </div>
                 <div class="card-body">
-                    <p class="mb-0 instagram-caption" data-instagram-caption>{{ caption }}</p>
+                    <p class="mb-0 instagram-copy-text" data-instagram-copy-source="caption">{{ caption }}</p>
                 </div>
             </div>
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fa fa-hashtag"></i> Kommentar mit Hashtags</span>
+                    <button type="button" class="btn btn-primary btn-sm" data-instagram-copy-trigger="hashtags">
+                        <i class="fa fa-clipboard"></i> In Zwischenablage kopieren
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 instagram-copy-text" data-instagram-copy-source="hashtags">{{ hashtags }}</p>
+                </div>
+            </div>
+            <p class="text-muted small mb-0">
+                Instagram wertet nur fünf Hashtags im Beitrag aus. Die übrigen
+                gehören als erster Kommentar unter den Beitrag.
+            </p>
         </div>
     </div>
 {% endblock %}
