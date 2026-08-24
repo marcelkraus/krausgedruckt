@@ -769,6 +769,27 @@ directories and a writable `var/`.
 `null://null`, so an unset `MAILER_DSN` swallows every contact request without
 raising an error.
 
+**Mail leaves through the local MTA, not over SMTP.** The domain's MX record
+points at this host and its SPF record authorises it, so the transport needs no
+credentials at all. Two traps sit in the DSN, both worked around below:
+
+- Plain `sendmail://default` calls `sendmail -bs`, which the qmail wrapper
+  rejects with `421 unable to read controls`. The command has to be forced into
+  pipe mode.
+- The command **must be URL-encoded** inside the DSN. With literal spaces the
+  query string is mangled and the mailer fails with `Unsupported sendmail
+  command flags`. The contact form catches the transport exception, so the
+  visitor gets a readable message — but the mail is still lost, so the DSN has
+  to be right.
+
+```
+MAILER_DSN="sendmail://default?command=%2Fusr%2Fsbin%2Fsendmail%20-t%20-i"
+```
+
+An SMTP transport pointed at another host is the wrong shape here: it ties the
+form to credentials and to a machine this site does not own, and it fails the
+moment that machine goes away.
+
 ## Code conventions
 
 - **Comments, identifiers and this documentation are English.** Visible site
