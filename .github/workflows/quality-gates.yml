@@ -47,7 +47,10 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          # The version the Uberspace serves. `composer.json` allows anything
+          # from 8.4 up, but testing against a version that never ships means a
+          # gate can stay green while the release stumbles.
+          php-version: '8.5'
           extensions: ctype, iconv, imagick, pdo_mysql
           coverage: none
 
@@ -77,8 +80,11 @@ jobs:
       - name: Lint the service container
         run: php bin/console lint:container
 
+      # Piped through xargs on purpose: with `-exec` the step reports the exit
+      # status of `find`, which GNU find leaves at zero even when the linter
+      # failed. xargs passes the failure through.
       - name: Lint PHP
-        run: find src tests -name "*.php" -exec php -l {} \;
+        run: find src tests -name "*.php" -print0 | xargs -0 -n1 php -l
 
       - name: Build the test database
         run: composer test-db
