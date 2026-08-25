@@ -70,7 +70,7 @@ final class DefaultController extends AbstractController
     #[Route('/', name: 'app_homepage', methods: ['GET'])]
     public function homepage(ReferenceRepository $referenceRepository): Response
     {
-        return $this->render('default/homepage.html.twig', [
+        return $this->render('content/homepage.html.twig', [
             'references' => $referenceRepository->findAllOrdered(self::HOMEPAGE_REFERENCE_LIMIT),
         ]);
     }
@@ -88,7 +88,7 @@ final class DefaultController extends AbstractController
             'json'
         );
 
-        return $this->render('default/advintage-landing-page.html.twig', [
+        return $this->render('content/advintage-landing-page.html.twig', [
             'printableModels' => $printableModels,
         ]);
     }
@@ -164,7 +164,7 @@ final class DefaultController extends AbstractController
                     ->to($this->contactTo)
                     ->replyTo(new Address($contactRequest->email, $contactRequest->name))
                     ->subject(sprintf('Nachricht von %s', $contactRequest->name))
-                    ->textTemplate('default/contact.txt.twig')
+                    ->textTemplate('content/contact.txt.twig')
                     ->context([
                         'discountCode' => $contactRequest->discountCode,
                         'emailAddress' => $contactRequest->email,
@@ -203,7 +203,7 @@ final class DefaultController extends AbstractController
     ): Response {
         $timestamp ??= (string) time();
 
-        return $this->render('default/contact.html.twig', [
+        return $this->render('content/contact.html.twig', [
             'contact_errors' => $errors,
             'contact_focus' => $focus,
             'contact_old' => $old,
@@ -371,7 +371,7 @@ final class DefaultController extends AbstractController
     #[Route('/app', name: 'app_app', methods: ['GET'])]
     public function app(): Response
     {
-        return $this->render('default/app.html.twig', [
+        return $this->render('content/app.html.twig', [
             'appStoreUrlMobile' => $this->appStoreUrlMobile,
         ]);
     }
@@ -381,7 +381,7 @@ final class DefaultController extends AbstractController
     {
         $references = $referenceRepository->findAllOrdered();
 
-        return $this->render('default/references.html.twig', [
+        return $this->render('content/references.html.twig', [
             'references' => $references,
         ]);
     }
@@ -395,7 +395,7 @@ final class DefaultController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('default/reference-detail.html.twig', [
+        return $this->render('content/reference-detail.html.twig', [
             'reference' => $reference,
         ]);
     }
@@ -405,7 +405,7 @@ final class DefaultController extends AbstractController
     {
         $faqEntries = $faqEntryRepository->findAllOrdered();
 
-        return $this->render('default/faq.html.twig', [
+        return $this->render('content/faq.html.twig', [
             'faqEntries' => $faqEntries,
         ]);
     }
@@ -413,12 +413,12 @@ final class DefaultController extends AbstractController
     #[Route('/datenschutz', name: 'app_data_privacy', methods: ['GET'])]
     public function dataPrivacy(): Response
     {
-        return $this->render('default/data-privacy.html.twig');
+        return $this->render('content/data-privacy.html.twig');
     }
 
     #[Route('/impressum', name: 'app_imprint', methods: ['GET'])]
     public function imprint(): Response
     {
-        return $this->render('default/imprint.html.twig');
+        return $this->render('content/imprint.html.twig');
     }
 }
