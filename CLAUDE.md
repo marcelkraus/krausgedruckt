@@ -575,6 +575,13 @@ run.
   what matters: without it a reload would send the message a second time
 - Mail goes out through `TemplatedEmail`; the reply-to address is the sender of
   the contact request
+- **The imprint and the privacy policy render
+  `partials/_legal_mail_address.html.twig`:** the plus-addressed mailbox
+  `mail+legal@krausgedruckt.de` in plain, unlinked text, followed by a decoy
+  hidden with an inline style, so a harvester reading the markup carries off an
+  address that does not exist. The plus tag appears on those two pages only –
+  what arrives on it came from a legal page and can be filtered on its own. The
+  same partial exists in the sibling projects and in jurassic-jeep
 
 ## Instagram preview
 

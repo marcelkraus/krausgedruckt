@@ -1,0 +1,23 @@
+{# The mailbox of the mandatory disclosures, written out and readable, with a
+   decoy nobody sees.
+
+   The address stands there in plain text: it can be read, selected and
+   copied, and a screen reader announces it correctly, because a hidden
+   element is neither copied nor read aloud. What a harvester takes out of the
+   markup is `mail+legal@nospam.<domain>` – an address that does not exist.
+
+   Two decisions are baked in and both are deliberate:
+
+   * **The decoy is hidden with an inline style, not a utility class.** The
+     partial has to work on any page, including one that loads a different
+     stylesheet – and a decoy that fails to hide is worse than no decoy.
+   * **The address is the plus-addressed one.** It appears in the imprint and
+     the privacy policy and nowhere else, so whatever is harvested from a
+     legal page can be told apart from real mail and filtered without losing
+     the mailbox.
+
+   Never a link. The click and the clean copy are given up on purpose. The
+   same partial exists in the sibling projects, and all four render it
+   identically. #}
+{%- set mailbox = legal_email_address|split('@') -%}
+{{ mailbox[0] }}@<span style="display:none" aria-hidden="true">nospam.</span>{{ mailbox[1] }}

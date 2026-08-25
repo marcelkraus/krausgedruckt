@@ -9,6 +9,10 @@ parameters:
     # to be hunted through the templates. Values that differ per machine
     # belong in .env instead; these do not.
     app.contact_email_address: 'mail@krausgedruckt.de'
+    # Only the imprint and the privacy policy show an address, and they show
+    # this one: whatever is harvested from a legal page arrives on its own
+    # tag and can be filtered without touching the mailbox.
+    app.legal_email_address: 'mail+legal@krausgedruckt.de'
     app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
     app.instagram_url: 'https://www.instagram.com/krausgedruckt'
     app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'

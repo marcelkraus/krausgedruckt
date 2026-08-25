@@ -3,6 +3,8 @@ twig:
     # The shop and the Instagram account are linked from several templates;
     # as a global the address sits in exactly one place in the project.
     globals:
+        contact_email_address: '%app.contact_email_address%'
+        legal_email_address: '%app.legal_email_address%'
         etsy_url: '%app.etsy_url%'
         instagram_url: '%app.instagram_url%'
 
