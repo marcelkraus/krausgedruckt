@@ -757,6 +757,23 @@ happened once here, when the anti-spam bundle went.
 Migrations run **after** the rebuild so they meet the new container rather than
 the old one.
 
+**A pending migration is dumped before it runs.** Rolling the code back undoes
+every other step of a deployment; a migration it does not. `bin/deploy`
+therefore asks `doctrine:migrations:up-to-date` first — the exit code, not a
+table — and only when something is pending does it write
+`backups/<ISO date>-backup-pre-<version>.sql`, then rotate dumps older than
+seven days as long as a newer one exists. An ordinary release costs nothing,
+and every file in `backups/` belongs to a release that changed the schema. The
+directory is project-internal and ignored; `mysqldump` needs no credentials of
+its own because it reads `~/.my.cnf` on this host, and the database name comes
+from `DATABASE_URL` so the script cannot drift from `.env.local`.
+
+The dump is written to `<name>.partial` and renamed on success. `set -e` aborts
+on a failed dump, which would otherwise leave a truncated file that the
+rotation counts as a backup and a restore would trust. This is the procedure
+ownyard and meetmyrc document as a manual deploy block — same directory, same
+name shape, same rotation — with the write-aside as the one addition.
+
 **Two things do not travel with the repository.** A fresh server is not complete
 after a clone:
 

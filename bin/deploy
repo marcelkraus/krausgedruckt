@@ -51,5 +51,50 @@ bin/console cache:clear --env=prod --no-debug
 
 # Migrations run against the rebuilt container, not the old one, so a
 # migration that relies on a new entity has it available. This is the one
-# step the sister project does not need — it has no database.
+# step the sister projects do not need — they have no database — and it is
+# also the one step that rolling the code back does not undo. Hence the dump
+# in front of it.
+#
+# The dump is written only when something is pending: an ordinary release
+# costs nothing, and every file in `backups/` therefore belongs to a release
+# that changed the schema. `up-to-date` answers through its exit code, so
+# nothing has to be read out of a table.
+#
+# Same procedure as ownyard and meetmyrc: a project-internal `backups/`,
+# never `~/backups`; the ISO date and the topic in the name; write first and
+# rotate afterwards, so "no backup left" cannot happen. Rotation keeps seven
+# days as long as a newer dump exists. The topic there names what the release
+# is about — a deployment that runs unattended has no such subject, so it
+# names the version it migrates to, which is the same thing one step more
+# literally.
+if bin/console doctrine:migrations:up-to-date --env=prod --no-debug >/dev/null 2>&1; then
+    echo "bin/deploy: the schema is up to date, no backup needed."
+else
+    # The connection is read from the environment rather than spelled out
+    # here, so the script cannot drift from `.env.local`. `mysqldump` needs
+    # no credentials of its own: it reads them from ~/.my.cnf, which is what
+    # the sister projects on this host rely on too.
+    database="$(php -r 'require "vendor/autoload.php"; (new Symfony\Component\Dotenv\Dotenv())->bootEnv(".env"); echo ltrim(parse_url($_SERVER["DATABASE_URL"], PHP_URL_PATH), "/");')"
+    # `latest` prints the version and its description on one line, so only
+    # the first field is the identifier — and the namespace in front of it
+    # is stripped, because a backslash has no business in a file name.
+    target="$(bin/console doctrine:migrations:latest --env=prod --no-debug | head -1 | awk '{print $1}')"
+    target="${target##*\\}"
+    dump="backups/$(date +%F)-backup-pre-${target:-pending}.sql"
+
+    mkdir -p backups
+
+    # Written aside and renamed on success, because `set -e` aborts on a
+    # failed dump and would leave a truncated file behind — one that the
+    # rotation below counts as a backup and that a restore would trust. The
+    # rename is atomic, so what carries the name is always a finished dump.
+    echo "bin/deploy: backing up ${database} to ${dump}."
+    mysqldump "$database" > "$dump.partial"
+    mv "$dump.partial" "$dump"
+
+    if [ "$(find backups -maxdepth 1 -name '*.sql' -mtime -7 | wc -l)" -gt 0 ]; then
+        find backups -maxdepth 1 -name '*.sql' -mtime +7 -print -delete
+    fi
+fi
+
 bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug
