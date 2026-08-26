@@ -738,7 +738,22 @@ to them; deprecations go to their own file.
 
 ## Deployment
 
-Rolled out with `bin/deploy`, which is the sibling's script plus one step:
+**A push to `main` rolls out by itself.** The workflow runs the gates first and
+starts `bin/deploy` over SSH only if they pass, so nothing reaches the server
+that has not been linted, tested and built. All three siblings do this now;
+this one was last, because its deployment touches a database and wanted the
+dump below in front of the migration first.
+
+The key GitHub authenticates with is restricted in the server's
+`authorized_keys` to exactly one command — `cd ~/html/krausgedruckt &&
+bin/deploy` — with no terminal and no forwarding. A leaked secret can
+therefore redeploy the state already on `main`, and nothing else. Withdraw it
+by deleting that line on the server; the entries there are labelled so they
+can be told apart. Three secrets carry it: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`
+and `DEPLOY_USER`.
+
+By hand, unchanged and always available — `bin/deploy` is the sibling's script
+plus one step:
 
 ```bash
 ssh kraus 'cd ~/html/krausgedruckt && bin/deploy'

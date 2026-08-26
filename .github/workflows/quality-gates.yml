@@ -6,8 +6,9 @@
 # they skip rather than fail, which reads as green on a machine that never
 # had the data.
 #
-# There is deliberately no deployment step: rolling out stays a decision, and
-# `bin/deploy` on the Uberspace is where that decision is carried out.
+# The rollout is the second job below. It waits for the gates, runs only on a
+# push to `main`, and reaches the Uberspace with a key that is restricted
+# there to exactly one command.
 name: Quality gates
 
 on:
@@ -101,3 +102,29 @@ jobs:
       # incomplete.
       - name: Check the committed stylesheet is current
         run: git diff --exit-code --stat public/css/output.css
+
+  # Rolling out is a second job, so it can only start once the gates are
+  # green. The key it uses is restricted on the server to exactly one
+  # command — `cd ~/html/krausgedruckt && bin/deploy` — so a leaked secret
+  # buys a redeploy of what is already on `main`, and nothing else.
+  #
+  # This is the one project of the three whose deployment touches a database.
+  # What makes it safe to run unattended sits in `bin/deploy`, not here: a
+  # pending migration is dumped before it runs, so the step a code rollback
+  # cannot undo has a way back.
+  deploy:
+    name: Roll out
+    needs: gates
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Load the deploy key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Run bin/deploy on the server
+        run: >-
+          ssh -T -o StrictHostKeyChecking=accept-new
+          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}
