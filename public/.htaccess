@@ -79,3 +79,16 @@ Options -Indexes
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+# Two headers that cost nothing and answer what every audit tool asks first.
+# `nosniff` stops the browser guessing a file's type instead of believing the
+# one that was sent. The referrer policy sends the domain but not the path when
+# a link leaves the site – which is what current browsers default to anyway,
+# said out loud rather than left to the browser.
+#
+# Deliberately not here: a Content-Security-Policy, because the pages carry an
+# inline script and a policy with an unsafe-inline is a policy in name only.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
