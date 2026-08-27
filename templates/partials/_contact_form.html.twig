@@ -33,8 +33,8 @@
 
 <form method="post" action="{{ path('app_contact') }}" novalidate{% if focus is defined and focus %} data-error-focus="{{ focus }}"{% endif %}>
     <input type="hidden" name="_token" value="{{ csrf_token('contact') }}">
-    <input type="hidden" name="ts" value="{{ ts }}">
-    <input type="hidden" name="ts_sig" value="{{ ts_sig }}">
+    <input type="hidden" name="ts" value="{{ contact_timestamp }}">
+    <input type="hidden" name="ts_sig" value="{{ contact_timestamp_signature }}">
 
     {# Honeypot: hidden from people, tempting to bots. A neutral field name
        that browser autofill is unlikely to populate for a real visitor. #}

@@ -207,8 +207,8 @@ final class DefaultController extends AbstractController
             'contact_errors' => $errors,
             'contact_focus' => $focus,
             'contact_old' => $old,
-            'contact_ts' => $timestamp,
-            'contact_ts_sig' => $signature ?? $this->signTimestamp($timestamp),
+            'contact_timestamp' => $timestamp,
+            'contact_timestamp_signature' => $signature ?? $this->signTimestamp($timestamp),
         ], new Response('', $status));
     }
 
