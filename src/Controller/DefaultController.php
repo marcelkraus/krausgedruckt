@@ -54,10 +54,6 @@ final class DefaultController extends AbstractController
         private readonly string $contactFrom,
         #[Autowire('%env(CONTACT_FORM_RECIPIENT_ADDRESS)%')]
         private readonly string $contactTo,
-        #[Autowire('%env(GOOGLE_REVIEW_URL)%')]
-        private readonly string $googleReviewUrl,
-        #[Autowire('%env(APP_STORE_URL_MOBILE)%')]
-        private readonly string $appStoreUrlMobile,
         #[Autowire(service: 'limiter.contact_form')]
         private readonly RateLimiterFactoryInterface $contactFormLimiter,
     ) {
@@ -365,14 +361,14 @@ final class DefaultController extends AbstractController
 
     #[Route('/bewerten', name: 'app_review', methods: ['GET'])]
     public function review(): Response {
-        return $this->redirect($this->googleReviewUrl);
+        return $this->redirect($this->getParameter('app.google_review_url'));
     }
 
     #[Route('/app', name: 'app_app', methods: ['GET'])]
     public function app(): Response
     {
         return $this->render('content/app.html.twig', [
-            'appStoreUrlMobile' => $this->appStoreUrlMobile,
+            'appStoreUrlMobile' => $this->getParameter('app.app_store_url_mobile'),
         ]);
     }
 
