@@ -50,10 +50,10 @@ final class DefaultController extends AbstractController
         private readonly MailerInterface $mailer,
         #[Autowire('%kernel.secret%')]
         private readonly string $appSecret,
-        #[Autowire('%env(CONTACT_FORM_SENDER_ADDRESS)%')]
-        private readonly string $contactFrom,
-        #[Autowire('%env(CONTACT_FORM_RECIPIENT_ADDRESS)%')]
+        #[Autowire('%env(CONTACT_TO)%')]
         private readonly string $contactTo,
+        #[Autowire('%env(CONTACT_FROM)%')]
+        private readonly string $contactFrom,
         #[Autowire(service: 'limiter.contact_form')]
         private readonly RateLimiterFactoryInterface $contactFormLimiter,
     ) {
