@@ -10,29 +10,70 @@
 # site would come back up broken instead of staying on the old release.
 set -euo pipefail
 
+# Everything the release needs from `.env.local` is checked before anything on
+# disk moves. A refusal then leaves the site exactly as it was; the same check
+# after the reset would leave new code standing against old dependencies and an
+# old container.
+if [ ! -f .env.local ]; then
+    echo "bin/deploy: .env.local is missing – aborting." >&2
+    exit 1
+fi
+
+# The secret keys CSRF and the anti-spam timestamp of the contact form, and the
+# repository carries one for development. A missing or copied value therefore
+# does not break the site – it silently ships a secret anybody can read, which
+# makes both tokens forgeable. Invisible from the outside, so it is checked on
+# every release.
+if ! grep -qE '^APP_SECRET=.+' .env.local || grep -qE '^APP_SECRET=(<ChangeMe|""$)' .env.local; then
+    echo "bin/deploy: .env.local has no usable APP_SECRET – aborting." >&2
+    exit 1
+fi
+
+# The check above only proves the line is not empty, so a `.env.local` that
+# copied the committed value would pass it. That is the exact case the
+# paragraph above describes, and describing it is not the same as excluding it.
+committed_secret=$(grep -E '^APP_SECRET=' .env | cut -d= -f2-)
+if [ -n "$committed_secret" ] && grep -qF "APP_SECRET=${committed_secret}" .env.local; then
+    echo "bin/deploy: .env.local repeats the APP_SECRET from the repository – aborting." >&2
+    exit 1
+fi
+
+# Whether a message from the contact form reaches anyone fails silently: the
+# form answers with its confirmation page either way, so a mailbox nobody reads
+# looks exactly like a mailbox that works.
+#
+# `MAILER_DSN` is the one setting that has to be overridden here, because the
+# committed value is `null://null` and throws every mail away without an error.
+if ! grep -qE '^MAILER_DSN=.+' .env.local || grep -qE '^MAILER_DSN=null://' .env.local; then
+    echo "bin/deploy: .env.local sets no usable MAILER_DSN – aborting." >&2
+    exit 1
+fi
+
+# The contact addresses may come from either file. `.env` ships the real ones,
+# so a project that does not override them is correctly configured – what is
+# checked is the value that takes effect, not the file it comes from.
+for setting in CONTACT_TO CONTACT_FROM; do
+    if [ -z "$(grep -hE "^${setting}=.+" .env.local .env 2>/dev/null | head -1 | cut -d= -f2-)" ]; then
+        echo "bin/deploy: neither .env.local nor .env sets ${setting} – aborting." >&2
+        exit 1
+    fi
+done
+
+# `.env` carries APP_ENV=dev for development. Without an override the
+# auto-scripts of `composer install` build the cache for the wrong environment.
+if ! grep -qE '^APP_ENV=prod$' .env.local; then
+    echo "bin/deploy: .env.local does not set APP_ENV=prod – aborting." >&2
+    exit 1
+fi
+
 git fetch --all
 git reset --hard origin/main
-
-# The secret keys CSRF and the anti-spam timestamp of the contact form, and
-# the repository carries a placeholder for it. A missing or unedited
-# .env.local therefore does not break the site — it silently ships a secret
-# that anybody can read here, which makes both tokens forgeable. Checked on
-# every release, because the failure is invisible from the outside.
-if [ ! -f .env.local ]; then
-    echo "bin/deploy: .env.local is missing — aborting." >&2
-    exit 1
-fi
-
-if grep -qE '^APP_SECRET=(<ChangeMe|\s*$|""$)' .env.local || ! grep -q '^APP_SECRET=' .env.local; then
-    echo "bin/deploy: .env.local has no usable APP_SECRET — aborting." >&2
-    exit 1
-fi
 
 composer install --no-dev --optimize-autoloader
 
 # The compiled container is moved aside rather than cleared. `cache:clear`
 # loads the existing container before it replaces it, so a release that drops
-# a bundle makes it die on a class that no longer exists — reproduced once,
+# a bundle makes it die on a class that no longer exists – reproduced once,
 # and it takes the site down for the length of the fix.
 #
 # Moved rather than deleted outright, because a plain `rm -rf` races the web
@@ -51,7 +92,7 @@ bin/console cache:clear --env=prod --no-debug
 
 # Migrations run against the rebuilt container, not the old one, so a
 # migration that relies on a new entity has it available. This is the one
-# step the sister projects do not need — they have no database — and it is
+# step the sister projects do not need – they have no database – and it is
 # also the one step that rolling the code back does not undo. Hence the dump
 # in front of it.
 #
@@ -64,7 +105,7 @@ bin/console cache:clear --env=prod --no-debug
 # never `~/backups`; the ISO date and the topic in the name; write first and
 # rotate afterwards, so "no backup left" cannot happen. Rotation keeps seven
 # days as long as a newer dump exists. The topic there names what the release
-# is about — a deployment that runs unattended has no such subject, so it
+# is about – a deployment that runs unattended has no such subject, so it
 # names the version it migrates to, which is the same thing one step more
 # literally.
 if bin/console doctrine:migrations:up-to-date --env=prod --no-debug >/dev/null 2>&1; then
@@ -76,7 +117,7 @@ else
     # the sister projects on this host rely on too.
     database="$(php -r 'require "vendor/autoload.php"; (new Symfony\Component\Dotenv\Dotenv())->bootEnv(".env"); echo ltrim(parse_url($_SERVER["DATABASE_URL"], PHP_URL_PATH), "/");')"
     # `latest` prints the version and its description on one line, so only
-    # the first field is the identifier — and the namespace in front of it
+    # the first field is the identifier – and the namespace in front of it
     # is stripped, because a backslash has no business in a file name.
     target="$(bin/console doctrine:migrations:latest --env=prod --no-debug | head -1 | awk '{print $1}')"
     target="${target##*\\}"
@@ -85,7 +126,7 @@ else
     mkdir -p backups
 
     # Written aside and renamed on success, because `set -e` aborts on a
-    # failed dump and would leave a truncated file behind — one that the
+    # failed dump and would leave a truncated file behind – one that the
     # rotation below counts as a backup and that a restore would trust. The
     # rename is atomic, so what carries the name is always a finished dump.
     echo "bin/deploy: backing up ${database} to ${dump}."
