@@ -105,7 +105,7 @@ jobs:
 
   # Rolling out is a second job, so it can only start once the gates are
   # green. The key it uses is restricted on the server to exactly one
-  # command — `cd ~/html/krausgedruckt && bin/deploy` — so a leaked secret
+  # command – `cd ~/html/krausgedruckt && bin/deploy` – so a leaked secret
   # buys a redeploy of what is already on `main`, and nothing else.
   #
   # This is the one project of the three whose deployment touches a database.

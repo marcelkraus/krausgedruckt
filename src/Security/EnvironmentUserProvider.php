@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  *
  * A memory provider spells the user name out as a YAML key, and a key is one
  * of the few places Symfony does not resolve `%env()%`. That left the name in
- * the repository, right next to the path it unlocks — half a set of
+ * the repository, right next to the path it unlocks – half a set of
  * credentials, handed over for free. Both halves live in `.env.local` now,
  * which is never committed.
  *

@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Event\LoginFailureEvent;
  * Symfony ships `login_throttling`, and it does not help here: it only covers
  * authenticators it considers interactive, and HTTP Basic is not one. So the
  * admin path accepted passwords at whatever rate the network allowed, on a
- * repository that names both the path and — until this change — the user.
+ * repository that names both the path and – until this change – the user.
  *
  * Five failures per address per fifteen minutes. The check runs before the
  * password is verified, so an exhausted budget refuses the correct password

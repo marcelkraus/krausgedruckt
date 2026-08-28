@@ -102,7 +102,7 @@ final class DefaultController extends AbstractController
 
         $timestampState = $this->timestampState($request);
 
-        // Silent drop only for clear bot signals — a filled honeypot, a
+        // Silent drop only for clear bot signals – a filled honeypot, a
         // missing or tampered signature, or an inhumanly fast submission.
         // These get a fake success so bots learn nothing; nothing is sent.
         $honeypot = trim((string) $request->request->get('website', ''));
@@ -132,7 +132,7 @@ final class DefaultController extends AbstractController
         }
 
         // A valid but stale signature is a real person whose form sat open
-        // too long — never silently drop it, ask them to resend instead.
+        // too long – never silently drop it, ask them to resend instead.
         if ($timestampState === 'expired') {
             $errors['form'] = 'Das Formular war zu lange geöffnet. Bitte sende es noch einmal ab.';
         }
@@ -227,7 +227,7 @@ final class DefaultController extends AbstractController
 
         // Reuse the visitor's still-valid timestamp on re-render so a quick
         // fix-and-resend is not misclassified as a bot. Only seed a fresh one
-        // when none is reusable — missing, tampered or expired.
+        // when none is reusable – missing, tampered or expired.
         $timestamp = null;
         $signature = null;
         $submittedTimestamp = (string) $request->request->get('ts', '');
@@ -297,7 +297,7 @@ final class DefaultController extends AbstractController
     {
         $sitemap = $this->generateUrl('app_sitemap', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        // The redirect routes carry no document, only a Location header — and
+        // The redirect routes carry no document, only a Location header – and
         // for the two contact routes that header holds the address. A
         // well-behaved crawler follows it and takes the address into its
         // corpus, and those corpora are where address lists come from.

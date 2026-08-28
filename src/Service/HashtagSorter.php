@@ -19,7 +19,7 @@ final class HashtagSorter
      */
     public static function sort(array $hashtags): array
     {
-        // Two tags can share a key — #apfel and #äpfel do — so the tags
+        // Two tags can share a key – #apfel and #äpfel do – so the tags
         // themselves decide the tie. Without it the order would follow the
         // input and change with it.
         usort(

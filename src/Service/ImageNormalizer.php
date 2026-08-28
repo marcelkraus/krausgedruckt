@@ -72,7 +72,7 @@ final class ImageNormalizer
      * The built-in helper is called autoOrientImage() in the ImageMagick 6
      * binding and autoOrient() in the ImageMagick 7 one, so neither name can be
      * relied upon. Doing the transformation by hand works on both, and it has
-     * to happen before the metadata is stripped — otherwise the picture ends up
+     * to happen before the metadata is stripped – otherwise the picture ends up
      * lying on its side for good.
      */
     private function applyOrientation(\Imagick $image): void

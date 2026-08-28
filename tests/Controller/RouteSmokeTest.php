@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Calls every frontend route once and expects it to answer. This is the
  * cheapest insurance against a template that breaks on a page nobody clicks
- * during development — a missing variable or a renamed partial surfaces here
+ * during development – a missing variable or a renamed partial surfaces here
  * instead of in front of a visitor.
  */
 final class RouteSmokeTest extends WebTestCase

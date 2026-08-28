@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Carries and validates the data submitted through the contact form.
  *
- * The form is hand-rolled — no symfony/form — the same way the sister
+ * The form is hand-rolled – no symfony/form – the same way the sister
  * project does it, so both sites answer a submission through one mechanism
  * instead of two. This object is filled from the request and handed to
  * symfony/validator.

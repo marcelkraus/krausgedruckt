@@ -7,7 +7,7 @@
 @plugin "@tailwindcss/typography";
 @source "../../templates/**/*.html.twig";
 
-/* Self-hosted fonts — no external requests. Aller carries the wordmark,
+/* Self-hosted fonts – no external requests. Aller carries the wordmark,
    headlines and body, which ties the type to the logo; JetBrains Mono is
    the technical voice for eyebrows, labels and spec data. Latin covers the
    German umlauts (ä ö ü ß). */
@@ -44,7 +44,7 @@
        difference between the two brands falls into the values and not into
        the naming.
 
-         accent                 the brand itself — surfaces, borders, markers,
+         accent                 the brand itself – surfaces, borders, markers,
                                 the mark. Never type without a checked step.
          accent-on-light        type on a light ground
          accent-on-dark         type on a dark ground
@@ -57,7 +57,7 @@
        why its tokens carry different values under the same names.
 
        The hover of a filled surface moves in whichever direction keeps its
-       label readable — here the label is near-black, so the fill LIGHTENS.
+       label readable – here the label is near-black, so the fill LIGHTENS.
        Darkening it would drop the label to 3.43:1. */
     --color-accent: var(--color-orange-600);
     --color-accent-on-light: var(--color-orange-700);
@@ -73,13 +73,13 @@
     --color-brand-marcelkraus: var(--color-purple-700);
     --color-brand-krausgebaut: var(--color-cyan-800);
     --color-brand-krausgebaut-hover: var(--color-cyan-900);
-    /* marcelkraus is purple now — the left square of the new family logo,
+    /* marcelkraus is purple now – the left square of the new family logo,
        which stands for the employment career. Like the petrol below it is a
        dark color and measures 2.54:1 on the footer's neutral-900, so the
        marker there uses the brighter step. All of these bind to the palette
        instead of carrying a copied hex, so they cannot drift from it. */
     --color-brand-marcelkraus-on-dark: var(--color-purple-400);
-    /* The petrol is too dark to be type on a dark ground — it measures
+    /* The petrol is too dark to be type on a dark ground – it measures
        2.74:1 there, where 4.5:1 is required. This is the same split the
        accent already has, only in the other direction: papaya needs a
        darker step for light grounds, petrol a brighter one for dark. */

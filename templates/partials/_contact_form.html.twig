@@ -1,4 +1,4 @@
-{# Hand-rolled contact form — no symfony/form, the same mechanism the sister
+{# Hand-rolled contact form – no symfony/form, the same mechanism the sister
    project uses, so one submission path exists in the family instead of two.
 
    The field classes live here because there is no form theme to hold them
@@ -48,7 +48,7 @@
     {% endif %}
 
     {# The two required fields open the form. Anything optional follows in the
-       second row, so a private customer — the majority here — starts with
+       second row, so a private customer – the majority here – starts with
        something that concerns them rather than skipping a field first. #}
     <div class="grid gap-5 sm:grid-cols-2">
         {{ field.input('name', 'Name', old, errors, { required: true, autocomplete: 'name', field_class: field_class }) }}

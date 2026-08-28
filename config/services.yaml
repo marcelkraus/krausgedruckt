@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     # Outbound targets. Each of them appears in more than one place – the
-    # footer, a page, a redirect route — and a changed address must not have
+    # footer, a page, a redirect route – and a changed address must not have
     # to be hunted through the templates. Values that differ per machine
     # belong in .env instead; these do not.
     app.contact_email_address: 'mail@krausgedruckt.de'

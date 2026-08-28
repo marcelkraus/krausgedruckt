@@ -5,7 +5,7 @@
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex index.php
 
-# There is nothing to browse here — every path either is a real asset or goes
+# There is nothing to browse here – every path either is a real asset or goes
 # through the front controller.
 Options -Indexes
 

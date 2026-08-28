@@ -387,8 +387,8 @@ class Reference
     /**
      * Brings the entered tags into the stored notation: one leading hash per
      * tag, lower case, without duplicates, alphabetical and separated by
-     * ", ". A character the notation does not allow inside a tag — a hyphen or
-     * a space — is left untouched, so the constraint reports it instead of the
+     * ", ". A character the notation does not allow inside a tag – a hyphen or
+     * a space – is left untouched, so the constraint reports it instead of the
      * setter hiding it.
      */
     private function normalizeHashtags(?string $hashtags): ?string

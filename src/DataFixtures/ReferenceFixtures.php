@@ -222,8 +222,8 @@ final class ReferenceFixtures extends Fixture implements DependentFixtureInterfa
     /**
      * The fixture pictures are square and smaller than the portrait target, so
      * they are blown up before the normaliser sees them. Interpolating like
-     * this would be unacceptable for real uploads — the normaliser rejects them
-     * for good reason — but these are sample records.
+     * this would be unacceptable for real uploads – the normaliser rejects them
+     * for good reason – but these are sample records.
      */
     private function enlargeToCover(string $path, int $targetWidth, int $targetHeight): void
     {

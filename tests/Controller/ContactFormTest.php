@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * only route that sends mail. It shipped once with constraints that were read
  * by nothing, so these tests pin what matters: an invalid submission is
  * refused with a message and sends nothing, a valid one is accepted exactly
- * once, and the two anti-spam signals behave differently — a bot is dropped
+ * once, and the two anti-spam signals behave differently – a bot is dropped
  * silently, a person whose form went stale is asked to send again.
  */
 final class ContactFormTest extends WebTestCase
@@ -78,7 +78,7 @@ final class ContactFormTest extends WebTestCase
         $client->request('POST', '/kontakt', $this->payload($client, ['website' => 'https://example.com']));
 
         // A bot must not learn that it was caught, so the answer looks like
-        // success — but nothing leaves the building.
+        // success – but nothing leaves the building.
         self::assertResponseRedirects('/kontakt');
         self::assertEmailCount(0);
     }
@@ -107,7 +107,7 @@ final class ContactFormTest extends WebTestCase
 
     /**
      * Builds a POST payload with a valid token taken from a rendered form and
-     * a signed timestamp aged `age` seconds — inside the valid window by
+     * a signed timestamp aged `age` seconds – inside the valid window by
      * default, expired when a large age is passed.
      *
      * @param array<string, string> $overrides

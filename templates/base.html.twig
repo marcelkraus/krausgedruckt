@@ -52,7 +52,7 @@
     {% if app.environment == 'prod' %}
         {# Privacy-first analytics: self-hosted Matomo (SiteId 8), run cookieless
            via disableCookies. Nothing is stored on or read from the visitor's
-           device, so no consent banner is required. Production only — local and
+           device, so no consent banner is required. Production only – local and
            test traffic must not pollute the statistics. #}
         <script>
             var _paq = window._paq = window._paq || [];
@@ -74,14 +74,14 @@
 
     {# One list feeds both navigations. Written twice, it has to be maintained
        in ten places instead of five. A page may narrow it down by setting
-       `nav_items` at its own top level — a landing page that stands apart
+       `nav_items` at its own top level – a landing page that stands apart
        from the site does that.
 
        An item names either a `route` inside the site or an external `url`.
        The shop is the only external one and it sits last, after the pages
        that belong to the site itself. It earns the place because there are
-       two ways to buy here — commission something or take something ready
-       made — and without it the second one is only reachable from the middle
+       two ways to buy here – commission something or take something ready
+       made – and without it the second one is only reachable from the middle
        of the homepage. #}
     {% set nav_items = nav_items|default([
         { label: 'Übersicht', route: 'app_homepage', matches: ['app_homepage'] },
@@ -95,7 +95,7 @@
     {# ── Header ─────────────────────────────────────────────────── #}
     {# The three columns are a grid, not a flex row with `justify-between`.
        In a flex row the navigation is squeezed between logo and actions, so
-       its starting edge follows the total width of its own labels — and
+       its starting edge follows the total width of its own labels – and
        lands somewhere else on the sibling site, whose labels are longer.
        A fixed first column gives both brands the same edge.
 
@@ -223,7 +223,7 @@
                     link.addEventListener('click', () => setOpen(false));
                 });
 
-                // A tap next to an open menu is a request to close it — without
+                // A tap next to an open menu is a request to close it – without
                 // this the panel stays open until the burger is hit again.
                 document.addEventListener('click', (event) => {
                     if (menu.classList.contains('hidden')) {

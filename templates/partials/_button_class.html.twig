@@ -1,12 +1,12 @@
 {# The button skin as a bare class string, so a <button> that Symfony renders
    can wear the same clothes as the <a> in _button.html.twig without either
    copy drifting from the other. The contrast rule lives here and nowhere
-   else: papaya fill with a near-black label, and a hover that LIGHTENS —
+   else: papaya fill with a near-black label, and a hover that LIGHTENS –
    darkening the fill drops the label to 3.43:1.
 
    Emits no markup. Pull it with include(), assign it, hand it to `attr`.
    Params: size ('default' or 'compact'). Compact is for buttons that share a
-   row with something else — the header bar, where the button sits next to the
+   row with something else – the header bar, where the button sits next to the
    burger; it holds 44 pixels so a thumb still finds it on a phone. #}
 {%- set size = size|default('default') -%}
 {%- set base = 'group inline-flex items-center gap-2 rounded-lg bg-accent font-mono font-semibold uppercase tracking-[0.15em] text-neutral-900 transition-colors hover:bg-accent-hover' -%}
