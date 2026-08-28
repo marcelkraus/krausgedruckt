@@ -218,7 +218,7 @@ EasyAdmin 5 at `/admin`.
   the criteria API, because a hand-written DQL comparison against the
   association silently returns zero for the UUID identifier
 * **FaqEntryCrudController** – sorted by `sortOrder` ascending, with custom
-  up/down actions that swap the sort order of neighbours
+  up/down actions that swap the sort order of neighbors
 * All CRUD and field labels are German
 
 **EasyAdmin 5 mechanics, mandatory and easy to get wrong:**
