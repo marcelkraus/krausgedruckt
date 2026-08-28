@@ -1,6 +1,8 @@
 {
+    "name": "marcelkraus/krausgedruckt",
     "type": "project",
     "license": "proprietary",
+    "description": "My business homepage for 3D printing services",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
