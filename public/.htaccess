@@ -28,10 +28,19 @@ Options -Indexes
 
     RewriteEngine On
 
-    # Canonical host: the site lives on www.krausgedruckt.de, so the bare apex is
-    # sent there permanently, carrying path and query string along. Host-scoped,
-    # so ddev and any other host stay untouched. Has to run before the rewriting
-    # below, otherwise it would fire on the already rewritten request.
+    # Canonical host: the site lives on www.krausgedruckt.de, so every other host is
+    # sent there permanently, carrying path and query string along. Host-scoped
+    # rather than a catch-all, so ddev and any host not named here stay
+    # untouched. Has to run before the rewriting below, otherwise it would fire
+    # on the already rewritten request.
+    #
+    # One host lands here: the bare apex. This site holds no second spelling of
+    # its own; where one exists it is named beside the apex, as on marcelkraus
+    # and jurassic-jeep.
+    #
+    # HTTPS is not forced here: the host redirects to it before Apache sees the
+    # request, and a second rule would only add a hop. The other sites on the
+    # same account carry the same block for the same reason.
     RewriteCond %{HTTP_HOST} ^krausgedruckt\.de$ [NC]
     RewriteRule ^ https://www.krausgedruckt.de%{REQUEST_URI} [R=301,L]
 
