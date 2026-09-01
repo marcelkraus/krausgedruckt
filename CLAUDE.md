@@ -69,7 +69,7 @@ src/EventListener/     AdminLoginThrottleListener, ReferenceImageListener,
 src/Security/          EnvironmentUserProvider
 src/Service/           ImageNormalizer, ReferenceImageNamer,
                        InstagramCaptionBuilder, HashtagSorter
-templates/             base.html.twig, default/, admin/, partials/
+templates/             base.html.twig, content/, admin/, partials/
 public/                css/, fonts/, images/, media/cache/, favicon.*
 ```
 
