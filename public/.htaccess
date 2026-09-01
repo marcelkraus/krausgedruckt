@@ -100,4 +100,14 @@ Options -Indexes
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # The third one covers what never reaches the kernel – a stylesheet, an
+    # icon, a picture. It belongs to the site rather than to the machine
+    # underneath: a host that adds one of its own states the same year, and a
+    # host that adds none leaves the promise where it is made.
+    #
+    # Only over HTTPS: a browser ignores the header on a plain request, and
+    # sending it there states something that is not true. The condition holds
+    # behind a reverse proxy that passes the scheme on.
+    Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
 </IfModule>

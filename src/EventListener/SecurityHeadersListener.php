@@ -25,5 +25,16 @@ final class SecurityHeadersListener
         $headers->set('X-Content-Type-Options', 'nosniff');
         $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $headers->set('X-Frame-Options', 'DENY');
+
+        // The one header that depends on how the request arrived. It belongs
+        // to the site rather than to the machine underneath: a host that adds
+        // one of its own states the same year, and a host that adds none
+        // leaves the promise where it is made.
+        //
+        // Only over HTTPS: a browser ignores it on a plain request, and
+        // sending it there states something that is not true.
+        if ($event->getRequest()->isSecure()) {
+            $headers->set('Strict-Transport-Security', 'max-age=31536000');
+        }
     }
 }
