@@ -470,8 +470,9 @@ Directories held by an empty `.gitignore`:
 
 ## Deployment
 
-Server directory `~/html/krausgedruckt`. Mechanism, deploy keys, the migration
-dump and the mailer are in `../docs/DEPLOYMENT.md`.
+Server directory `~/html/krausgedruckt`, on the account `kraus`, host `menkar`.
+Mechanism, deploy keys, the migration dump and the mailer are in
+`../docs/DEPLOYMENT.md`.
 
 **Two things do not travel with the repository.** A fresh server is not complete
 after a clone:

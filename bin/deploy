@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 #
 # Rolls the checked-out branch out. Run it on the server, inside the
-# application directory:
-#
-#     ssh kraus 'cd ~/html/krausgedruckt && bin/deploy'
+# application directory.
 #
 # `set -e` matters here: without it a failed `composer install` would be
 # followed by a cache rebuild against half-installed dependencies, and the
@@ -112,9 +110,9 @@ if bin/console doctrine:migrations:up-to-date --env=prod --no-debug >/dev/null 2
     echo "bin/deploy: the schema is up to date, no backup needed."
 else
     # The connection is read from the environment rather than spelled out
-    # here, so the script cannot drift from `.env.local`. `mysqldump` needs
-    # no credentials of its own: it reads them from ~/.my.cnf, which is what
-    # the sister projects on this host rely on too.
+    # here, so the script cannot drift from `.env.local`. The dump needs no
+    # credentials of its own: it reads them from ~/.my.cnf, which is what the
+    # sister projects rely on too.
     database="$(php -r 'require "vendor/autoload.php"; (new Symfony\Component\Dotenv\Dotenv())->bootEnv(".env"); echo ltrim(parse_url($_SERVER["DATABASE_URL"], PHP_URL_PATH), "/");')"
     # `latest` prints the version and its description on one line, so only
     # the first field is the identifier – and the namespace in front of it
@@ -129,8 +127,20 @@ else
     # failed dump and would leave a truncated file behind – one that the
     # rotation below counts as a backup and that a restore would trust. The
     # rename is atomic, so what carries the name is always a finished dump.
+    # `mysqldump` is the deprecated name of `mariadb-dump` and says so on every
+    # run of the newer host. Which of the two a machine carries is the
+    # machine's property, so the script asks instead of assuming.
+    if command -v mariadb-dump >/dev/null 2>&1; then
+        dump_command=mariadb-dump
+    elif command -v mysqldump >/dev/null 2>&1; then
+        dump_command=mysqldump
+    else
+        echo "bin/deploy: no mariadb-dump and no mysqldump – aborting." >&2
+        exit 1
+    fi
+
     echo "bin/deploy: backing up ${database} to ${dump}."
-    mysqldump "$database" > "$dump.partial"
+    "$dump_command" "$database" > "$dump.partial"
     mv "$dump.partial" "$dump"
 
     if [ "$(find backups -maxdepth 1 -name '*.sql' -mtime -7 | wc -l)" -gt 0 ]; then
