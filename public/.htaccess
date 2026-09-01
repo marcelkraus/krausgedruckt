@@ -107,7 +107,11 @@ Options -Indexes
     # host that adds none leaves the promise where it is made.
     #
     # Only over HTTPS: a browser ignores the header on a plain request, and
-    # sending it there states something that is not true. The condition holds
-    # behind a reverse proxy that passes the scheme on.
-    Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+    # sending it there states something that is not true.
+    #
+    # The scheme has to come from the forwarded header. `%{HTTPS}` is a mod_ssl
+    # variable, and behind the proxy there is no mod_ssl to set it – a
+    # condition on it is never true, so the header never goes out at all. It
+    # reads as working, which is why this says so.
+    Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTP:X-Forwarded-Proto} == 'https'"
 </IfModule>
