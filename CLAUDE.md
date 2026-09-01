@@ -470,9 +470,17 @@ Directories held by an empty `.gitignore`:
 
 ## Deployment
 
-Server directory `~/html/krausgedruckt`, on the account `kraus`, host `menkar`.
-Mechanism, deploy keys, the migration dump and the mailer are in
-`../docs/DEPLOYMENT.md`.
+Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host
+`nix`. Mechanism, deploy keys, the migration dump and the mailer are in
+`../docs/DEPLOYMENT.md`. The database is `krswrk_krausgedruckt`; the account
+prefix is compulsory there, `CREATE DATABASE krausgedruckt` is refused.
+
+**The mail stayed where it was.** The MX record points at `menkar`, and the
+domain is registered for mail on the account the site left – so it must
+**never** be registered for mail on the one it runs on now. The local MTA would
+then treat it as local, and `mail@krausgedruckt.de` would land in a mailbox
+nobody reads instead of reaching the MX. Sending is unaffected: SPF authorises
+every Uberspace host.
 
 **Two things do not travel with the repository.** A fresh server is not complete
 after a clone:
