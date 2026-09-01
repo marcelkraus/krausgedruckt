@@ -47,7 +47,8 @@ final class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('krausgedruckt:admin');
+            ->setTitle('krausgedruckt:admin')
+            ->setFaviconPath('favicon.svg');
     }
 
     public function configureMenuItems(): iterable
