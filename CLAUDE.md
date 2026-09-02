@@ -1,8 +1,12 @@
 # krausgedruckt
 
-Shared rules that apply here: `../docs/WEB_STACK.md`, `../docs/DEPLOYMENT.md`,
-`../docs/BRAND_FAMILY.md`. This document carries only what is true of this
-project alone.
+This project lives in the krauswerk, in the group Brand Family, and this
+document is not complete on its own. The rules it follows stand a level up –
+`../../docs/WEB_STACK.md`, `../../docs/DEPLOYMENT.md` and the group's
+`../docs/BRAND_FAMILY.md` – and a session inside the workspace has the
+`CLAUDE.md` of the workspace and of the group loaded. Read alone, in a
+repository cloned elsewhere, it lacks that context. This document carries only
+what is true of this project alone.
 
 ## Overview
 
@@ -347,7 +351,7 @@ sibling brand: same height, same baseline, only mark and color differ.
 
 ## Contact form
 
-The mechanism is in `../docs/WEB_STACK.md`. Specific here:
+The mechanism is in `../../docs/WEB_STACK.md`. Specific here:
 
 * **Five fields:** `name`, `email`, `phone`, `discountCode`, `message`. **The
   two required ones open the form and the optional ones follow**, because a
@@ -472,14 +476,14 @@ Directories held by an empty `.gitignore`:
 
 Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host
 `nix`. Mechanism, deploy keys, the migration dump and the mailer are in
-`../docs/DEPLOYMENT.md`. The database is `krswrk_krausgedruckt`; the account
+`../../docs/DEPLOYMENT.md`. The database is `krswrk_krausgedruckt`; the account
 prefix is compulsory there, `CREATE DATABASE krausgedruckt` is refused.
 
 **The mail stayed where it was.** The MX record points at `menkar`, and the
 domain is registered for mail on the account the site left – so it must
 **never** be registered for mail on the one it runs on now. The local MTA would
 then treat it as local, and `mail@krausgedruckt.de` would land in a mailbox
-nobody reads instead of reaching the MX. Sending is unaffected: SPF authorises
+nobody reads instead of reaching the MX. Sending is unaffected: SPF authorizes
 every Uberspace host.
 
 **Two things do not travel with the repository.** A fresh server is not complete
