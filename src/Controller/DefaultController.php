@@ -149,7 +149,7 @@ final class DefaultController extends AbstractController
             ]);
         }
 
-        // A transport failure must not cost the enquiry and must not hand a
+        // A transport failure must not cost the inquiry and must not hand a
         // visitor a bare error page: the sendmail DSN has two documented ways
         // of being wrong on this host, and Apache replaces the Symfony error
         // page with its own.
