@@ -95,7 +95,7 @@ Three carry rules rather than just markup:
   **without** one stays inert, because a growing shadow is a promise of a click.
 * **`_conversion_band`** has three shapes: plain band, `boxed` as an inset card,
   and – with an `image` – a two column block with a picture. Its `actions` block
-  defaults to the enquiry button; a page whose closing action is something else
+  defaults to the inquiry button; a page whose closing action is something else
   embeds it and overrides the block, so ground, measurements and rhythm still
   come from one place.
 
