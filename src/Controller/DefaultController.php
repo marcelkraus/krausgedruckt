@@ -308,8 +308,11 @@ final class DefaultController extends AbstractController
         // of a corpus – and blocking it would do the opposite of what it looks
         // like. The link stands in the footer of every page, so a crawler that
         // may not fetch it never learns that the address is a redirect, and it
-        // can keep the bare address in the index. Fetched, it follows the 301
-        // and drops the address instead.
+        // can keep the bare address in the index. Fetched, it follows the
+        // redirect and knows where the address leads. The route answers 302
+        // rather than 301, so the address can sit in the index longer than a
+        // permanent redirect would leave it – but then as one whose target is
+        // known, not one nothing is known about.
         $disallowed = [
             '/kontakt-per-email',
             '/kontakt-per-whats-app',

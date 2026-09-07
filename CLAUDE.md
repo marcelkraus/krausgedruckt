@@ -430,6 +430,19 @@ pages carry none** – the benefit is limited to image search.
 sitemap lists the public pages and every visible reference; legal pages, the
 confirmation and the adVintage landing page stay out.
 
+The robots.txt disallows exactly the two routes whose Location header holds the
+mail address – `/kontakt-per-email` and `/kontakt-per-whats-app`. A crawler
+that fetches one of them takes the address into its corpus, and those corpora
+are where address lists come from.
+
+**`/bewerten` does not belong in that list**, although it is built the same
+way. Its header holds a public Google address, so there is nothing to keep out
+of a corpus, and blocking it works against the index rather than for it: the
+link stands in the footer of every page, so a crawler barred from fetching it
+never learns that the address is a redirect and can hold it bare. It is the
+rule the legal pages stand on – a path a crawler may not fetch is a path it
+learns nothing about.
+
 Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 the eyebrow with its square marker at the top left, the logo lockup below it, a
 two line claim in `neutral-600`, and the domain with the location as a mono line
