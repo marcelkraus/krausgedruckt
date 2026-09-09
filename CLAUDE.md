@@ -1,13 +1,5 @@
 # krausgedruckt
 
-This project lives in the krauswerk, in the group Brand Family, and this
-document is not complete on its own. The rules it follows stand a level up –
-`../../docs/WEB_STACK.md`, `../../docs/DEPLOYMENT.md` and the group's
-`../docs/BRAND_FAMILY.md` – and a session inside the workspace has the
-`CLAUDE.md` of the workspace and of the group loaded. Read alone, in a
-repository cloned elsewhere, it lacks that context. This document carries only
-what is true of this project alone.
-
 ## Overview
 
 Business website for **krausgedruckt** – the 3D printing branch of Marcel
