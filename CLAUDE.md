@@ -484,12 +484,11 @@ Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host
 `../../docs/DEPLOYMENT.md`. The database is `krswrk_krausgedruckt`; the account
 prefix is compulsory there, `CREATE DATABASE krausgedruckt` is refused.
 
-**The mail stayed where it was.** The MX record points at `menkar`, and the
-domain is registered for mail on the account the site left – so it must
-**never** be registered for mail on the one it runs on now. The local MTA would
-then treat it as local, and `mail@krausgedruckt.de` would land in a mailbox
-nobody reads instead of reaching the MX. Sending is unaffected: SPF authorizes
-every Uberspace host.
+**The mail is on the same account.** The MX record points at
+`in-mx.uberspace.de`, and `krausgedruckt.de` is registered for mail on
+`krswrk`, so `mail@krausgedruckt.de` is a mailbox of that account and the
+contact form delivers locally. The sender is not this domain – see “The sender
+on `krswrk`” in `../../docs/DEPLOYMENT.md`.
 
 **Two things do not travel with the repository.** A fresh server is not complete
 after a clone:
