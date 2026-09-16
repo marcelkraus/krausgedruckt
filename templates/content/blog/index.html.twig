@@ -1,37 +1,36 @@
+{# The overview of the blog: every post of the channel as a card, newest
+   first, the way the references were listed.
+   Expects: posts. #}
 {% extends 'base.html.twig' %}
-{% import 'partials/_icons.html.twig' as icons %}
 
-{% block title %}Referenzen · krausgedruckt von Marcel Kraus{% endblock %}
-{% block meta_description %}Ein Einblick in unsere bunte Welt: gedruckte Ersatzteile, Werkzeuge und Dekostücke aus der Werkstatt von krausgedruckt in Erftstadt bei Köln.{% endblock %}
+{% block title %}Blog · krausgedruckt von Marcel Kraus{% endblock %}
+{% block meta_description %}Einblicke in unsere kleine Druckfarm in Erftstadt bei Köln: gedruckte Ersatzteile, Werkzeuge und Dekostücke von krausgedruckt.{% endblock %}
 
 {% block main %}
     <section class="border-b border-neutral-200 bg-surface-warm pt-20">
         <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-            <div class="max-w-2xl">
-                {{ include('partials/_eyebrow.html.twig', { text: 'Referenzen' }) }}
+            <div class="max-w-3xl">
+                {{ include('partials/_eyebrow.html.twig', { text: 'Blog' }) }}
                 <h1 class="mt-5 font-display text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
-                    Unsere Referenzen.
-                    <span class="mt-3 block text-[0.8em] text-accent-on-light">Ein kleiner Einblick in unsere bunte Welt.</span>
+                    Druckfrisch präsentiert.
+                    <span class="mt-3 block text-[0.8em] text-accent-on-light">Bunte Einblicke in unsere kleine Druckfarm.</span>
                 </h1>
             </div>
         </div>
     </section>
 
     <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
-        <h2 class="sr-only">Alle Referenzen</h2>
-        {% if references %}
+        <h2 class="sr-only">Alle Beiträge</h2>
+        {% if posts %}
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {% for reference in references %}
-                    {{ include('partials/_reference_card.html.twig', { reference: reference }) }}
+                {% for post in posts %}
+                    {{ include('partials/_post_card.html.twig', { post: post }, with_context = false) }}
                 {% endfor %}
             </div>
         {% else %}
             <p class="text-base leading-relaxed text-neutral-600">Hier ist gerade nichts zu sehen – wir arbeiten daran.</p>
         {% endif %}
 
-        {# Der Bezug ist echt, nicht dekorativ: Aus jeder Referenz baut das
-           Backend eine Instagram-Bildunterschrift – die Referenzen sind die
-           Beiträge. Wer hier durch ist, findet dort die Fortsetzung. #}
         <div class="mt-12">
             {{ include('partials/_link_arrow.html.twig', {
                 href: instagram_url,

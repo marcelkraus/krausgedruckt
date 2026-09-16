@@ -1,0 +1,180 @@
+{
+    "date": "2026-09-10T10:00:00+02:00",
+    "headline": "Jeder Block einmal",
+    "teaser": "Ein Testbeitrag mit *allen* acht Blöcken.",
+    "meta_title": "Jeder Block einmal",
+    "meta_description": "Ein Testbeitrag mit allen acht Blöcken.",
+    "category": "Referenzen",
+    "slug": "jeder-block-einmal",
+    "cover_image": {
+        "type": "image",
+        "alt": "Ein gedrucktes Teil, Ansicht 1",
+        "caption": null,
+        "credit": null,
+        "sources": [
+            {
+                "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/small.jpg",
+                "width": 480,
+                "height": 270
+            },
+            {
+                "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/medium.jpg",
+                "width": 960,
+                "height": 540
+            },
+            {
+                "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/large.jpg",
+                "width": 1920,
+                "height": 1080
+            }
+        ]
+    },
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "Ein Absatz mit **fettem** Text und einem [internen Link](/kontakt)."
+        },
+        {
+            "type": "paragraph",
+            "text": "[Kundenbewertung bei Google](https://www.google.com/maps)"
+        },
+        {
+            "type": "paragraph",
+            "text": "[Schreib uns](/kontakt)"
+        },
+        {
+            "type": "heading",
+            "level": 2,
+            "text": "Eine Überschrift"
+        },
+        {
+            "type": "list",
+            "style": "bullet",
+            "items": [
+                "Erster Punkt",
+                "Zweiter Punkt"
+            ]
+        },
+        {
+            "type": "quote",
+            "text": "Das ist ein Zitat.",
+            "source": "Eine Kundin"
+        },
+        {
+            "type": "image",
+            "alt": "Ein gedrucktes Teil, Ansicht 2",
+            "caption": "Bildunterschrift 2",
+            "credit": "Fotograf 2",
+            "sources": [
+                {
+                    "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/small.jpg",
+                    "width": 480,
+                    "height": 620
+                },
+                {
+                    "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/medium.jpg",
+                    "width": 960,
+                    "height": 1240
+                },
+                {
+                    "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/large.jpg",
+                    "width": 1084,
+                    "height": 1400
+                }
+            ]
+        },
+        {
+            "type": "gallery",
+            "images": [
+                {
+                    "type": "image",
+                    "alt": "Ein gedrucktes Teil, Ansicht 3",
+                    "caption": null,
+                    "credit": null,
+                    "sources": [
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c25-7433-a2c8-84b940e2a416/small.jpg",
+                            "width": 480,
+                            "height": 270
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c25-7433-a2c8-84b940e2a416/medium.jpg",
+                            "width": 960,
+                            "height": 540
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c25-7433-a2c8-84b940e2a416/large.jpg",
+                            "width": 1920,
+                            "height": 1080
+                        }
+                    ]
+                },
+                {
+                    "type": "image",
+                    "alt": "Ein gedrucktes Teil, Ansicht 4",
+                    "caption": null,
+                    "credit": null,
+                    "sources": [
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/small.jpg",
+                            "width": 480,
+                            "height": 270
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/medium.jpg",
+                            "width": 960,
+                            "height": 540
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/large.jpg",
+                            "width": 1920,
+                            "height": 1080
+                        }
+                    ]
+                },
+                {
+                    "type": "image",
+                    "alt": "Ein gedrucktes Teil, Ansicht 5",
+                    "caption": "Bildunterschrift 5",
+                    "credit": "Fotograf 5",
+                    "sources": [
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/small.jpg",
+                            "width": 480,
+                            "height": 620
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/medium.jpg",
+                            "width": 960,
+                            "height": 1240
+                        },
+                        {
+                            "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/large.jpg",
+                            "width": 1084,
+                            "height": 1400
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "details",
+            "items": [
+                {
+                    "label": "Farbe <b>",
+                    "value": "PLA, *schwarz*"
+                },
+                {
+                    "label": "Druckzeit",
+                    "value": "3 Stunden, [anfragen](/kontakt)"
+                }
+            ]
+        },
+        {
+            "type": "embed",
+            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "provider": "youtube",
+            "key": "dQw4w9WgXcQ"
+        }
+    ]
+}

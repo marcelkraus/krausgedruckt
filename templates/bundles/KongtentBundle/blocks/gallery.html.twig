@@ -1,0 +1,20 @@
+{# **This site's version.** Two columns of square tiles, each picture with its
+   own caption line, so every picture keeps what the library says about it.
+   `not-prose`, because the plugin would space the figures a second time. #}
+<ul class="not-prose my-8 grid grid-cols-2 gap-3" role="list">
+    {% for image in block.images %}
+        {% set picture = image.picture %}
+        <li>
+            <figure>
+                <img class="aspect-square w-full rounded-xl object-cover" src="{{ picture.getUrl() }}"{% if picture.getSourceSet() %} srcset="{{ picture.getSourceSet() }}" sizes="(min-width: 51rem) 24rem, 50vw"{% endif %} width="{{ picture.getWidth() }}" height="{{ picture.getHeight() }}" alt="{{ picture.alternativeText }}" loading="lazy" decoding="async">
+                {% if picture.caption or picture.credit %}
+                    <figcaption class="mt-2 text-xs leading-relaxed text-neutral-600">
+                        {{- picture.caption -}}
+                        {%- if picture.caption and picture.credit %} · {% endif -%}
+                        {%- if picture.credit %}Foto: {{ picture.credit }}{% endif -%}
+                    </figcaption>
+                {% endif %}
+            </figure>
+        </li>
+    {% endfor %}
+</ul>

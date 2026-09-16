@@ -3,8 +3,8 @@
    every card, whatever sits inside it.
 
    Embedded rather than included: the picture and the running text differ per
-   case (a reference needs a <picture> with two formats, the landing page a
-   plain <img>), the shell around them does not. Blocks keep the two apart
+   case (a post brings a cover with its sizes, the landing page a plain
+   <img>), the shell around them does not. Blocks keep the two apart
    without the shell having to know the cases.
 
    A card with a target is one click target, not three. The heading link is
@@ -14,7 +14,9 @@
    promise. A card without a target stays inert.
 
    Params: title, href (optional – without a target the heading is plain
-   text), meta (optional, the mono line at the foot), external (optional).
+   text), meta (optional, the mono line at the foot), datetime (optional – the
+   machine-readable date, which sets the meta line in <time>), external
+   (optional).
    Blocks: media, body. #}
 {% set has_target = href|default(null) %}
 <article class="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm{% if has_target %} relative transition-shadow hover:shadow-lg hover:shadow-neutral-200/60{% endif %}{% if class is defined and class %} {{ class }}{% endif %}">
@@ -32,7 +34,9 @@
         {% block body %}{% endblock %}
 
         {% if meta|default(null) %}
-            <p class="mt-4 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">{{ meta }}</p>
+            <p class="mt-4 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">
+                {%- if datetime|default(null) %}<time datetime="{{ datetime }}">{{ meta }}</time>{% else %}{{ meta }}{% endif -%}
+            </p>
         {% endif %}
     </div>
 </article>

@@ -1,0 +1,32 @@
+{# Binds a post of the blog to the card shell. Shared by the homepage teaser
+   and the overview so the two cannot drift apart.
+
+   The cover is cut to 4:3 at every width: kongtent keeps one picture, not a
+   portrait and a landscape cut. The date is printed with `timezone: false`,
+   as in the head of the post: it carries the offset out of the payload, and
+   a post dated just after midnight would otherwise stand under the day
+   before. The teaser loses its links: the heading link covers the whole
+   card, and a link beneath it could be focused but never clicked.
+   Expects: post. #}
+{% embed 'partials/_card.html.twig' with {
+    class: class|default(''),
+    href: path('app_blog_post', { year: post.getYear(), slug: post.slug }),
+    title: post.headline,
+    meta: post.date|format_datetime(pattern: 'd. MMMM yyyy', locale: 'de', timezone: false),
+    datetime: post.date|date('Y-m-d', false),
+    picture: post.coverImage,
+    teaser: post.teaser
+} only %}
+    {% block media %}
+        {% if picture %}
+            <img class="aspect-4/3 w-full object-cover" src="{{ picture.getUrl() }}"{% if picture.getSourceSet() %} srcset="{{ picture.getSourceSet() }}" sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 50vw, 100vw"{% endif %} width="{{ picture.getWidth() }}" height="{{ picture.getHeight() }}" alt="{{ picture.alternativeText }}" loading="lazy">
+        {% endif %}
+    {% endblock %}
+
+    {% block body %}
+        {# `flex-1` so the footer line sits at the same height across every
+           card in a row. The teaser went through the converter, so without
+           its tags it is escaped text. #}
+        <p class="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-neutral-600">{{ teaser|striptags|raw }}</p>
+    {% endblock %}
+{% endembed %}

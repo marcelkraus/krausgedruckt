@@ -345,6 +345,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     enable_profiler?: bool|Param, // Whether or not to enable the profiler collector to calculate and visualize migration status. This adds some queries overhead. // Default: false
  *     transactional?: bool|Param, // Whether or not to wrap migrations in a single transaction. // Default: true
  * }
+ * @psalm-type KongtentConfig = array{
+ *     cache?: string|Param, // Default: "cache.app"
+ *     http_client?: string|Param, // Default: "http_client"
+ *     key?: string|Param,
+ *     url?: string|Param,
+ * }
  * @psalm-type LiipImagineConfig = array{
  *     resolvers?: array<string, array{ // Default: []
  *         web_path?: array{
@@ -788,7 +794,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     disallow_search_engine_index?: bool|Param, // Enabled by default when debug is enabled. // Default: true
  *     http_client?: bool|array{ // HTTP Client configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         max_host_connections?: int|Param, // The maximum number of connections to a single host.
  *         default_options?: array{
  *             headers?: array<string, mixed>,
@@ -1607,6 +1613,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     services?: ServicesConfig,
  *     doctrine?: DoctrineConfig,
  *     doctrine_migrations?: DoctrineMigrationsConfig,
+ *     kongtent?: KongtentConfig,
  *     liip_imagine?: LiipImagineConfig,
  *     framework?: FrameworkConfig,
  *     monolog?: MonologConfig,
@@ -1621,6 +1628,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         services?: ServicesConfig,
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
+ *         kongtent?: KongtentConfig,
  *         liip_imagine?: LiipImagineConfig,
  *         framework?: FrameworkConfig,
  *         monolog?: MonologConfig,
@@ -1636,6 +1644,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         services?: ServicesConfig,
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
+ *         kongtent?: KongtentConfig,
  *         liip_imagine?: LiipImagineConfig,
  *         framework?: FrameworkConfig,
  *         monolog?: MonologConfig,
@@ -1651,6 +1660,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         services?: ServicesConfig,
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
+ *         kongtent?: KongtentConfig,
  *         liip_imagine?: LiipImagineConfig,
  *         framework?: FrameworkConfig,
  *         monolog?: MonologConfig,

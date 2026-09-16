@@ -59,6 +59,9 @@
             "config/routes/easyadmin.yaml"
         ]
     },
+    "krausgebaut/kongtent-bundle": {
+        "version": "dev-main"
+    },
     "liip/imagine-bundle": {
         "version": "2.17",
         "recipe": {

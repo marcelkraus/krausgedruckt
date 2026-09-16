@@ -1,0 +1,14 @@
+{# **This site's version.** A term list is the data of a print – printer,
+   material, model – and is set as rows: the name in the mono label voice,
+   the value in the body face, because a value can be a model title with a
+   link and would not read in capitals. On a phone the name stands above the
+   value. The value went through the converter and is printed raw; the name
+   is text. #}
+<dl class="not-prose my-8 divide-y divide-neutral-200 border-y border-neutral-200">
+    {% for item in block.items %}
+        <div class="py-3 sm:flex sm:items-baseline sm:gap-6">
+            <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600 sm:w-40 sm:shrink-0">{{ item.label }}</dt>
+            <dd class="mt-1 min-w-0 break-words leading-relaxed text-neutral-700 sm:mt-0" data-generated>{{ item.html|raw }}</dd>
+        </div>
+    {% endfor %}
+</dl>
