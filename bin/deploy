@@ -57,6 +57,75 @@ for setting in CONTACT_TO CONTACT_FROM; do
     fi
 done
 
+# The value of a setting as Dotenv reads it: the last line that sets it, which
+# may be indented and carry an `export`, a pair of quotes and a comment.
+dotenv_value() {
+    local value double single
+    double='^"([^"]*)"[[:space:]]*(#.*)?$'
+    single="^'([^']*)'[[:space:]]*(#.*)?\$"
+    value=$(grep -hE "^[[:space:]]*(export[[:space:]]+)?$1=" "$2" 2>/dev/null | tail -1 | cut -d= -f2- | tr -d '\r' || true)
+    if [[ "$value" =~ $double ]] || [[ "$value" =~ $single ]]; then
+        value="${BASH_REMATCH[1]}"
+    else
+        value="${value%%[[:space:]]#*}"
+        value="${value%"${value##*[![:space:]]}"}"
+    fi
+    printf '%s' "$value"
+}
+
+# Whether an address names a host only this machine or a private network
+# reaches: a name without a dot, a local, test or reserved name, a loopback,
+# private, shared or link-local IPv4 address, an IPv4 address in any but the
+# plain dotted form, or any IPv6 literal. A host counts as an IPv4 address when
+# its last label is a number, as a browser reads it.
+private_host() {
+    local host octet
+    host=$(printf '%s' "$1" | sed -E 's#^[a-zA-Z]+://##; s#[/?#].*$##; s#^[^@]*@##' | tr '[:upper:]' '[:lower:]')
+    if [[ "$host" == \[* ]]; then
+        return 0
+    fi
+    host="${host%%:*}"
+    while [[ "$host" == *. ]]; do
+        host="${host%.}"
+    done
+    if [[ "$host" != *.* ]] || [[ "$host" =~ (^|\.)(localhost|local|lan|test|internal|invalid|example|home\.arpa|ddev\.site)$ ]]; then
+        return 0
+    fi
+    if [[ "$host" =~ ^(0|10|127)\. ]] || [[ "$host" =~ ^(169\.254|192\.168)\. ]] || [[ "$host" =~ ^172\.(1[6-9]|2[0-9]|3[01])\. ]] || [[ "$host" =~ ^100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\. ]]; then
+        return 0
+    fi
+    octet='(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])'
+    if [[ "$host" =~ (^|\.)(0x[0-9a-f]*|[0-9]+)$ ]] && ! [[ "$host" =~ ^$octet(\.$octet){3}$ ]]; then
+        return 0
+    fi
+    return 1
+}
+
+# The editorial system is reached with a key, under an address that `.env`
+# fills with the production one, so a server that does not override it is
+# correctly configured. What is checked is the value that takes effect: a
+# `.env.local` carried over from development can point at ddev or a private
+# host, and then every page that shows a post answers 500 – the start
+# page included. Only `https`, because over plain HTTP the key would travel
+# readable before the redirect.
+kongtent_url_file=.env
+if grep -qE '^[[:space:]]*(export[[:space:]]+)?KONGTENT_URL=' .env.local; then
+    kongtent_url_file=.env.local
+fi
+kongtent_url=$(dotenv_value KONGTENT_URL "$kongtent_url_file")
+if [[ ! "$kongtent_url" =~ ^https://[^[:space:]/]+ ]] || private_host "$kongtent_url"; then
+    echo "bin/deploy: the KONGTENT_URL in effect, from ${kongtent_url_file}, is no public https address – aborting." >&2
+    exit 1
+fi
+
+# Empty in `.env`, so an unset key is an unauthorized request rather than a
+# missing setting: kongtent answers 401 and the site reports a fault it did not
+# cause.
+if [[ ! "$(dotenv_value KONGTENT_KEY .env.local)" =~ ^[^[:space:]]+$ ]]; then
+    echo "bin/deploy: .env.local sets no KONGTENT_KEY – aborting." >&2
+    exit 1
+fi
+
 # `.env` carries APP_ENV=dev for development. Without an override the
 # auto-scripts of `composer install` build the cache for the wrong environment.
 if ! grep -qE '^APP_ENV=prod$' .env.local; then

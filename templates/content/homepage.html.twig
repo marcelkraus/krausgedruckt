@@ -49,8 +49,8 @@
 
                 <div class="mt-10 flex flex-wrap items-center gap-4">
                     {{ include('partials/_button.html.twig', { href: path('app_contact'), label: 'Jetzt anfragen' }, with_context = false) }}
-                    <a href="{{ path('app_references') }}" class="group inline-flex items-center gap-2 px-2 py-3.5 font-mono text-sm uppercase tracking-[0.15em] text-neutral-600 transition-colors hover:text-accent-on-light">
-                        Zu den Referenzen
+                    <a href="{{ path('app_blog') }}" class="group inline-flex items-center gap-2 px-2 py-3.5 font-mono text-sm uppercase tracking-[0.15em] text-neutral-600 transition-colors hover:text-accent-on-light">
+                        Zum Blog
                         <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('arrow', 'h-4 w-4') }}</span>
                     </a>
                 </div>
@@ -100,14 +100,14 @@
         </div>
     </section>
 
-    {# ── Referenzen ─────────────────────────────────────────────── #}
-    {% if references %}
+    {# ── Blog ───────────────────────────────────────────────────── #}
+    {% if posts %}
         <section class="border-y border-neutral-200 bg-surface-warm">
             <div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
                 <div class="max-w-2xl">
-                    {{ include('partials/_eyebrow.html.twig', { text: 'Referenzen' }) }}
-                    <h2 class="mt-5 font-display text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">Gedrucktes im Einsatz</h2>
-                    <p class="mt-5 text-lg leading-relaxed text-neutral-600">Ein kleiner Einblick in unsere bunte Welt – vom Ersatzteil über das Werkzeug bis zum Dekostück.</p>
+                    {{ include('partials/_eyebrow.html.twig', { text: 'Blog' }) }}
+                    <h2 class="mt-5 font-display text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">Neues aus dem Drucker</h2>
+                    <p class="mt-5 text-lg leading-relaxed text-neutral-600">Unser Blog gibt dir einen kleinen Einblick in unsere bunte Welt – ob Referenzen, Gedanken oder Updates in der Druckfarm.</p>
                 </div>
 
                 <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -115,18 +115,18 @@
                        Rather than leaving the third one alone on its own row,
                        that width shows two: the section is a teaser, and the
                        link below it leads to all of them anyway. #}
-                    {% for reference in references %}
-                        {{ include('partials/_reference_card.html.twig', {
-                            reference: reference,
+                    {% for post in posts %}
+                        {{ include('partials/_post_card.html.twig', {
+                            post: post,
                             class: loop.index > 2 ? 'sm:hidden lg:flex' : ''
-                        }) }}
+                        }, with_context = false) }}
                     {% endfor %}
                 </div>
 
                 <div class="mt-10">
                     {{ include('partials/_link_arrow.html.twig', {
-                        href: path('app_references'),
-                        label: 'Alle Referenzen ansehen',
+                        href: path('app_blog'),
+                        label: 'Alle Beiträge ansehen',
                     }, with_context = false) }}
                 </div>
             </div>
@@ -134,7 +134,7 @@
     {% endif %}
 
     {# ── Shop ───────────────────────────────────────────────────── #}
-    {# Der zweite Verkaufsweg, direkt hinter den Referenzen: Wer gerade
+    {# Der zweite Verkaufsweg, direkt hinter dem Blog-Abschnitt: Wer gerade
        Beispiele gesehen hat, teilt sich hier in „ich will etwas Eigenes“
        und „ich will sowas fertig“. #}
     {{ include('partials/_conversion_band.html.twig', {
@@ -152,7 +152,7 @@
     {# ── Ablauf (dunkel) ────────────────────────────────────────── #}
     {# Eine Stufe flacher als die übrigen Abschnitte: Seit die Schritte ohne
        Kasten auskommen, trägt dieser Block nur noch halb so viel Inhalt wie
-       etwa die Referenzen, bei gleicher Polsterung also doppelt so viel Luft
+       etwa der Blog-Abschnitt, bei gleicher Polsterung also doppelt so viel Luft
        je Zeile. Er bleibt trotzdem die dunkle Pause im Rhythmus. #}
     <section class="bg-neutral-950">
         <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
@@ -208,7 +208,7 @@
             </div>
         </div>
 
-        {# Dieselbe Karte wie bei den Referenzen: Bild randlos über die volle
+        {# Dieselbe Karte wie im Blog-Abschnitt: Bild randlos über die volle
            Breite, Text darunter. Runde Porträts in einem Kasten sind das
            generischste Teammuster überhaupt, und der Kasten konkurriert dort
            mit dem Foto statt es zu tragen. #}

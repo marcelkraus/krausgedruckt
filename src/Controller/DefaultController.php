@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Dto\ContactRequest;
 use App\Repository\FaqEntryRepository;
-use App\Repository\ReferenceRepository;
+use Krausgebaut\KongtentBundle\Client;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,10 +27,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class DefaultController extends AbstractController
 {
     /**
-     * The number of references the homepage teaser shows before it hands
-     * over to the overview page.
+     * The number of posts the homepage teaser shows before it hands over to
+     * the blog.
      */
-    private const HOMEPAGE_REFERENCE_LIMIT = 3;
+    private const HOMEPAGE_POST_LIMIT = 3;
 
     /**
      * A submission arriving sooner than this was not typed by a person.
@@ -64,10 +64,10 @@ final class DefaultController extends AbstractController
     }
 
     #[Route('/', name: 'app_homepage', methods: ['GET'])]
-    public function homepage(ReferenceRepository $referenceRepository): Response
+    public function homepage(Client $kongtent): Response
     {
         return $this->render('content/homepage.html.twig', [
-            'references' => $referenceRepository->findAllOrdered(self::HOMEPAGE_REFERENCE_LIMIT),
+            'posts' => array_slice($kongtent->all(), 0, self::HOMEPAGE_POST_LIMIT),
         ]);
     }
 
@@ -331,24 +331,24 @@ final class DefaultController extends AbstractController
     }
 
     #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'])]
-    public function sitemap(ReferenceRepository $referenceRepository): Response
+    public function sitemap(Client $kongtent): Response
     {
-        // The public pages plus every visible reference. The legal pages and
+        // The public pages plus every post of the blog. The legal pages and
         // the confirmation are noindex and stay out, and so does the landing
         // page, which is only meant to be reached through its own link.
         $locations = [
             [$this->generateUrl('app_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL), '1.0'],
-            [$this->generateUrl('app_references', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.8'],
+            [$this->generateUrl('app_blog', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.8'],
             [$this->generateUrl('app_faq', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.8'],
             [$this->generateUrl('app_app', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.6'],
             [$this->generateUrl('app_contact', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.6'],
         ];
 
-        foreach ($referenceRepository->findAllOrdered() as $reference) {
+        foreach ($kongtent->all() as $post) {
             $locations[] = [
                 $this->generateUrl(
-                    'app_reference_detail',
-                    ['year' => $reference->getYear(), 'slug' => $reference->getSlug()],
+                    'app_blog_post',
+                    ['year' => $post->getYear(), 'slug' => $post->slug],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ),
                 '0.7',
@@ -379,30 +379,6 @@ final class DefaultController extends AbstractController
     {
         return $this->render('content/app.html.twig', [
             'appStoreUrlMobile' => $this->getParameter('app.app_store_url_mobile'),
-        ]);
-    }
-
-    #[Route('/referenzen', name: 'app_references', methods: ['GET'])]
-    public function references(ReferenceRepository $referenceRepository): Response
-    {
-        $references = $referenceRepository->findAllOrdered();
-
-        return $this->render('content/references.html.twig', [
-            'references' => $references,
-        ]);
-    }
-
-    #[Route('/referenzen/{year}/{slug}', name: 'app_reference_detail', methods: ['GET'])]
-    public function referenceDetail(int $year, string $slug, ReferenceRepository $referenceRepository): Response
-    {
-        $reference = $referenceRepository->findByYearAndSlug($year, $slug);
-
-        if ($reference === null || $reference->isVisible() === false) {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->render('content/reference-detail.html.twig', [
-            'reference' => $reference,
         ]);
     }
 

@@ -1,0 +1,36 @@
+{
+    "content": [
+        {
+            "date": "2026-09-10T10:00:00+02:00",
+            "headline": "Jeder Block einmal",
+            "teaser": "Ein Testbeitrag mit *allen* acht Blöcken.",
+            "meta_title": "Jeder Block einmal",
+            "meta_description": "Ein Testbeitrag mit allen acht Blöcken.",
+            "category": "Referenzen",
+            "slug": "jeder-block-einmal",
+            "cover_image": {
+                "type": "image",
+                "alt": "Ein gedrucktes Teil, Ansicht 1",
+                "caption": null,
+                "credit": null,
+                "sources": [
+                    {
+                        "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/small.jpg",
+                        "width": 480,
+                        "height": 270
+                    },
+                    {
+                        "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/medium.jpg",
+                        "width": 960,
+                        "height": 540
+                    },
+                    {
+                        "url": "https://kongtent.example/media/01a059f7-3c2f-779c-ab4c-548b4eb6601c/large.jpg",
+                        "width": 1920,
+                        "height": 1080
+                    }
+                ]
+            }
+        }
+    ]
+}

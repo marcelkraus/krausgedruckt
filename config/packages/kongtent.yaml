@@ -1,0 +1,22 @@
+# The blog reads kongtent through the bundle. The key is a secret; the
+# address is the production system unless `.env.local` says otherwise.
+kongtent:
+    key: '%env(KONGTENT_KEY)%'
+    url: '%env(KONGTENT_URL)%'
+
+when@test:
+    # The suite never reaches the network: the answers come out of
+    # `tests/fixtures/kongtent/` and are held in memory only.
+    kongtent:
+        cache: kongtent.recorded_cache
+        http_client: kongtent.recorded_client
+        key: recorded
+        url: https://kongtent.example
+
+    services:
+        kongtent.recorded_cache:
+            class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        kongtent.recorded_client:
+            class: Symfony\Component\HttpClient\MockHttpClient
+            factory: ['Krausgebaut\KongtentBundle\Test\RecordedClient', 'fromDirectory']
+            arguments: ['%kernel.project_dir%/tests/fixtures/kongtent']

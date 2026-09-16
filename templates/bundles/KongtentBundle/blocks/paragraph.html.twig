@@ -1,0 +1,16 @@
+{# **This site's version.** A paragraph that is nothing but one link to
+   another site is set as the link with the arrow the site uses for every way
+   out – a customer review, a model – and opens in a new tab. A link within
+   this site – a path or an address on its own host – and a link among words
+   stay running text. #}
+{% set link = block.html|sole_external_link(app.request.host) %}
+{% if link %}
+    <p class="not-prose my-6">{{ include('partials/_link_arrow.html.twig', {
+        href: link.href,
+        label: link.label,
+        icon: 'external',
+        external: true,
+    }, with_context = false) }}</p>
+{% else %}
+    {{ block.html|raw }}
+{% endif %}

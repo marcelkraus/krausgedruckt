@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Repository\ReferenceRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -22,7 +21,8 @@ final class RouteSmokeTest extends WebTestCase
     {
         return [
             'Startseite' => ['/'],
-            'Referenzen' => ['/referenzen'],
+            'Blog' => ['/blog'],
+            'Blog-Beitrag' => ['/blog/2026/jeder-block-einmal'],
             'FAQ' => ['/haeufig-gestellte-fragen'],
             'Kontakt' => ['/kontakt'],
             'Impressum' => ['/impressum'],
@@ -41,6 +41,7 @@ final class RouteSmokeTest extends WebTestCase
     {
         return [
             'Bewerten' => ['/bewerten'],
+            'Referenzen' => ['/referenzen'],
             'Kontakt per E-Mail' => ['/kontakt-per-email'],
             'Kontakt per WhatsApp' => ['/kontakt-per-whats-app'],
         ];
@@ -62,21 +63,6 @@ final class RouteSmokeTest extends WebTestCase
         $client->request('GET', $path);
 
         self::assertResponseRedirects();
-    }
-
-    public function testReferenceDetailRenders(): void
-    {
-        $client = static::createClient();
-        $references = static::getContainer()->get(ReferenceRepository::class)->findAllOrdered();
-
-        if ($references === []) {
-            self::markTestSkipped('Ohne sichtbare Referenz gibt es keine Detailseite zu prüfen.');
-        }
-
-        $reference = $references[0];
-        $client->request('GET', sprintf('/referenzen/%s/%s', $reference->getYear(), $reference->getSlug()));
-
-        self::assertResponseIsSuccessful();
     }
 
     /**

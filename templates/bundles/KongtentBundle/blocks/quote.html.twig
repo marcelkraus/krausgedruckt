@@ -1,0 +1,8 @@
+{# **This site's version.** The quotation in the display face on an accent
+   rail, the speaker in the mono label voice beneath it. #}
+<figure class="not-prose my-10 border-l-2 border-accent pl-6">
+    <blockquote class="font-display text-xl leading-relaxed text-neutral-900 sm:text-2xl" data-generated>{{ block.html|raw }}</blockquote>
+    {% if block.source %}
+        <figcaption class="mt-4 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">{{ block.source }}</figcaption>
+    {% endif %}
+</figure>

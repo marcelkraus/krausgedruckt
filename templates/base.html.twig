@@ -43,6 +43,8 @@
     <meta name="twitter:description" content="{{ block('meta_description') }}">
     <meta name="twitter:image" content="{{ app.request.schemeAndHttpHost ~ asset(meta_image) }}">
 
+    <link rel="alternate" type="application/atom+xml" title="Blog · krausgedruckt" href="{{ path('app_blog_feed') }}">
+
     {% block structured_data %}{% endblock %}
 
     {% block stylesheets %}
@@ -85,7 +87,7 @@
        of the homepage. #}
     {% set nav_items = nav_items|default([
         { label: 'Übersicht', route: 'app_homepage', matches: ['app_homepage'] },
-        { label: 'Referenzen', route: 'app_references', matches: ['app_references', 'app_reference_detail'] },
+        { label: 'Blog', route: 'app_blog', matches: ['app_blog', 'app_blog_post'] },
         { label: 'App', route: 'app_app', matches: ['app_app'] },
         { label: 'FAQ', route: 'app_faq', matches: ['app_faq'] },
         { label: 'Shop', url: etsy_url, external: true }
