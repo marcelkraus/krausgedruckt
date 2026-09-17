@@ -1,5 +1,0 @@
-/* The copyable Instagram texts keep their line breaks and never overflow the card. */
-.instagram-copy-text {
-    white-space: pre-wrap;
-    word-break: break-word;
-}

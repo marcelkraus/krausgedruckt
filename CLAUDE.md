@@ -25,7 +25,7 @@ ddev exec bin/console doctrine:migrations:migrate
 bin/reinstall-db                             # full local reset
 ```
 
-`bin/reinstall-db` drops and recreates the database, runs the migrations, sweeps the uploaded reference images from `landscape/` and `portrait/` and loads the fixtures. **It excludes `.gitignore` from the sweep** – without that the reset removes the placeholders and the two directories fall out of the repository.
+`bin/reinstall-db` drops and recreates the database, runs the migrations and loads the fixtures.
 
 **The test database is built, not maintained by hand:**
 
@@ -39,20 +39,17 @@ It creates the database, runs the migrations and loads the fixtures. The two ski
 
 ```
 config/                advintage-landing-page.json and the Symfony configuration
-migrations/            nine Doctrine migrations
+migrations/            ten Doctrine migrations
 src/Controller/        DefaultController, BlogController – the frontend routes
-src/Controller/Admin/  Dashboard and the three CRUD controllers
-src/Entity/            Reference, Category, FaqEntry
+src/Controller/Admin/  Dashboard and the FAQ CRUD controller
+src/Entity/            FaqEntry, and the DTOs of the landing page
 src/Dto/               ContactRequest
-src/EventListener/     AdminLoginThrottleListener, ReferenceImageListener,
-                       SecurityHeadersListener
+src/EventListener/     AdminLoginThrottleListener, SecurityHeadersListener
 src/Security/          EnvironmentUserProvider
 src/Twig/              SoleLinkExtension
-src/Service/           ImageNormalizer, ReferenceImageNamer,
-                       InstagramCaptionBuilder, HashtagSorter
 templates/             base.html.twig, content/, admin/, partials/,
                        bundles/KongtentBundle/blocks/
-public/                css/, fonts/, images/, media/cache/, favicon.*
+public/                css/, fonts/, images/, favicon.*
 ```
 
 Partials: `_logo`, `_eyebrow`, `_icons`, `_card`, `_post_card` (shared by the homepage teaser and the overview of the blog), `_button`, `_button_class`, `_link_arrow`, `_contact_form`, `_conversion_band`, `_sibling_band`.
@@ -109,48 +106,23 @@ Database-backed: the FAQ uses `FaqEntryRepository::findAllOrdered()` (by `sortOr
 
 **The feed carries the full text** and asks kongtent once per post, because the list carries no blocks.
 
-**The backend is untouched.** The `reference` and `category` tables, their entities, EasyAdmin and the uploads stay as they were and are no longer shown on the site; when they go is Marcel's decision.
+**The references and their categories have no place in this project.** No entity, table, backend screen or upload stands for them; their addresses redirect, and a dump of both tables with the uploaded pictures is kept outside the workspace.
 
 ## Data model
 
-* **References, categories and FAQ entries** live in MariaDB – the references and categories only for the backend now, see „The blog“ – and are managed through EasyAdmin. Flow: database → Doctrine → entity → Twig.
+* **FAQ entries** live in MariaDB and are managed through EasyAdmin. Flow: database → Doctrine → entity → Twig.
 * **Landing pages** use JSON files in `config/`. Flow: JSON → Serializer → entity DTO → Twig.
-* `Reference`, `Category` and `FaqEntry` are full Doctrine entities with UUID v7 primary keys. `Source` is a Doctrine embeddable used inside `Reference` (column prefix `source_`). `PrintableModel`, `Image` and `ContactRequest` are pure DTOs without Doctrine mapping.
-
-### Reference (`reference` table)
-
-* UUID v7 primary key, lifecycle callbacks enabled
-* Content: `title`, `slug` (unique), `summary`, `description`
-* The slug is generated from the title while a reference is created – the field is disabled there – and can be edited freely afterwards. Changing it changes the address of the detail page. A pattern check keeps it URL-safe and `UniqueEntity` catches a collision before the database does
-* Images: `imageLandscape` / `imageFileLandscape` and `imagePortrait` / `imageFilePortrait`
-* Classification: `category` (ManyToOne, nullable), `material` and `printer` (enums, nullable)
-* Free tags: `hashtags` (nullable), the reference's own Instagram tags. **The setter owns the notation** – lower case, one leading hash per tag, no duplicates, alphabetical, joined with `", "` – so the field accepts a sloppy input and stores the form the comment needs. What normalizing cannot fix, a hyphen or a space inside a tag, a `Regex` constraint reports; `Assert\Length` guards the 255 characters of the column, because a longer value would reach the database as an exception instead of a form error. `getHashtagList()` hands the parsed list to the caption builder
-* Visibility: `isVisible`, defaults to `false`
-* Attribution: embedded `Source` (`title`, `url`, `author`, all optional)
-* Google rating: `ratingUrl` (nullable); timestamps `createdAt` (midnight on construction) and `updatedAt`
-* **Both images and the category are mandatory**, enforced at form validation only – the columns stay nullable so references predating the split can still be read. The images are checked through a callback that accepts either a freshly uploaded file or an already stored one, because VichUploader writes the file name while flushing, long after validation has run. A reference without a portrait image cannot be saved until one is supplied; that is intended
-
-### Category (`category` table)
-
-UUID v7 primary key, `name` and `slug` (unique). Same slug handling as the reference. **The slug is currently read nowhere** – no route and no template uses it.
+* `FaqEntry` is a full Doctrine entity with a UUID v7 primary key. `PrintableModel`, `Image` and `ContactRequest` are pure DTOs without Doctrine mapping.
 
 ### FaqEntry (`faq_entry` table)
 
 UUID v7 primary key, index on `sort_order`. Fields `question`, `answer`, `isVisible`, `sortOrder`, plus timestamps. Custom ordering through `sortOrder` with up/down buttons in the backend, which needs a `getSortButtons()` getter for EasyAdmin field rendering.
 
-### Enums
-
-* `App\Enum\Material`: ASA, FLEX, PA12-CF, PC, PC-CF, PETG, PLA
-* `App\Enum\Printer`: Prusa CORE One INDX, CORE One L, CORE One+, MINI+, MK4S, MK4S + MMU3; `isMultiColor()` is true for the INDX and the MMU3 variant
-* Both carry a `getHashtags()` method feeding the Instagram comment. **Keep the hashtags next to the case, never in a second place.**
-
 ## Backend
 
 EasyAdmin 5 at `/admin`.
 
-* **DashboardController** renders `templates/admin/dashboard.html.twig` with deep links into the reference and FAQ index pages; the menu holds Dashboard, Referenzen, Kategorien and FAQ
-* **ReferenceCrudController** – sorted by `createdAt` descending
-* **CategoryCrudController** – sorted by `name` ascending. A category that references point at cannot be deleted: the button is hidden through `displayIf()` and `deleteEntity()` refuses the request, so a hand-crafted call cannot run into a foreign key error either. **Use `ReferenceRepository::countByCategory()` for that check** – it counts through the criteria API, because a hand-written DQL comparison against the association silently returns zero for the UUID identifier
+* **DashboardController** renders `templates/admin/dashboard.html.twig` with a deep link into the FAQ index page; the menu holds Dashboard and FAQ
 * **FaqEntryCrudController** – sorted by `sortOrder` ascending, with custom up/down actions that swap the sort order of neighbors
 * All CRUD and field labels are German
 
@@ -171,27 +143,6 @@ Firewall `admin` covers `^/admin` and uses **HTTP Basic** with realm `krausgedru
 **Failed attempts are counted and then refused.** Symfony's `login_throttling` does not reach this firewall: it only covers authenticators it considers interactive, and HTTP Basic is not one – measured, not assumed. `App\EventListener\AdminLoginThrottleListener` spends the `admin_login` limiter instead: five failures per address per fifteen minutes, checked **before** the password is verified, so an exhausted budget refuses the correct password too. A successful login costs nothing, which matters because Basic sends the credential on every single request.
 
 **The check reads `getRemainingTokens()`, not `isAccepted()`.** Asking the limiter for zero tokens is always granted, so the accepted flag stays true long after the budget is gone.
-
-## Images
-
-Every reference carries two images, both capped at 1080 pixels wide, matching what Instagram accepts.
-
-| # | | Landscape | Portrait |
-| --- | --- | --- | --- |
-| 1 | Ratio | 5:4 | 4:5 |
-| 2 | Stored size | 1080 × 864 | 1080 × 1350 |
-| 3 | Directory | `public/images/references/landscape/` | `public/images/references/portrait/` |
-| 4 | Vich mapping | `reference_images_landscape` | `reference_images_portrait` |
-| 5 | Liip filter | `reference_landscape` | `reference_portrait` |
-
-* `Assert\Image` on the upload properties enforces the ratio with a tolerance of roughly one percent, a minimum size matching the target, a maximum of 12 MB and 30 megapixels, and restricts the type to JPEG, PNG and WebP. **Imagick never scales up**, so anything smaller than the target is rejected rather than interpolated
-* `App\EventListener\ReferenceImageListener` listens on VichUploader's `POST_UPLOAD` and `POST_REMOVE`. On upload it hands the stored file to `App\Service\ImageNormalizer`, which applies the EXIF rotation, crops to the target size, converts to sRGB and strips the remaining metadata. The uploaded original is replaced, there is no archive copy. Both events drop the rendered versions from the LiipImagine cache, because the file name stays the same when an image is replaced
-* `App\Service\ReferenceImageNamer` builds the filename as `<title-slug>-<uuid-without-dashes>.<extension>` for both mappings
-* VichUploader owns the file lifecycle and needs no help: `delete_on_update` removes the previous picture when a new one is uploaded, even when the title changed the file name in between, and `delete_on_remove` removes both files when the reference is deleted. Renaming without uploading leaves the file under its old name – cosmetic, nothing is lost
-* The admin list shows the landscape image. The site shows none of these images any more: the covers of the blog come from kongtent, one picture each, cut to 4:3 on the card and on the post at every width; on the post the cover is as wide as the text column below it, so it is never cropped further and the text starts on the first screen
-* In the Instagram preview, references without a portrait image fall back through `Reference::getImagePortraitPathWithFallback()`. Cached thumbnails land in `public/media/cache`
-* **Never call `Imagick::autoOrientImage()` or `Imagick::autoOrient()`.** The name depends on the ImageMagick major version – the sixth binding knows the former, the seventh the latter – so either one works in one environment and fatals in the other. The rotation always goes through `ImageNormalizer::applyOrientation()`, which maps the eight EXIF values onto `flipImage()`, `flopImage()` and `rotateImage()`
-* Known limitation: `Assert\Image` measures the physical pixels and ignores the EXIF orientation. A photo stored sideways is rejected with a ratio message rather than being rotated first
 
 ## Design
 
@@ -219,22 +170,6 @@ The mechanism is in `../../docs/WEB_STACK.md`. Specific here:
 * Mail goes out through `TemplatedEmail`
 * The legal mailbox is `mail+legal@krausgedruckt.de`
 
-## Instagram preview
-
-Read-only page reachable from the three-dot menu of a reference, rendered by `ReferenceCrudController::instagramPreview()` into `templates/admin/instagram-preview.html.twig`.
-
-**Instagram counts five hashtags per post, so the tags are split over two texts** and `App\Service\InstagramCaptionBuilder` builds both.
-
-`buildCaption()` assembles the post from three paragraphs: the `#ModellMontag` introduction with the title and the summary, the source sentence (only when all three source fields are set) and `POST_HASHTAGS`. Without a summary the introduction ends after the model name. That constant holds four tags – `#krausgedruckt #3ddruck #erftstadt #rheinerftkreis` – because the introduction already spends the fifth on `#ModellMontag`. **Its order is the published one and therefore not alphabetical**, the one place in this project where a constant list is not sorted.
-
-`buildHashtagComment()` builds the block that goes under the post as the first comment: `COMMENT_HASHTAGS` plus the printer, the material and the reference's own `hashtags`. Missing fields contribute nothing, duplicates are dropped, and **everything the caption already carries is subtracted** – `POST_HASHTAGS` and `INTRODUCTION_HASHTAG` alike, compared without regard to case, because Instagram reads a hashtag that way. No tag therefore appears twice.
-
-**Sorting runs through `App\Service\HashtagSorter`, never through `sort()`.** A byte comparison puts every umlaut behind the whole alphabet, and the tags may carry one; the sorter folds `ä ö ü ß` onto their base letters without a locale and without the intl extension. The entity uses the same sorter for what it stores, so the two orders cannot drift.
-
-**A tag belongs in `POST_HASHTAGS` only when it never varies.** A hashtag cannot carry a hyphen – Instagram ends the tag there, turning `#rhein-erft-kreis` into `#rhein` – so the joined spelling is correct, not a shortening.
-
-Both texts sit in a copyable block with a button next to it, paired through `data-instagram-copy-trigger` and `data-instagram-copy-source` so the script serves any number of them. The asynchronous clipboard API only exists in a secure context, so the button falls back to a hidden selection when the backend is opened over plain HTTP.
-
 ## SEO / meta
 
 Centralised in `base.html.twig`: `lang`, canonical, description, Open Graph and Twitter card, all overridable per page through the `title`, `meta_description`, `meta_robots` and `meta_image` blocks. `meta_image` is captured into a variable rather than printed where it is defined, because the card needs the path twice.
@@ -251,32 +186,28 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 
 ## Tests
 
-92 cases. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
+59 cases. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
 
 | # | File | Covers |
 | --- | --- | --- |
 | 1 | `tests/Controller/RouteSmokeTest.php` | every frontend route answers and carries exactly one `h1` |
 | 2 | `tests/Controller/ContactFormTest.php` | an invalid submission is refused with 422, names the field and sends nothing; a valid one redirects and sends exactly one mail; the confirmation takes the form's place; the discount code arrives from the query string; a filled honeypot and a tampered signature are dropped silently while a stale form is asked to resend |
 | 3 | `tests/Controller/BackendThrottleTest.php` | after the budget is spent the **correct** password is refused too – the only question a status code can answer here, because Basic returns 401 either way |
-| 4 | `tests/Entity/ReferenceHashtagsTest.php` | the hashtag notation of `Reference` |
-| 5 | `tests/Service/InstagramCaptionBuilderTest.php` | the two Instagram texts |
-| 6 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the old reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
-| 7 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
+| 4 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the old reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
+| 5 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
+| 6 | `tests/EventListener/SecurityHeadersListenerTest.php` | every public path carries the hardening headers, and the transport header follows the scheme |
 
-Files 4, 5 and 7 are **plain `TestCase`s without kernel and without database**, because the logic behind them is pure – that is what makes them cheap enough to pin every case rather than a sample. They carry the invariant the feature stands on: `testNoHashtagReachesInstagramTwice` compares the hashtags of the caption against those of the comment, folded to lower case.
+File 5 is a **plain `TestCase` without kernel and without database**, because the logic behind it is pure – that is what makes it cheap enough to pin every case rather than a sample.
 
-## Fixtures and empty directories
+## Fixtures
 
-`src/DataFixtures/` contains `CategoryFixtures`, `ReferenceFixtures` and `FaqEntryFixtures`. Load them with `ddev exec bin/console doctrine:fixtures:load`, or use `bin/reinstall-db`.
-
-Directories held by an empty `.gitignore`: `public/images/references/landscape/` and `public/images/references/portrait/`.
+`src/DataFixtures/` contains `FaqEntryFixtures`. Load them with `ddev exec bin/console doctrine:fixtures:load`, or use `bin/reinstall-db`.
 
 ## Static assets
 
 * Images: `public/images/`
 * Landing page images: `public/images/advintage-landing-page/`
 * Shop photo: `public/images/etsy-shop.jpg` (1080 × 1080, shop band)
-* Reference images: `public/images/references/landscape/` and `portrait/`
 * Logo: `templates/partials/_logo.html.twig` – a Twig partial, not an image
 * Sharing image: `public/images/sharing.jpg` (1200×630)
 
@@ -286,12 +217,7 @@ Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host `nix`
 
 **The mail is on the same account.** The MX record points at `in-mx.uberspace.de`, and `krausgedruckt.de` is registered for mail on `krswrk`, so `mail@krausgedruckt.de` is a mailbox of that account and the contact form delivers locally. The sender is not this domain – see “The sender on `krswrk`” in `../../docs/DEPLOYMENT.md`.
 
-**Two things do not travel with the repository.** A fresh server is not complete after a clone:
-
-1. **The database** – the migrations build the schema, the content needs a dump.
-2. **The uploaded reference images** – `landscape/` and `portrait/` are ignored, so only the two empty `.gitignore` placeholders and the fixture pictures are versioned. Without copying them across, every reference loses its picture.
-
-`public/media/cache/` does **not** need to travel; LiipImagine rebuilds it on demand. What it does need is a writable `public/media/`, writable upload directories and a writable `var/`.
+**The database does not travel with the repository.** A fresh server is not complete after a clone: the migrations build the schema, the FAQ needs a dump. What the server needs besides is a writable `var/`.
 
 ## Environment variables
 
@@ -317,4 +243,4 @@ The app is promoted for iOS only; there is no Mac badge and no variable for one.
 ## Open points
 
 1. **The test database is hand-loaded state, not a test fixture.** There is no transaction isolation, no fixture loading in `setUp()` and no migration run in the test environment. `bin/reinstall-db` runs against the development database, not `db_test`.
-2. **Most of `src/` is untested.** The image listener, the repositories, the admin controllers and the image services have no tests; `DefaultController` is touched through the smoke test and the blog through its own, and the only unit-tested ground is the Instagram caption with the hashtag notation of `Reference`.
+2. **Most of `src/` is untested.** The repository and the admin controllers have no tests; `DefaultController` is touched through the smoke test and the blog through its own.

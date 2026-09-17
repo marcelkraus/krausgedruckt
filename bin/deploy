@@ -136,12 +136,14 @@ fi
 git fetch --all
 git reset --hard origin/main
 
-composer install --no-dev --optimize-autoloader
-
-# The compiled container is moved aside rather than cleared. `cache:clear`
-# loads the existing container before it replaces it, so a release that drops
-# a bundle makes it die on a class that no longer exists – reproduced once,
-# and it takes the site down for the length of the fix.
+# The compiled container is moved aside rather than cleared, and it happens
+# **before** `composer install`. `cache:clear` loads the existing container
+# before it replaces it, so a release that drops a bundle makes it die on a
+# class that no longer exists – and `composer install` runs `cache:clear`
+# itself, through `@auto-scripts`, at the moment when the class is already
+# gone from `vendor/` and still named in the old container. Clearing after the
+# install is therefore too late: the packages are in place, but the install
+# script fails and aborts the deployment.
 #
 # Moved rather than deleted outright, because a plain `rm -rf` races the web
 # server: PHP-FPM writes into the directory while rm walks it and rm gives up
@@ -154,6 +156,8 @@ if [ -d var/cache/prod ]; then
     mv var/cache/prod "$discard"
     rm -rf "$discard" || true
 fi
+
+composer install --no-dev --optimize-autoloader
 
 bin/console cache:clear --env=prod --no-debug
 
