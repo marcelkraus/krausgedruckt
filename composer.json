@@ -9,27 +9,28 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "doctrine/doctrine-migrations-bundle": "^4.0",
-        "easycorp/easyadmin-bundle": "^5.5",
         "krausgebaut/kongtent-bundle": "dev-main",
-        "league/commonmark": "^2.4",
         "symfony/apache-pack": "*",
+        "symfony/asset": "8.1.*",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.1.*",
         "symfony/mailer": "8.1.*",
+        "symfony/mime": "8.1.*",
         "symfony/monolog-bundle": "^4.0",
+        "symfony/property-access": "8.1.*",
+        "symfony/property-info": "8.1.*",
         "symfony/rate-limiter": "8.1.*",
         "symfony/runtime": "8.1.*",
         "symfony/security-csrf": "8.1.*",
         "symfony/serializer": "8.1.*",
+        "symfony/translation": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/validator": "8.1.*",
         "symfony/yaml": "8.1.*",
         "twig/extra-bundle": "^3.23",
         "twig/intl-extra": "^3.23",
-        "twig/markdown-extra": "^3.8",
         "twig/twig": "^3.0"
     },
     "config": {
@@ -69,11 +70,6 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "test-db": [
-            "php bin/console doctrine:database:create --env=test --if-not-exists --quiet",
-            "php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet",
-            "php bin/console doctrine:fixtures:load --env=test --no-interaction --quiet"
         ]
     },
     "conflict": {
@@ -86,7 +82,6 @@
         }
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.3",
         "phpunit/phpunit": "^13.3",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*"

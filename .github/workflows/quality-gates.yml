@@ -1,9 +1,5 @@
 # The quality gates from CLAUDE.md, run by a machine instead of by hand.
 #
-# This one carries a database, so it differs from both sibling workflows in
-# exactly two places: the MariaDB service, and `composer test-db` before the
-# test run, which builds the schema the FAQ is read from.
-#
 # The rollout is the second job below. It waits for the gates, runs only on a
 # push to `main`, and reaches the Uberspace with a key that is restricted
 # there to exactly one command.
@@ -19,27 +15,6 @@ jobs:
     name: Lint, test and build
     runs-on: ubuntu-latest
 
-    services:
-      mariadb:
-        image: mariadb:10.11
-        env:
-          MARIADB_ROOT_PASSWORD: root
-          MARIADB_DATABASE: db
-          MARIADB_USER: db
-          MARIADB_PASSWORD: db
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="healthcheck.sh --connect --innodb_initialized"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-    env:
-      # The test environment appends `_test` to the database name, so this
-      # points at `db` and Doctrine creates `db_test` next to it.
-      DATABASE_URL: "mysql://root:root@127.0.0.1:3306/db?serverVersion=10.11.0-mariadb&charset=utf8mb4"
-
     steps:
       - uses: actions/checkout@v7
 
@@ -50,7 +25,7 @@ jobs:
           # from 8.4 up, but testing against a version that never ships means a
           # gate can stay green while the release stumbles.
           php-version: '8.5'
-          extensions: ctype, iconv, pdo_mysql
+          extensions: ctype, iconv
           coverage: none
 
       - name: Set up Node
@@ -85,9 +60,6 @@ jobs:
       - name: Lint PHP
         run: find src tests -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      - name: Build the test database
-        run: composer test-db
-
       - name: Test
         run: php bin/phpunit
 
@@ -103,13 +75,8 @@ jobs:
 
   # Rolling out is a second job, so it can only start once the gates are
   # green. The key it uses is restricted on the server to exactly one
-  # command – `cd ~/html/krausgedruckt && bin/deploy` – so a leaked secret
+  # command – `cd ~/www/html/krausgedruckt && bin/deploy` – so a leaked secret
   # buys a redeploy of what is already on `main`, and nothing else.
-  #
-  # This is the one project of the three whose deployment touches a database.
-  # What makes it safe to run unattended sits in `bin/deploy`, not here: a
-  # pending migration is dumped before it runs, so the step a code rollback
-  # cannot undo has a way back.
   deploy:
     name: Roll out
     needs: gates
