@@ -43,7 +43,7 @@ final class SecurityHeadersListenerTest extends WebTestCase
     /**
      * The one header that depends on how the request arrived, and the one the
      * listener may not set unconditionally. Over HTTPS it has to be there –
-     * the backend is reached with a password, and it goes over the first
+     * the contact form carries personal data, and it goes over the first
      * request there is. Over plain HTTP it must not be: a browser ignores it,
      * and sending it states something that is not true.
      */
