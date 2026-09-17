@@ -23,7 +23,7 @@ final class RouteSmokeTest extends WebTestCase
             'Startseite' => ['/'],
             'Blog' => ['/blog'],
             'Blog-Beitrag' => ['/blog/2026/jeder-block-einmal'],
-            'FAQ' => ['/haeufig-gestellte-fragen'],
+            'Häufig gestellte Fragen' => ['/haeufig-gestellte-fragen'],
             'Kontakt' => ['/kontakt'],
             'Impressum' => ['/impressum'],
             'Datenschutz' => ['/datenschutz'],

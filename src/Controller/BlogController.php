@@ -64,8 +64,9 @@ final class BlogController extends AbstractController
     {
         $post = $this->kongtent->one($slug);
 
-        // kongtent is asked for the slug alone, so the year is compared here.
-        if (null === $post || $post->getYear() !== $year) {
+        // kongtent is asked for the slug alone, so the year is compared here. A
+        // content that is not listed is a page of its own, never a post.
+        if (null === $post || false === $post->listed || $post->getYear() !== $year) {
             throw $this->createNotFoundException();
         }
 
