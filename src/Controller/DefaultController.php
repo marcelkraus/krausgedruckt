@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Dto\ContactRequest;
-use App\Repository\FaqEntryRepository;
+use Krausgebaut\KongtentBundle\Block\Block;
+use Krausgebaut\KongtentBundle\Block\HeadingBlock;
 use Krausgebaut\KongtentBundle\Client;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -382,13 +383,33 @@ final class DefaultController extends AbstractController
         ]);
     }
 
+    /**
+     * One content in kongtent, not listed: every heading opens a question and
+     * the blocks up to the next one are its answer. A heading without an
+     * answer and whatever stands before the first heading are dropped.
+     */
     #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
-    public function faq(FaqEntryRepository $faqEntryRepository): Response
+    public function faq(Client $kongtent): Response
     {
-        $faqEntries = $faqEntryRepository->findAllOrdered();
+        $page = $kongtent->one('haeufig-gestellte-fragen');
+
+        if (null === $page) {
+            throw $this->createNotFoundException();
+        }
+
+        /** @var list<array{question: HeadingBlock, answer: list<Block>}> $entries */
+        $entries = [];
+        foreach ($page->blocks as $block) {
+            if ($block instanceof HeadingBlock) {
+                $entries[] = ['question' => $block, 'answer' => []];
+            } elseif ([] !== $entries) {
+                $entries[\count($entries) - 1]['answer'][] = $block;
+            }
+        }
 
         return $this->render('content/faq.html.twig', [
-            'faqEntries' => $faqEntries,
+            'page' => $page,
+            'faqEntries' => array_values(array_filter($entries, static fn (array $entry): bool => [] !== $entry['answer'])),
         ]);
     }
 

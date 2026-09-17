@@ -4,7 +4,7 @@
 
 Business website for **krausgedruckt** – the 3D printing branch of Marcel Kraus's freelance work (https://www.krausgedruckt.de). It presents the services, the blog and the FAQ, and carries a contact form and a shop band.
 
-German only. The blog comes from kongtent; the FAQ entries live in MariaDB and are maintained through an EasyAdmin backend; everything else is markup or JSON.
+German only. The blog and the FAQ come from kongtent; everything else is markup or JSON. The `faq_entry` table and its EasyAdmin backend still stand but are read by nothing.
 
 **Voice:** the business speaks as „wir“ and addresses the customer as „du“. In the FAQ the customer speaks too, keeping „ich“ for itself and addressing the business as „ihr“ – the same word therefore moves in one entry and stays in the next. Routing uses German URLs throughout.
 
@@ -46,7 +46,7 @@ src/Entity/            FaqEntry, and the DTOs of the landing page
 src/Dto/               ContactRequest
 src/EventListener/     AdminLoginThrottleListener, SecurityHeadersListener
 src/Security/          EnvironmentUserProvider
-src/Twig/              SoleLinkExtension
+src/Twig/              PlainTextExtension, SoleLinkExtension
 templates/             base.html.twig, content/, admin/, partials/,
                        bundles/KongtentBundle/blocks/
 public/                css/, fonts/, images/, favicon.*
@@ -73,7 +73,7 @@ Defined in `src/Controller/DefaultController.php` and `src/Controller/BlogContro
 | 3 | `/app` | `app_app` | App Store landing page for the 3D-Druck-Kostenrechner |
 | 4 | `/bewerten` | `app_review` | Redirect to the Google review URL |
 | 5 | `/datenschutz` | `app_data_privacy` | Privacy policy |
-| 6 | `/haeufig-gestellte-fragen` | `app_faq` | FAQ, database-backed |
+| 6 | `/haeufig-gestellte-fragen` | `app_faq` | FAQ, one content out of kongtent |
 | 7 | `/impressum` | `app_imprint` | Imprint |
 | 8 | `/kontakt` | `app_contact` | Contact form (GET, POST) |
 | 9 | `/kontakt-per-email` | `app_contact_email` | Redirect to `mailto:` |
@@ -87,8 +87,6 @@ Defined in `src/Controller/DefaultController.php` and `src/Controller/BlogContro
 | 17 | `/sitemap.xml` | `app_sitemap` | Public pages plus every post |
 | 18 | `/admin` | `admin` | EasyAdmin dashboard |
 | 19 | `/admin/logout` | `admin_logout` | Logout, intercepted by the firewall |
-
-Database-backed: the FAQ uses `FaqEntryRepository::findAllOrdered()` (by `sortOrder` ascending).
 
 `/advintage` loads `config/advintage-landing-page.json` and deserialises to `PrintableModel[]`. **The path is anchored to `kernel.project_dir`:** a relative path resolves against the working directory, which holds for the web server and breaks in the test runner.
 
@@ -108,9 +106,14 @@ Database-backed: the FAQ uses `FaqEntryRepository::findAllOrdered()` (by `sortOr
 
 **The references and their categories have no place in this project.** No entity, table, backend screen or upload stands for them; their addresses redirect, and a dump of both tables with the uploaded pictures is kept outside the workspace.
 
+## The FAQ
+
+**The questions are one content in kongtent**, slug `haeufig-gestellte-fragen`, fixed in `DefaultController::faq()` and not listed – without it the page answers 404 – so the blog, the feed and the sitemap never see it, and `BlogController` refuses a content that is not listed as a post. Its head is the page's head: `headline` and `teaser` the title and its second line, `metaTitle` and `metaDescription` the document head.
+
+**Every heading opens a question, whatever its level, and the blocks up to the next one are its answer.** **An answer is expected to be text.** Every block renders, but the picture and gallery templates state the width of the blog column in `sizes`; a picture in a two-column card would load a size larger than it needs. A heading without an answer and whatever stands before the first heading are dropped without a word; the editor keeps the content in shape. The `FAQPage` data carries the text of every question and answer through `plain_text`, tags stripped and entities decoded.
+
 ## Data model
 
-* **FAQ entries** live in MariaDB and are managed through EasyAdmin. Flow: database → Doctrine → entity → Twig.
 * **Landing pages** use JSON files in `config/`. Flow: JSON → Serializer → entity DTO → Twig.
 * `FaqEntry` is a full Doctrine entity with a UUID v7 primary key. `PrintableModel`, `Image` and `ContactRequest` are pure DTOs without Doctrine mapping.
 
@@ -186,7 +189,7 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 
 ## Tests
 
-59 cases. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
+62 cases. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
 
 | # | File | Covers |
 | --- | --- | --- |
@@ -194,10 +197,11 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 | 2 | `tests/Controller/ContactFormTest.php` | an invalid submission is refused with 422, names the field and sends nothing; a valid one redirects and sends exactly one mail; the confirmation takes the form's place; the discount code arrives from the query string; a filled honeypot and a tampered signature are dropped silently while a stale form is asked to resend |
 | 3 | `tests/Controller/BackendThrottleTest.php` | after the budget is spent the **correct** password is refused too – the only question a status code can answer here, because Basic returns 401 either way |
 | 4 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the old reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
-| 5 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
-| 6 | `tests/EventListener/SecurityHeadersListenerTest.php` | every public path carries the hardening headers, and the transport header follows the scheme |
+| 5 | `tests/Controller/FaqTest.php` | every heading with an answer is a question in its order while the rest is dropped, an answer holds all of its blocks, the head comes from the content, the structured data carries the text of every answer, and a content that is not listed is no post |
+| 6 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
+| 7 | `tests/EventListener/SecurityHeadersListenerTest.php` | every public path carries the hardening headers, and the transport header follows the scheme |
 
-File 5 is a **plain `TestCase` without kernel and without database**, because the logic behind it is pure – that is what makes it cheap enough to pin every case rather than a sample.
+File 6 is a **plain `TestCase` without kernel and without database**, because the logic behind it is pure – that is what makes it cheap enough to pin every case rather than a sample.
 
 ## Fixtures
 
@@ -217,7 +221,7 @@ Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host `nix`
 
 **The mail is on the same account.** The MX record points at `in-mx.uberspace.de`, and `krausgedruckt.de` is registered for mail on `krswrk`, so `mail@krausgedruckt.de` is a mailbox of that account and the contact form delivers locally. The sender is not this domain – see “The sender on `krswrk`” in `../../docs/DEPLOYMENT.md`.
 
-**The database does not travel with the repository.** A fresh server is not complete after a clone: the migrations build the schema, the FAQ needs a dump. What the server needs besides is a writable `var/`.
+**The database does not travel with the repository.** A fresh server is not complete after a clone: the migrations build the schema. What the server needs besides is a writable `var/`.
 
 ## Environment variables
 

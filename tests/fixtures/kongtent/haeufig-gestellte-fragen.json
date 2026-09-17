@@ -1,0 +1,48 @@
+{
+    "date": "2026-09-17T09:09:00+02:00",
+    "headline": "Häufig gestellte Fragen.",
+    "teaser": "Du fragst, wir antworten.",
+    "meta_title": "Häufig gestellte Fragen",
+    "meta_description": "Antworten auf die häufigsten Fragen.",
+    "category": "Inhalte",
+    "slug": "haeufig-gestellte-fragen",
+    "listed": false,
+    "cover_image": null,
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "Vor der ersten Überschrift, fällt weg."
+        },
+        {
+            "type": "heading",
+            "level": 2,
+            "text": "Was kostet PLA & „PETG“?"
+        },
+        {
+            "type": "paragraph",
+            "text": "Das hängt [vom Modell](/kontakt) ab."
+        },
+        {
+            "type": "paragraph",
+            "text": "Frag uns einfach."
+        },
+        {
+            "type": "heading",
+            "level": 2,
+            "text": "Ohne Antwort"
+        },
+        {
+            "type": "heading",
+            "level": 3,
+            "text": "Welche Farben?"
+        },
+        {
+            "type": "list",
+            "style": "bullet",
+            "items": [
+                "Schwarz",
+                "Weiß"
+            ]
+        }
+    ]
+}
