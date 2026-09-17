@@ -9,12 +9,10 @@
         "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-imagick": "*",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "easycorp/easyadmin-bundle": "^5.5",
         "krausgebaut/kongtent-bundle": "dev-main",
         "league/commonmark": "^2.4",
-        "liip/imagine-bundle": "^2.17",
         "symfony/apache-pack": "*",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
@@ -32,8 +30,7 @@
         "twig/extra-bundle": "^3.23",
         "twig/intl-extra": "^3.23",
         "twig/markdown-extra": "^3.8",
-        "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^2.9"
+        "twig/twig": "^3.0"
     },
     "config": {
         "allow-plugins": {

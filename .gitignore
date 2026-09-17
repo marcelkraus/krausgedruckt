@@ -4,9 +4,6 @@
 /.claude/
 /backups/
 /node_modules
-/public/images/references/*.jpg
-/public/images/references/landscape/*
-/public/images/references/portrait/*
 ###< custom ###
 
 ###> symfony/framework-bundle ###
@@ -18,11 +15,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> liip/imagine-bundle ###
-/public/media/cache/
-###< liip/imagine-bundle ###
-
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/

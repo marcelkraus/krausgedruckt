@@ -2,9 +2,7 @@
 #
 # This one carries a database, so it differs from both sibling workflows in
 # exactly two places: the MariaDB service, and `composer test-db` before the
-# test run. Two tests need a visible reference to exist; without that step
-# they skip rather than fail, which reads as green on a machine that never
-# had the data.
+# test run, which builds the schema the FAQ is read from.
 #
 # The rollout is the second job below. It waits for the gates, runs only on a
 # push to `main`, and reaches the Uberspace with a key that is restricted
@@ -52,7 +50,7 @@ jobs:
           # from 8.4 up, but testing against a version that never ships means a
           # gate can stay green while the release stumbles.
           php-version: '8.5'
-          extensions: ctype, iconv, imagick, pdo_mysql
+          extensions: ctype, iconv, pdo_mysql
           coverage: none
 
       - name: Set up Node
