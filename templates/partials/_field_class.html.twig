@@ -1,0 +1,20 @@
+{# The class string of a text field, emitted and nothing else.
+
+   It lived in `_contact_form` and was copied four times into the
+   assistant. The focus ring, the hairline and the error state are one
+   rule, so they hang on one place – the same reason `_button_class`
+   exists.
+
+   The browser focus ring is kept on top of the accent border rather than
+   replacing it: a one pixel border change would make these the only
+   fields on the site where keyboard focus is weaker than the default.
+
+   Emits no markup. Pull it with include(), hand it to `class`.
+   Params: invalid (bool, optional), spaced (bool, default true – false for
+   a field that sits in a row rather than under its label). #}
+{#- `default` would swallow an explicit false, so the test is on defined. -#}
+{%- set base = ((spaced is defined ? spaced : true) ? 'mt-2 ' : '') ~ 'w-full rounded-lg border bg-white px-4 py-3 text-base text-neutral-900 shadow-sm transition-colors placeholder:text-neutral-500 focus:outline-2 focus:outline-offset-2 focus:outline-accent' -%}
+{%- set state = invalid|default(false)
+    ? 'border-error-border focus:border-error-border'
+    : 'border-neutral-200 focus:border-accent' -%}
+{{- base ~ ' ' ~ state -}}

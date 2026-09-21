@@ -86,10 +86,10 @@
        made – and without it the second one is only reachable from the middle
        of the homepage. #}
     {% set nav_items = nav_items|default([
-        { label: 'Übersicht', route: 'app_homepage', matches: ['app_homepage'] },
+        { label: 'Modell drucken', route: 'app_print_order', matches: ['app_print_order'] },
         { label: 'Blog', route: 'app_blog', matches: ['app_blog', 'app_blog_post'] },
         { label: 'App', route: 'app_app', matches: ['app_app'] },
-        { label: 'Häufig gestellte Fragen', route: 'app_faq', matches: ['app_faq'] },
+        { label: 'FAQ', route: 'app_faq', matches: ['app_faq'] },
         { label: 'Shop', url: etsy_url, external: true }
     ]) %}
     {% set current_route = app.request.attributes.get('_route') %}

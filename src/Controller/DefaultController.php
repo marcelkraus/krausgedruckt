@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Dto\ContactRequest;
+use App\Service\SignedTimestamp;
+use App\Service\TimestampState;
 use Krausgebaut\KongtentBundle\Block\Block;
 use Krausgebaut\KongtentBundle\Block\HeadingBlock;
 use Krausgebaut\KongtentBundle\Client;
@@ -33,24 +35,12 @@ final class DefaultController extends AbstractController
      */
     private const HOMEPAGE_POST_LIMIT = 3;
 
-    /**
-     * A submission arriving sooner than this was not typed by a person.
-     */
-    private const CONTACT_FORM_MINIMUM_AGE = 3;
-
-    /**
-     * After this the signed timestamp is stale and the visitor is asked to
-     * send again rather than being dropped.
-     */
-    private const CONTACT_FORM_LIFETIME = 7200;
-
     protected Serializer $serializer;
 
     public function __construct(
         private readonly ValidatorInterface $validator,
         private readonly MailerInterface $mailer,
-        #[Autowire('%kernel.secret%')]
-        private readonly string $appSecret,
+        private readonly SignedTimestamp $signedTimestamp,
         #[Autowire('%env(CONTACT_TO)%')]
         private readonly string $contactTo,
         #[Autowire('%env(CONTACT_FROM)%')]
@@ -101,13 +91,16 @@ final class DefaultController extends AbstractController
             return $this->renderContactPage(['discountCode' => $discountCode]);
         }
 
-        $timestampState = $this->timestampState($request);
+        $timestampState = $this->signedTimestamp->state(
+            (string) $request->request->get('ts', ''),
+            (string) $request->request->get('ts_sig', ''),
+        );
 
         // Silent drop only for clear bot signals – a filled honeypot, a
         // missing or tampered signature, or an inhumanly fast submission.
         // These get a fake success so bots learn nothing; nothing is sent.
         $honeypot = trim((string) $request->request->get('website', ''));
-        if ($honeypot !== '' || $timestampState === 'invalid' || $timestampState === 'too_fast') {
+        if ($honeypot !== '' || $timestampState === TimestampState::Invalid || $timestampState === TimestampState::TooFast) {
             $this->addFlash('contact_success', true);
 
             return $this->redirectToRoute('app_contact');
@@ -134,7 +127,7 @@ final class DefaultController extends AbstractController
 
         // A valid but stale signature is a real person whose form sat open
         // too long – never silently drop it, ask them to resend instead.
-        if ($timestampState === 'expired') {
+        if ($timestampState === TimestampState::Expired) {
             $errors['form'] = 'Das Formular war zu lange geöffnet. Bitte sende es noch einmal ab.';
         }
 
@@ -198,14 +191,14 @@ final class DefaultController extends AbstractController
         ?string $signature = null,
         int $status = Response::HTTP_OK,
     ): Response {
-        $timestamp ??= (string) time();
+        $issued = $this->signedTimestamp->reissueOrKeep($timestamp ?? '', $signature ?? '');
 
         return $this->render('content/contact.html.twig', [
             'contact_errors' => $errors,
             'contact_focus' => $focus,
             'contact_old' => $old,
-            'contact_timestamp' => $timestamp,
-            'contact_timestamp_signature' => $signature ?? $this->signTimestamp($timestamp),
+            'contact_timestamp' => $issued['timestamp'],
+            'contact_timestamp_signature' => $issued['signature'],
         ], new Response('', $status));
     }
 
@@ -226,61 +219,17 @@ final class DefaultController extends AbstractController
             }
         }
 
-        // Reuse the visitor's still-valid timestamp on re-render so a quick
-        // fix-and-resend is not misclassified as a bot. Only seed a fresh one
-        // when none is reusable – missing, tampered or expired.
-        $timestamp = null;
-        $signature = null;
-        $submittedTimestamp = (string) $request->request->get('ts', '');
-        $submittedSignature = (string) $request->request->get('ts_sig', '');
-        if ($submittedTimestamp !== ''
-            && hash_equals($this->signTimestamp($submittedTimestamp), $submittedSignature)
-            && time() - (int) $submittedTimestamp <= self::CONTACT_FORM_LIFETIME
-        ) {
-            $timestamp = $submittedTimestamp;
-            $signature = $submittedSignature;
-        }
-
+        // The visitor's still-valid pair is kept on re-render so a quick
+        // fix-and-resend is not misclassified as a bot; the service seeds a
+        // fresh one only when none is reusable.
         return $this->renderContactPage(
             $request->request->all(),
             $errors,
             $focus,
-            $timestamp,
-            $signature,
+            (string) $request->request->get('ts', ''),
+            (string) $request->request->get('ts_sig', ''),
             Response::HTTP_UNPROCESSABLE_ENTITY,
         );
-    }
-
-    /**
-     * Classifies the signed timestamp the form carries. The signature is what
-     * makes the age trustworthy: without it a bot would simply post a value
-     * that looks old enough.
-     */
-    private function timestampState(Request $request): string
-    {
-        $timestamp = (string) $request->request->get('ts', '');
-        $signature = (string) $request->request->get('ts_sig', '');
-
-        if ($timestamp === '' || hash_equals($this->signTimestamp($timestamp), $signature) === false) {
-            return 'invalid';
-        }
-
-        $elapsed = time() - (int) $timestamp;
-
-        if ($elapsed < self::CONTACT_FORM_MINIMUM_AGE) {
-            return 'too_fast';
-        }
-
-        if ($elapsed > self::CONTACT_FORM_LIFETIME) {
-            return 'expired';
-        }
-
-        return 'valid';
-    }
-
-    private function signTimestamp(string $timestamp): string
-    {
-        return hash_hmac('sha256', $timestamp, $this->appSecret);
     }
 
     #[Route('/kontakt-per-email', name: 'app_contact_email', methods: ['GET'])]
@@ -339,6 +288,7 @@ final class DefaultController extends AbstractController
         // page, which is only meant to be reached through its own link.
         $locations = [
             [$this->generateUrl('app_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL), '1.0'],
+            [$this->generateUrl('app_print_order', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.9'],
             [$this->generateUrl('app_blog', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.8'],
             [$this->generateUrl('app_faq', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.8'],
             [$this->generateUrl('app_app', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.6'],

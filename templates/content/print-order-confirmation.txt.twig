@@ -1,0 +1,44 @@
+{# The receipt the customer keeps.
+
+   **It is an acknowledgement, not an order confirmation** – the sentence
+   about costs and the conditional „Im Fall der Freigabe“ are what keep the
+   inquiry from becoming a contract. The conditional is also where the
+   instruction behind the license question is written down, because it has
+   to reach the customer and stay with him.
+
+   The summary leaves out what the customer did not fill in, where the
+   workshop's mail writes it out: an empty row is a starting point there
+   and noise here. The shape both share is in `CLAUDE.md`.
+
+   Expects: color, message, preview, quantity, url, usage. #}
+Hallo,
+
+wir haben deine Anfrage erhalten. Dein Angebot schicken wir dir per E-Mail
+– zwischen 8 und 20 Uhr in der Regel innerhalb weniger Stunden.
+
+Kosten entstehen dir bis zur ausdrücklichen Freigabe unseres Angebots
+nicht. Im Fall der Freigabe beauftragst du uns, das Modell unter der unten
+genannten Adresse für dich herunterzuladen, zu drucken und danach wieder
+zu löschen.
+
++++
+
+DEINE ANFRAGE
+
+Modell: {{ preview ? preview.title ~ ' (' ~ url ~ ')' : url }}
+Stückzahl: {{ quantity }} Stück
+{% if usage is not empty %}Wofür: {{ usage|join(', ') }}
+{% endif %}{% if color is not empty %}Farbe: {{ color }}
+{% endif %}{% if message is not empty %}
+
+Deine Anmerkungen:
+
+{{ message }}
+{% endif %}
+
++++
+
+Vielen Dank für deine Anfrage und dein Interesse an krausgedruckt!
+
+Marcel & Manuela
+https://www.krausgedruckt.de

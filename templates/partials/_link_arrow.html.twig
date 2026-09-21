@@ -6,15 +6,21 @@
 
    Params: href, label; optional icon ('arrow' or 'external', default arrow),
    external (adds target and rel), back (the arrow leads and points left),
-   tone ('accent' or 'muted'), class (layout classes for the caller).
+   tone ('accent', 'muted' or 'dark'), class (layout classes for the caller).
 
    Muted is `neutral-600`, not `neutral-500`: the rule is that anything
-   carrying meaning takes the darker step, and a link carries meaning. #}
+   carrying meaning takes the darker step, and a link carries meaning. Both
+   are values for a light ground, which is why a dark section needs its own
+   tone rather than the muted one – `neutral-600` on `neutral-950` is 2.5:1,
+   and the link is set in the small mono face. #}
 {%- import 'partials/_icons.html.twig' as icons -%}
 {%- set base = 'group inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-[0.15em] transition-colors' -%}
-{%- set colours = tone|default('accent') == 'muted'
+{%- set tone = tone|default('accent') -%}
+{%- set colours = tone == 'muted'
     ? 'text-neutral-600 hover:text-accent-on-light'
-    : 'text-accent-on-light hover:text-accent-on-light-hover' -%}
+    : tone == 'dark'
+        ? 'text-neutral-400 hover:text-accent-on-dark'
+        : 'text-accent-on-light hover:text-accent-on-light-hover' -%}
 <a href="{{ href }}" class="{{ base }} {{ colours }}{% if class is defined %} {{ class }}{% endif %}"{% if external|default(false) %} target="_blank" rel="noopener"{% endif %}>
     {%- if back|default(false) -%}
         <span class="transition-transform group-hover:-translate-x-1">{{ icons.icon('arrow', 'h-4 w-4 rotate-180') }}</span>

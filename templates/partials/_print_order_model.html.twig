@@ -1,0 +1,91 @@
+{# Step one: the address of the model, and what the platform says about it.
+
+   „Weiter“ is the first submit button of the one form and carries the name
+   `lookup`, so the controller reads the model and renders again instead of
+   sending. Enter in the address field does the same, because a browser
+   triggers the first submit button – which is why the inquiry cannot go out
+   by accident while the visitor is still typing an address.
+
+   Expects: open (whether a model has been read), errors, imageUrl,
+   lookupError, old, preview. #}
+{% import 'partials/_icons.html.twig' as icons %}
+
+<section id="schritt-1" class="mx-auto max-w-3xl scroll-mt-32 px-6 pt-12">
+    <div class="flex items-center gap-4">
+        <span class="font-mono text-2xl font-bold text-accent-on-light">01</span>
+        <h2 class="font-display text-xl font-bold text-neutral-900">Dein Modell</h2>
+    </div>
+
+    <div class="mt-6">
+        <label for="f_url" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Adresse des Modells <span class="text-accent-on-light" aria-hidden="true">*</span></label>
+        <div class="mt-2 flex flex-col gap-3 sm:flex-row">
+            <input type="url" id="f_url" name="url" value="{{ old.url|default('') }}" placeholder="URL der Printables-Detailseite" aria-required="true"
+                   {%- if errors.url is defined %} aria-invalid="true" aria-describedby="e_url"{% endif %}
+                   class="{{ include('partials/_field_class.html.twig', { invalid: errors.url is defined, spaced: false }, with_context = false) }}">
+            <button type="submit" name="lookup" value="1" class="{{ include('partials/_button_class.html.twig', {}, with_context = false) }} shrink-0 justify-center">
+                Weiter
+                <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('arrow', 'h-4 w-4') }}</span>
+            </button>
+        </div>
+        {% if errors.url is defined %}<p id="e_url" class="mt-2 text-sm font-semibold text-error">{{ errors.url }}</p>{% endif %}
+        <p class="mt-3 text-sm leading-relaxed text-neutral-600">Wir schauen uns dein gewünschtes Modell auf der Plattform für die Erstellung eines persönlichen Angebots an. Es erfolgt keine Verpflichtung für dich. Du hast noch gar kein Modell, sondern nur eine Idee? <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_contact') }}">Erzähl uns davon.</a></p>
+    </div>
+
+    {# The status line carries both outcomes.
+
+       **The focus is moved here, and that is deliberate.** The plan asked
+       for a live region and an untouched focus, which is right when a
+       script swaps the card in place. Reading the model is a full page
+       load, though: a live region whose text is already there when the
+       document arrives announces nothing, and the focus sits at the top of
+       a page that changed below. Moving it is the only thing that reaches
+       anyone here. #}
+    {# The card announces itself after a lookup – but never over a refused
+       submission, where the focus belongs to the field that was refused. #}
+    <div role="status" tabindex="-1" {% if errors is empty and (preview is not null or lookupError is not null) %}autofocus {% endif %}class="scroll-mt-32 outline-none {{ lookupError is null and preview is null ? 'sr-only' : '' }}">
+        {% if preview is not null %}
+            <p class="sr-only">Modell erkannt: {{ preview.title }}. Schritt 2 und 3 sind jetzt offen.</p>
+        {% elseif lookupError is not null %}
+            <p class="sr-only">Schritt 2 und 3 sind jetzt offen.</p>
+        {% endif %}
+        {% if lookupError is not null %}
+            <p class="mt-6 rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-3 text-sm leading-relaxed text-neutral-900">{{ lookupError }}</p>
+        {% elseif preview is not null %}
+            <div class="mt-8">{{ include('partials/_eyebrow.html.twig', { text: 'Dein Modell' }, with_context = false) }}</div>
+            <div class="mt-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:flex">
+                {# The relay may refuse what the platform answers – too large,
+                   or not an image at all once a rendition address changes.
+                   Without the handler that reads as a broken picture inside
+                   the card the visitor is asked to confirm. #}
+                {% if imageUrl is not null %}
+                    <img class="aspect-square w-full shrink-0 bg-neutral-100 object-cover sm:aspect-auto sm:w-44" src="{{ imageUrl }}" alt="" loading="lazy"
+                         onerror="this.nextElementSibling.classList.remove('hidden'); this.remove();">
+                {% endif %}
+                <div class="{% if imageUrl is not null %}hidden {% endif %}flex aspect-square w-full shrink-0 items-center justify-center bg-neutral-100 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600 sm:aspect-auto sm:w-44">Ohne Bild</div>
+                {# No platform label: the visitor typed a Printables address
+                   two fields up, so naming it back at him says nothing. The
+                   preview keeps it for the workshop's mail, where a second
+                   platform would first matter. #}
+                <div class="p-6 sm:flex-1">
+                    <p class="font-display text-xl font-bold text-neutral-900">{{ preview.title }}</p>
+                    {% if preview.description is not empty %}
+                        <p lang="en" class="mt-3 line-clamp-2 text-sm leading-relaxed text-neutral-600">{{ preview.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if open %}
+        {# Outside the card on purpose: without it the failure path would
+           carry no quantity at all, and both mails would still claim one
+           piece – an answer the visitor never gave. #}
+        <div class="mt-6">
+            <label for="f_quantity" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Gewünschte Stückzahl <span class="text-accent-on-light" aria-hidden="true">*</span></label>
+            <input type="number" id="f_quantity" name="quantity" value="{{ old.quantity|default(1) }}" min="1" max="999" step="1" inputmode="numeric" aria-required="true"
+                   {%- if errors.quantity is defined %} aria-invalid="true" aria-describedby="e_quantity"{% endif %}
+                   class="{{ include('partials/_field_class.html.twig', { invalid: errors.quantity is defined }, with_context = false) }} max-w-[10rem]">
+            {% if errors.quantity is defined %}<p id="e_quantity" class="mt-2 text-sm font-semibold text-error">{{ errors.quantity }}</p>{% endif %}
+        </div>
+    {% endif %}
+</section>

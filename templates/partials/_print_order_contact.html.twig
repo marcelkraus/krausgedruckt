@@ -1,0 +1,60 @@
+{# Step three: where the offer goes, and the sending itself.
+
+   Closed until a model has been read, like step two – the fields do not
+   exist while it is.
+
+   **The paragraph under the button is the inquiry's legal footing.** It
+   says the submission is not an order, and it records the instruction the
+   license question rests on – in the conditional, because a sentence in
+   the indicative would turn the inquiry into the contract it must not be.
+
+   Expects: open (whether a model has been read), errors, old. #}
+{% import 'partials/_icons.html.twig' as icons %}
+
+{% if open %}
+    <section id="schritt-3" class="mx-auto mt-14 mb-20 max-w-3xl scroll-mt-32 px-6">
+        <div class="flex items-center gap-4">
+            <span class="font-mono text-2xl font-bold text-accent-on-light">03</span>
+            <h2 class="font-display text-xl font-bold text-neutral-900">Dein Kontakt</h2>
+        </div>
+
+        {% if errors.form is defined %}
+            <p class="mt-6 rounded-lg border border-error-border bg-error-surface px-4 py-3 text-sm font-semibold text-error-on-surface" role="alert">{{ errors.form }}</p>
+        {% endif %}
+
+        <div class="mt-6">
+            <label for="f_email" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Deine E-Mail-Adresse <span class="text-accent-on-light" aria-hidden="true">*</span></label>
+            <input type="email" id="f_email" name="email" value="{{ old.email|default('') }}" autocomplete="email" aria-required="true"
+                   {%- if errors.email is defined %} aria-invalid="true" aria-describedby="e_email"{% endif %}
+                   class="{{ include('partials/_field_class.html.twig', { invalid: errors.email is defined }, with_context = false) }} max-w-md">
+            {% if errors.email is defined %}<p id="e_email" class="mt-2 text-sm font-semibold text-error">{{ errors.email }}</p>{% endif %}
+            <p class="mt-2 text-sm leading-relaxed text-neutral-600">Wir verwenden deine E-Mail-Adresse, um dir ein persönliches Angebot zukommen zu lassen. Dieses Angebot ist kostenlos und unverbindlich.</p>
+        </div>
+
+        <p class="mt-8 text-base leading-relaxed text-neutral-900">Unverbindlich und kostenlos. Ein Auftrag entsteht erst, wenn du unser Angebot freigibst.</p>
+
+        <div class="mt-5 flex flex-wrap items-center gap-4">
+            <button type="submit" class="{{ include('partials/_button_class.html.twig', {}, with_context = false) }}">
+                Anfrage senden
+                <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('arrow', 'h-4 w-4') }}</span>
+            </button>
+            <p class="font-mono text-xs text-neutral-600">Pflichtfelder <span class="text-accent-on-light">*</span></p>
+        </div>
+
+        <p class="mt-5 text-sm leading-relaxed text-neutral-600">Gibst du dein persönliches Angebot nach Erhalt frei, beauftragst du uns damit, das hier angegebene Modell für dich herunterzuladen, zu drucken und danach wieder zu löschen. Es gilt unsere <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_data_privacy') }}">Datenschutzerklärung</a>.</p>
+    </section>
+{% else %}
+    <section id="schritt-3" class="mx-auto mt-6 mb-20 max-w-3xl scroll-mt-32 px-6">
+        {# The heading is a real heading, not decoration: a step that
+           cannot be found by heading navigation is not an announcement of
+           what is coming, it is a hole. #}
+        <div class="rounded-2xl border border-dashed border-neutral-400 bg-neutral-50 p-6">
+            <div class="flex items-center gap-4">
+                <span class="font-mono text-2xl font-bold text-neutral-600" aria-hidden="true">03</span>
+                <h2 class="font-display text-xl font-bold text-neutral-600">Dein Kontakt</h2>
+                <span class="ml-auto text-neutral-600" aria-hidden="true">{{ icons.icon('lock', 'h-5 w-5') }}</span>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-neutral-600">Diese Felder kannst du ausfüllen, wenn wir uns dein Modell angeschaut haben.</p>
+        </div>
+    </section>
+{% endif %}

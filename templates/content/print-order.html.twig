@@ -1,0 +1,193 @@
+{# The print-order assistant: three steps on one page, the last two closed
+   until a model has been read.
+
+   **It works without JavaScript.** One form with two submit buttons – the
+   first reads the model and renders again, the second sends. Nothing is
+   kept on the server, and the page can also be reached with `?url=`.
+
+   A failed lookup opens the steps all the same and says what went wrong –
+   the address alone is enough for the workshop, so the inquiry must never
+   hang on a platform answering.
+
+   This page stands outside the usual pattern by decision, but not in its
+   header: the navigation is the site's own, unchanged, and the step bar is
+   the one thing here that exists nowhere else.
+
+   Expects: errors, focus, imageUrl, lookupError, old, preview, timestamp,
+   timestampSignature, usageContexts. #}
+{% extends 'base.html.twig' %}
+{% import 'partials/_icons.html.twig' as icons %}
+
+{% block title %}Modell drucken – Angebot innerhalb weniger Stunden · krausgedruckt von Marcel Kraus{% endblock %}
+{% block meta_description %}Du hast auf Printables etwas Schönes gefunden, aber selber keinen 3D-Drucker? Fülle das Formular aus und du erhältst innerhalb weniger Stunden dein persönliches Angebot.{% endblock %}
+
+{% set open = preview is not null or lookupError is not null or errors|length > 0 %}
+{# A pending confirmation must not cover an error: the flash survives a
+   submission that never followed its redirect, and the visitor would be
+   told his inquiry arrived while the form is refusing it. #}
+{% set done = errors|length == 0 and app.flashes('print_order_success')|length > 0 %}
+
+{% block main %}
+    <section class="border-b border-neutral-200 bg-surface-warm pt-20">
+        <div class="mx-auto max-w-5xl px-6 py-16 text-center lg:py-20">
+            <h1 class="text-balance font-display text-3xl font-bold leading-[1.15] tracking-tight text-neutral-900 sm:text-5xl sm:leading-[1.1] lg:text-6xl">
+                <span class="text-accent-on-light">Du hast dein Modell gefunden?</span><br>
+                Gut. Wir drucken’s dir.
+            </h1>
+            <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-neutral-600">Du hast auf <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="https://www.printables.com">Printables</a> etwas Schönes gefunden, aber selber keinen 3D-Drucker. Wir helfen dir weiter: Fülle einfach das nachfolgende Formular aus und du erhältst innerhalb weniger Stunden dein persönliches Angebot.</p>
+            <ul class="mt-8 flex flex-col items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600 sm:flex-row sm:justify-center sm:gap-3">
+                <li>Mindestbestellwert {{ minimum_order_value }}&nbsp;€</li>
+                <li aria-hidden="true" class="hidden text-accent-on-light sm:block">·</li>
+                <li>Angebot kostenlos &amp; unverbindlich, innerhalb weniger Stunden</li>
+            </ul>
+        </div>
+    </section>
+
+    {% if done %}
+        <section class="mx-auto max-w-3xl px-6 py-16 lg:py-20">
+            <div class="flex items-start gap-4 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm sm:gap-6 sm:p-10" role="status">
+                <span class="mt-0.5 shrink-0 text-accent-on-light">{{ icons.icon('check', 'h-7 w-7') }}</span>
+                <div>
+                    <h2 class="font-display text-xl font-bold text-neutral-900">Deine Anfrage wurde versendet!</h2>
+                    <p class="mt-2 text-sm leading-relaxed text-neutral-600">Wir haben dir eine Bestätigung geschickt und melden uns mit deinem Angebot. Dieses kommt per E-Mail – zwischen 8 und 20 Uhr in der Regel innerhalb weniger Stunden.</p>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        {{ include('partials/_print_order_steps.html.twig', { current: open ? 2 : 1 }, with_context = false) }}
+
+        {# One form over all three steps, with two submit buttons: „Weiter“
+           carries `lookup` and only reads the model, „Anfrage senden“ sends.
+           Enter in the address field triggers the first one, because it is
+           the first submit button in the form.
+
+           A second form for the address would be the other way to keep
+           Enter from sending – but then the address would exist twice, and
+           whoever corrects the field without pressing „Weiter“ would send
+           the old one. Here there is one field and one truth. #}
+        <form method="post" action="{{ path('app_print_order') }}" novalidate{% if focus %} data-error-focus="{{ focus }}"{% endif %}>
+            <input type="hidden" name="_token" value="{{ csrf_token('print_order') }}">
+            <input type="hidden" name="ts" value="{{ timestamp }}">
+            <input type="hidden" name="ts_sig" value="{{ timestampSignature }}">
+
+            {# Honeypot: hidden from people, tempting to bots. Hidden from a
+               screen reader as well – reading mode walks the document, not
+               the tab chain, so without aria-hidden the trap is read out to
+               exactly the visitors who cannot see that it is one. #}
+            <div class="sr-only" aria-hidden="true">
+                <label for="f_website">Dieses Feld bitte leer lassen</label>
+                <input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            {{ include('partials/_print_order_model.html.twig', { open: open }) }}
+            {{ include('partials/_print_order_details.html.twig', { open: open }) }}
+            {{ include('partials/_print_order_contact.html.twig', { open: open }) }}
+        </form>
+    {% endif %}
+
+    <section class="bg-neutral-950">
+        <div class="mx-auto max-w-3xl px-6 py-16 lg:py-20">
+            <div class="grid items-stretch gap-10 sm:grid-cols-[14rem_1fr] lg:gap-12">
+                <img class="aspect-square w-full rounded-2xl object-cover sm:aspect-auto sm:h-full" src="{{ asset('images/prusa-mk4s-with-print-on-black-background--square.jpg') }}" alt="Ein Prusa MK4S mit einem frisch gedruckten Teil" loading="lazy">
+                <div>
+                    <h2 class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">So geht es weiter.</h2>
+                    <p class="mt-6 text-base leading-relaxed text-neutral-400">Wir sehen uns dein gewünschtes Modell an und erstellen dir ein kostenloses, persönliches Angebot.</p>
+                    <p class="mt-4 text-base leading-relaxed text-neutral-400">Dieses kommt per E-Mail – zwischen 8 und 20 Uhr in der Regel sogar innerhalb weniger Stunden.</p>
+                    <p class="mt-4 text-base leading-relaxed text-neutral-400">Erst, wenn du das Angebot freigibst, legen wir los; fertig ist dein Teil danach in der Regel innerhalb von 24&nbsp;Stunden.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-t border-neutral-200 bg-surface-warm">
+        <div class="mx-auto max-w-3xl px-6 py-16">
+            <div class="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+                <h2 class="font-display text-xl font-bold text-neutral-900">Doch noch nicht ganz das Richtige?</h2>
+                <p class="mt-3 text-base leading-relaxed text-neutral-600">Ein Loch an der falschen Stelle, ein paar Millimeter zu klein oder eine Personalisierung gewünscht? Wir passen ein vorhandenes Modell gerne für dich an, bevor wir es drucken – oder erstellen dir ein eigenes.</p>
+                <div class="mt-6">
+                    {{ include('partials/_link_arrow.html.twig', {
+                        href: path('app_contact'),
+                        label: 'Zum Kontaktformular',
+                    }, with_context = false) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ include('partials/_error_focus.html.twig', {}, with_context = false) }}
+    {% if not done %}
+        <script>
+            // Print-order assistant: two enhancements, neither of them load
+            // bearing. Without JavaScript the step bar simply marks the step
+            // the server rendered, and the browser shows its own progress
+            // while the model is fetched.
+            (function () {
+                // The bar states where the reader is, not what the server
+                // decided – with every step open, a fixed marker would claim
+                // a position the page no longer has.
+                const entries = Array.from(document.querySelectorAll('nav[aria-label="Fortschritt"] li[data-step]'));
+                const sections = entries
+                    .map((entry) => document.getElementById(entry.dataset.step))
+                    .filter((section) => section !== null);
+
+                if (entries.length > 0 && sections.length === entries.length && 'IntersectionObserver' in window) {
+                    const mark = (id) => {
+                        entries.forEach((entry) => {
+                            const current = entry.dataset.step === id;
+                            entry.classList.toggle('font-semibold', current);
+                            if (current) {
+                                entry.setAttribute('aria-current', 'step');
+                            } else {
+                                entry.removeAttribute('aria-current');
+                            }
+                        });
+                    };
+
+                    const observer = new IntersectionObserver((records) => {
+                        const visible = records.filter((record) => record.isIntersecting);
+                        if (visible.length > 0) {
+                            mark(visible[0].target.id);
+                        }
+                    }, { rootMargin: '-40% 0px -55% 0px' });
+
+                    sections.forEach((section) => observer.observe(section));
+                }
+
+                // Fetching the model takes a moment on someone else's
+                // server, and sending writes two mails. Saying so beats a
+                // button that looks untouched – and a disabled button
+                // cannot be pressed a second time.
+                //
+                // The name of the pressed button decides what the server
+                // does, so it is submitted by hand before the button is
+                // disabled: a disabled control sends nothing.
+                const form = document.querySelector('main form');
+
+                if (form !== null) {
+                    form.addEventListener('submit', (event) => {
+                        const button = event.submitter;
+
+                        if (button === null || button.hasAttribute('disabled')) {
+                            return;
+                        }
+
+                        if (button.name !== '') {
+                            const carried = document.createElement('input');
+                            carried.type = 'hidden';
+                            carried.name = button.name;
+                            carried.value = button.value;
+                            form.appendChild(carried);
+                        }
+
+                        button.setAttribute('aria-busy', 'true');
+                        button.setAttribute('disabled', 'disabled');
+                        button.textContent = button.name === 'lookup' ? 'Einen Moment …' : 'Wird gesendet …';
+                    });
+                }
+            })();
+        </script>
+    {% endif %}
+{% endblock %}

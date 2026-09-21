@@ -1,0 +1,64 @@
+{# Step two: what the part is for, in which color, and anything else.
+
+   Closed until a model has been read – the numbered box says so rather
+   than hiding, so the visitor can see what is still coming. The fields do
+   not exist while it is closed, so there is nothing to take out of the tab
+   order and nothing that could reach the server.
+
+   Expects: open (whether a model has been read), errors, old,
+   usageContexts. #}
+{% import 'partials/_icons.html.twig' as icons %}
+
+{% if open %}
+    <section id="schritt-2" class="mx-auto mt-14 max-w-3xl scroll-mt-32 px-6">
+        <div class="flex items-center gap-4">
+            <span class="font-mono text-2xl font-bold text-accent-on-light">02</span>
+            <h2 class="font-display text-xl font-bold text-neutral-900">Deine Details</h2>
+        </div>
+        <p class="mt-4 text-base leading-relaxed text-neutral-600">Klick an, was zutrifft – bei Bedarf auch mehreres. Auf Basis deiner Angaben wählen wir das passende Material.</p>
+
+        <fieldset id="f_context" tabindex="-1" class="mt-6 outline-none"{% if errors.context is defined %} aria-describedby="e_context"{% endif %}>
+            <legend class="sr-only">Wofür brauchst du dein Teil?</legend>
+            <div class="flex flex-wrap gap-3">
+                {% for usage in usageContexts %}
+                    <label class="relative">
+                        <input type="checkbox" name="context[]" value="{{ usage.value }}" class="peer sr-only"{{ usage.value in old.context|default([]) ? ' checked' : '' }}>
+                        <span class="flex h-11 cursor-pointer items-center rounded-lg border border-neutral-500 bg-white px-4 text-sm text-neutral-900 transition-colors hover:border-neutral-600 peer-checked:border-accent peer-checked:bg-accent peer-checked:font-semibold peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent">{{ usage.label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% if errors.context is defined %}<p id="e_context" class="mt-3 text-sm font-semibold text-error">{{ errors.context }}</p>{% endif %}
+        </fieldset>
+
+        <div class="mt-10">
+            <label for="f_color" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Farbe</label>
+            <input type="text" id="f_color" name="color" value="{{ old.color|default('') }}" placeholder="z. B. Schwarz, Rot oder Gelb"
+                   {%- if errors.color is defined %} aria-invalid="true" aria-describedby="e_color"{% endif %}
+                   class="{{ include('partials/_field_class.html.twig', { invalid: errors.color is defined }, with_context = false) }}">
+            {% if errors.color is defined %}<p id="e_color" class="mt-2 text-sm font-semibold text-error">{{ errors.color }}</p>{% endif %}
+            <p class="mt-2 text-sm leading-relaxed text-neutral-600">Je höher deine Anforderungen an das Material sind, desto kleiner wird die Farbauswahl. Im Angebot sagen wir dir, was möglich ist.</p>
+        </div>
+
+        <div class="mt-8">
+            <label for="f_message" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Anmerkungen</label>
+            <textarea id="f_message" name="message" rows="4" placeholder="Gibt es noch etwas, was wir wissen sollten oder was dir wichtig ist?"
+                      {%- if errors.message is defined %} aria-invalid="true" aria-describedby="e_message"{% endif %}
+                      class="{{ include('partials/_field_class.html.twig', { invalid: errors.message is defined }, with_context = false) }}">{{ old.message|default('') }}</textarea>
+            {% if errors.message is defined %}<p id="e_message" class="mt-2 text-sm font-semibold text-error">{{ errors.message }}</p>{% endif %}
+        </div>
+    </section>
+{% else %}
+    <section id="schritt-2" class="mx-auto mt-10 max-w-3xl scroll-mt-32 px-6">
+        {# The heading is a real heading, not decoration: a step that
+           cannot be found by heading navigation is not an announcement of
+           what is coming, it is a hole. #}
+        <div class="rounded-2xl border border-dashed border-neutral-400 bg-neutral-50 p-6">
+            <div class="flex items-center gap-4">
+                <span class="font-mono text-2xl font-bold text-neutral-600" aria-hidden="true">02</span>
+                <h2 class="font-display text-xl font-bold text-neutral-600">Deine Details</h2>
+                <span class="ml-auto text-neutral-600" aria-hidden="true">{{ icons.icon('lock', 'h-5 w-5') }}</span>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed text-neutral-600">Diese Felder kannst du ausfüllen, wenn wir uns dein Modell angeschaut haben.</p>
+        </div>
+    </section>
+{% endif %}

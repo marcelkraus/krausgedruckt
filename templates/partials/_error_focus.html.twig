@@ -1,0 +1,19 @@
+{# Moves the focus to the first invalid field after a refused submission.
+
+   Both hand-written forms need it, and the rule is the same for both: the
+   field ids are `f_` plus the name the error is keyed by, so the script
+   needs nothing but the key. A form that renders without an error carries
+   no attribute and the script returns. #}
+<script>
+    (function () {
+        const form = document.querySelector('[data-error-focus]');
+        if (form === null) {
+            return;
+        }
+        const field = document.getElementById('f_' + form.dataset.errorFocus);
+        if (field !== null) {
+            field.focus();
+            field.scrollIntoView({ block: 'center' });
+        }
+    }());
+</script>

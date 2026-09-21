@@ -4,6 +4,28 @@ framework:
             policy: 'sliding_window'
             limit: 5
             interval: '1 hour'
+        # The image relay is reachable without a sign-in and fetches from a
+        # third party on request. A page shows one picture, so a visitor
+        # needs a handful; anything beyond that is not a visitor.
+        model_image:
+            policy: 'sliding_window'
+            limit: 60
+            interval: '1 hour'
+        # Reading a model page is a request to a third party that anyone can
+        # trigger by putting an address in the query string. A visitor tries
+        # a handful of links; past that it is not a visitor.
+        model_lookup:
+            policy: 'sliding_window'
+            limit: 30
+            interval: '1 hour'
+        # An inquiry sends two mails, one of them to an address the sender
+        # picks, with text the sender writes. Without a limit that is an open
+        # relay, and it costs the domain its deliverability, not just a full
+        # inbox. Same policy and figure as the contact form.
+        print_order:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 hour'
 
 # The limiter state outlives a single test run, so the production limit of 5
 # per hour makes the contact-form tests fail once the suite has run a few
@@ -13,4 +35,10 @@ when@test:
     framework:
         rate_limiter:
             contact_form:
+                limit: 1000
+            model_image:
+                limit: 1000
+            model_lookup:
+                limit: 1000
+            print_order:
                 limit: 1000
