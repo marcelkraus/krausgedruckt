@@ -8,16 +8,20 @@ parameters:
     # footer, a page, a redirect route – and a changed address must not have
     # to be hunted through the templates. Values that differ per machine
     # belong in .env instead; these do not.
+    app.app_store_url_mobile: 'https://apps.apple.com/de/app/3d-druck-kostenrechner/id6502561182'
     app.contact_email_address: 'mail@krausgedruckt.de'
+    app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
+    app.google_review_url: 'https://g.page/r/CW-IKJ1ZcOv8EBM/review'
+    app.instagram_url: 'https://www.instagram.com/krausgedruckt'
     # Only the imprint and the privacy policy show an address, and they show
     # this one: whatever is harvested from a legal page arrives on its own
     # tag and can be filtered without touching the mailbox.
     app.legal_email_address: 'mail+legal@krausgedruckt.de'
-    app.app_store_url_mobile: 'https://apps.apple.com/de/app/3d-druck-kostenrechner/id6502561182'
-    app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
-    app.google_review_url: 'https://g.page/r/CW-IKJ1ZcOv8EBM/review'
-    app.instagram_url: 'https://www.instagram.com/krausgedruckt'
     app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
+
+    # Not an outbound target: the print order states this in two places, the
+    # proof line of the assistant and the contact page.
+    app.minimum_order_value: 20
 
 services:
     # default configuration for services in *this* file
@@ -34,6 +38,25 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # Symfony does not alias an interface to its only implementation on its
+    # own, and the fetcher asks for the interface so a test can hand it an
+    # address without a name server.
+    App\Service\HostResolver: '@App\Service\DnsHostResolver'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+
+when@test:
+    services:
+        # The suite never reaches a platform. kongtent is fenced off the same
+        # way in its own file; without a fence here the promise hangs on every
+        # test remembering to swap the fetcher, and one that forgets asks the
+        # real interface over the network instead of failing.
+        App\Service\PlatformFetcher:
+            arguments:
+                $httpClient: '@app.refusing_http_client'
+
+        app.refusing_http_client:
+            class: Symfony\Component\HttpClient\MockHttpClient
+            arguments: [[]]

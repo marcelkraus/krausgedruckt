@@ -1,16 +1,12 @@
 {# Hand-rolled contact form – no symfony/form, the same mechanism the sister
    project uses, so one submission path exists in the family instead of two.
 
-   The field classes live here because there is no form theme to hold them
-   any more. They keep what the review corrected: labels and help text on
-   `neutral-600`, hairlines on `neutral-200`, and the browser focus ring kept
-   on top of the accent border rather than replaced by it.
+   The field classes are in `_field_class`, which the assistant pulls too;
+   this file holds the layout and the order of the fields.
 
    Expects: errors (map field→message), old (submitted values), ts + ts_sig
    (the signed anti-spam timestamp), focus (optional, first invalid field). #}
 {% import _self as field %}
-
-{% set field_class = 'mt-2 w-full rounded-lg border bg-white px-4 py-3 text-base text-neutral-900 shadow-sm transition-colors placeholder:text-neutral-500 focus:outline-2 focus:outline-offset-2 focus:outline-accent' %}
 
 {% macro label(name, text, required) %}
     <label for="f_{{ name }}" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">{{ text }}{% if required %} <span class="text-accent-on-light" aria-hidden="true">*</span>{% endif %}</label>
@@ -25,7 +21,7 @@
         <input type="{{ options.type|default('text') }}" id="f_{{ name }}" name="{{ name }}" value="{{ old[name]|default('') }}"
                {% if options.autocomplete is defined %}autocomplete="{{ options.autocomplete }}"{% endif %}
                {% if required %}aria-required="true"{% endif %}
-               class="{{ options.field_class }} {{ error ? 'border-error-border focus:border-error-border' : 'border-neutral-200 focus:border-accent' }}"
+               class="{{ include('partials/_field_class.html.twig', { invalid: error is not null }, with_context = false) }}"
                {% if error %}aria-invalid="true" aria-describedby="e_{{ name }}"{% endif %}>
         {% if error %}<p id="e_{{ name }}" class="mt-2 text-sm font-semibold text-error">{{ error }}</p>{% endif %}
     </div>
@@ -51,20 +47,20 @@
        second row, so a private customer – the majority here – starts with
        something that concerns them rather than skipping a field first. #}
     <div class="grid gap-5 sm:grid-cols-2">
-        {{ field.input('name', 'Name', old, errors, { required: true, autocomplete: 'name', field_class: field_class }) }}
-        {{ field.input('email', 'E-Mail', old, errors, { required: true, type: 'email', autocomplete: 'email', field_class: field_class }) }}
+        {{ field.input('name', 'Name', old, errors, { required: true, autocomplete: 'name' }) }}
+        {{ field.input('email', 'E-Mail', old, errors, { required: true, type: 'email', autocomplete: 'email' }) }}
     </div>
 
     <div class="mt-5 grid gap-5 sm:grid-cols-2">
-        {{ field.input('phone', 'Telefon', old, errors, { type: 'tel', autocomplete: 'tel', field_class: field_class }) }}
-        {{ field.input('discountCode', 'Rabattcode', old, errors, { field_class: field_class }) }}
+        {{ field.input('phone', 'Telefon', old, errors, { type: 'tel', autocomplete: 'tel' }) }}
+        {{ field.input('discountCode', 'Rabattcode', old, errors) }}
     </div>
 
     <div class="mt-5">
         {{ field.label('message', 'Nachricht', true) }}
         <textarea id="f_message" name="message" rows="6" aria-required="true"
                   {% if errors.message is defined %}aria-invalid="true" aria-describedby="e_message"{% endif %}
-                  class="{{ field_class }} {{ errors.message is defined ? 'border-error-border focus:border-error-border' : 'border-neutral-200 focus:border-accent' }}">{{ old.message|default('') }}</textarea>
+                  class="{{ include('partials/_field_class.html.twig', { invalid: errors.message is defined }, with_context = false) }}">{{ old.message|default('') }}</textarea>
         {% if errors.message is defined %}<p id="e_message" class="mt-2 text-sm font-semibold text-error">{{ errors.message }}</p>{% endif %}
         <p class="mt-2 text-sm text-neutral-600">Falls du auf der Suche nach einem Rabattcode bist, schau doch mal in unsere App.</p>
     </div>

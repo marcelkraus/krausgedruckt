@@ -49,8 +49,8 @@
 
                 <div class="mt-10 flex flex-wrap items-center gap-4">
                     {{ include('partials/_button.html.twig', { href: path('app_contact'), label: 'Jetzt anfragen' }, with_context = false) }}
-                    <a href="{{ path('app_blog') }}" class="group inline-flex items-center gap-2 px-2 py-3.5 font-mono text-sm uppercase tracking-[0.15em] text-neutral-600 transition-colors hover:text-accent-on-light">
-                        Zum Blog
+                    <a href="{{ path('app_print_order') }}" class="group inline-flex items-center gap-2 px-2 py-3.5 font-mono text-sm uppercase tracking-[0.15em] text-neutral-600 transition-colors hover:text-accent-on-light">
+                        Modell drucken
                         <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('arrow', 'h-4 w-4') }}</span>
                     </a>
                 </div>
@@ -133,10 +133,30 @@
         </section>
     {% endif %}
 
+    {# ── Druckauftrag ───────────────────────────────────────────── #}
+    {# Whoever has just seen examples splits here into “I want one of my own”
+       and “I want one off the shelf”. The own way comes first: it is the one
+       this site is built for, and it is what the shop band's “Lieber…”
+       answers. The two bands keep the rhythm alternating – blog on warm,
+       this one on white, the shop back on warm, then the dark section.
+
+       It carries an eyebrow because it is an offer rather than furniture,
+       and none of the other calls of the band do. Without a picture: the
+       three photographs of the page are spoken for, and showing one of them
+       a second time would be worse than type. #}
+    {{ include('partials/_conversion_band.html.twig', {
+        eyebrow: 'Modell drucken',
+        title: 'Du hast ein fertiges Modell gefunden?',
+        text: 'Nutze unser Formular: Füge die Adresse der Printables-Detailseite ein, wähle deine gewünschten Eigenschaften und du bekommst innerhalb weniger Stunden dein persönliches Angebot.',
+        label: 'Modell drucken',
+        href: path('app_print_order'),
+        tone: 'plain'
+    }, with_context = false) }}
+
     {# ── Shop ───────────────────────────────────────────────────── #}
-    {# Der zweite Verkaufsweg, direkt hinter dem Blog-Abschnitt: Wer gerade
-       Beispiele gesehen hat, teilt sich hier in „ich will etwas Eigenes“
-       und „ich will sowas fertig“. #}
+    {# The other way to buy, and deliberately the second one. It keeps the
+       picture and its size; what it gives up is being the first way out of
+       the page, before the visitor has seen the way that stays on it. #}
     {{ include('partials/_conversion_band.html.twig', {
         title: 'Lieber sofort etwas Fertiges?',
         text: 'Ausgewählte Produkte bieten wir in unserem Etsy-Shop an – ohne Anfrage und ohne Wartezeit.',
@@ -145,15 +165,14 @@
         icon: 'external',
         external: true,
         image: asset('images/etsy-shop.jpg'),
-        imageAlt: 'Im 3D-Druck gefertigte Korbschalen und Untersetzer in Blau und Weiß',
-        tone: 'plain'
+        imageAlt: 'Im 3D-Druck gefertigte Korbschalen und Untersetzer in Blau und Weiß'
     }, with_context = false) }}
 
     {# ── Ablauf (dunkel) ────────────────────────────────────────── #}
-    {# Eine Stufe flacher als die übrigen Abschnitte: Seit die Schritte ohne
-       Kasten auskommen, trägt dieser Block nur noch halb so viel Inhalt wie
-       etwa der Blog-Abschnitt, bei gleicher Polsterung also doppelt so viel Luft
-       je Zeile. Er bleibt trotzdem die dunkle Pause im Rhythmus. #}
+    {# One step shallower than the other sections: since the steps do
+       without a box, this block carries half the content of, say, the blog
+       section, and at the same padding that is twice the air per line. It
+       stays the dark pause in the rhythm all the same. #}
     <section class="bg-neutral-950">
         <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
             <div class="max-w-2xl">
@@ -161,19 +180,19 @@
                 <h2 class="mt-5 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">In drei Schritten zum gedruckten Teil</h2>
             </div>
 
-            {# Wortlaut und Dreiteilung folgen dem gedruckten Poster: Titel,
-               Erläuterung, Pointe. Was auf Papier steht und was auf der Seite
-               steht, soll dieselbe Geschichte in denselben Worten erzählen. #}
+            {# Wording and the three parts follow the printed poster: title,
+               explanation, punchline. What stands on paper and what stands
+               on the page tell the same story in the same words. #}
             <ol class="mt-12 grid gap-10 md:grid-cols-3">
                 {% set steps = [
                     { no: '01', title: 'Du hast die Idee.', text: 'Ob fertiges Modell, grobe Skizze oder nur eine erste Vorstellung.', note: 'Sprich uns an – wir helfen.' },
                     { no: '02', title: 'Wir drucken.', text: 'Ob ein oder hundert Stück. Auf Wunsch farbig, aber immer maßhaltig.', note: 'In Tagen – nicht Wochen.' },
                     { no: '03', title: 'Du hältst es in der Hand.', text: 'Deine Idee ist nun Realität. Ob Geschenk, Ersatzteil, Werkzeug oder Gadget.', note: 'Gedacht, gemacht – passt!' }
                 ] %}
-                {# Optik des gedruckten Posters: eine Linie über der Ziffer statt
-                   eines Kastens. Auf dem dunklen Grund trägt die Linie eine
-                   gedämpfte Weißstufe, damit sie die Trennung markiert, ohne
-                   die Ziffer zu überstrahlen. #}
+                {# The look of the printed poster: a rule above the figure
+                   rather than a box. On the dark ground the rule takes a
+                   muted step of white, so it marks the division without
+                   outshining the figure. #}
                 {% for step in steps %}
                     <li class="border-t-2 border-white/25 pt-5">
                         <span class="font-mono text-2xl font-bold text-accent-on-dark">{{ step.no }}</span>
@@ -184,16 +203,20 @@
                 {% endfor %}
             </ol>
 
-            <div class="mt-10">
-                {{ include('partials/_button.html.twig', { href: path('app_contact'), label: 'Schritt 1 starten', icon: 'arrow' }, with_context = false) }}
+            {# The filled button leads to the way that carries the promise;
+               the arrow link keeps the other one open. One button and no
+               second step, so the alternative is a link and not a rival. #}
+            <div class="mt-10 flex flex-wrap items-center gap-6">
+                {{ include('partials/_button.html.twig', { href: path('app_print_order'), label: 'Mit einem fertigen Modell starten', icon: 'arrow' }, with_context = false) }}
+                {{ include('partials/_link_arrow.html.twig', { href: path('app_contact'), label: 'Ich habe nur eine Idee', tone: 'dark' }, with_context = false) }}
             </div>
         </div>
     </section>
 
     {# ── Team ───────────────────────────────────────────────────── #}
-    {# Der Text läuft auf Lesebreite, die Porträts bekommen darunter eine
-       eigene Reihe über die volle Breite. Neben dem langen Text standen sie
-       vorher zu klein und gingen unter. #}
+    {# The text runs at reading width and the portraits get a row of their
+       own below it, across the full width. Beside the long text they stood
+       too small and were lost. #}
     <section class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
         <div class="max-w-3xl">
             {{ include('partials/_eyebrow.html.twig', { text: 'Team' }) }}
@@ -208,10 +231,10 @@
             </div>
         </div>
 
-        {# Dieselbe Karte wie im Blog-Abschnitt: Bild randlos über die volle
-           Breite, Text darunter. Runde Porträts in einem Kasten sind das
-           generischste Teammuster überhaupt, und der Kasten konkurriert dort
-           mit dem Foto statt es zu tragen. #}
+        {# The same card as in the blog section: picture edge to edge across
+           the full width, text below it. Round portraits in a box are the
+           most generic team pattern there is, and the box competes with the
+           photograph instead of carrying it. #}
         <ul class="mt-14 grid gap-6 sm:grid-cols-3">
             {% set team = [
                 { name: 'Marcel', role: 'Technik, Kommunikation', image: 'images/marcel.jpg', alt: 'Marcel Kraus' },

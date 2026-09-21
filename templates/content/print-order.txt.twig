@@ -1,0 +1,21 @@
+{# The inquiry as it reaches the workshop. The shape is in `CLAUDE.md`.
+
+   Three lines say more than a dash, because a dash would be read as „not
+   given“ and none of them means that: an unread page, a platform that
+   names no license, and a visitor who clicked nothing are three different
+   starting points for the calculation.
+
+   Expects: color, emailAddress, message, preview, quantity, url, usage. #}
+Es wurde eine neue Druckanfrage über das Anfrageformular empfangen.
+
+Modell: {{ preview ? preview.title ~ ' (' ~ url ~ ')' : 'nicht gelesen – bitte selbst öffnen (' ~ url ~ ')' }}
+Plattform: {{ preview ? preview.platform : '–' }}
+Lizenz: {{ preview ? (preview.license ?: 'von der Plattform nicht genannt') : '–' }}
+Stückzahl: {{ quantity }} Stück
+Wofür: {{ usage is empty ? 'keine Angabe – Material nach unserer Einschätzung' : usage|join(', ') }}
+Farbe: {{ color is empty ? '–' : color }}
+E-Mail: {{ emailAddress }}
+
+Anmerkungen:
+
+{{ message is empty ? '–' : message }}

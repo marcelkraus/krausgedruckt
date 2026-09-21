@@ -1,0 +1,56 @@
+{# The progress bar of the assistant: 01 Modell · 02 Details · 03 Kontakt.
+
+   The numbers are borrowed, not invented – they are the ones from the
+   printed poster that the homepage already carries in its „Ablauf“ block.
+
+   It sticks below the header, so anything it links to needs a scroll
+   margin of both heights together; the sections carry `scroll-mt-32`.
+
+   Params: current (1, 2 or 3 – the step the visitor is working on). #}
+{% import 'partials/_icons.html.twig' as icons %}
+
+{% set steps = [
+    { no: '01', label: 'Modell' },
+    { no: '02', label: 'Details' },
+    { no: '03', label: 'Kontakt' }
+] %}
+
+<div class="sticky top-20 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur-sm">
+    <nav aria-label="Fortschritt" class="mx-auto max-w-3xl px-6">
+        <ol class="flex items-center justify-center gap-2 sm:gap-4">
+            {% for step in steps %}
+                {% set index = loop.index %}
+                {%- set reachable = index <= current -%}
+                {%- set tone = index < current ? 'text-accent-on-light' : (index == current ? 'text-neutral-900' : 'text-neutral-500') -%}
+                {%- set shape = 'flex h-11 items-center gap-2 ' ~ tone ~ (reachable ? ' transition-colors hover:text-accent-on-light' : '') -%}
+                {%- set inner -%}
+                    <span class="flex h-5 w-5 items-center justify-center">
+                        {%- if index < current -%}
+                            <span class="text-accent-on-light">{{ icons.icon('check', 'h-4 w-4') }}</span>
+                        {%- else -%}
+                            <span class="font-mono text-sm font-bold {{ index == current ? 'text-accent-on-light' : 'text-neutral-500' }}">{{ step.no }}</span>
+                        {%- endif -%}
+                    </span>
+                    <span class="font-mono text-xs uppercase tracking-[0.15em]">{{ step.label }}</span>
+                    {%- if index < current %}<span class="sr-only">, erledigt</span>{% elseif index > current %}<span class="sr-only">, noch nicht offen</span>{% endif -%}
+                {%- endset -%}
+                <li data-step="schritt-{{ index }}"{% if index == current %} aria-current="step"{% endif %} class="{{ index == current ? 'font-semibold' : '' }}">
+                    {# A locked step is no jump target: following it would land
+                       on a box with nothing in it. The entry stays, so the
+                       visitor still sees what is coming – it just does not
+                       pretend to be a way there.
+
+                       Two branches rather than a computed tag name: Twig
+                       escapes what it prints, so `<{{ … }}>` puts the quotes
+                       of an attribute into the document as entities. #}
+                    {% if reachable %}
+                        <a href="#schritt-{{ index }}" class="{{ shape }}">{{ inner }}</a>
+                    {% else %}
+                        <span class="{{ shape }}">{{ inner }}</span>
+                    {% endif %}
+                </li>
+                {% if not loop.last %}<li aria-hidden="true" class="h-px w-6 bg-neutral-300 sm:w-10"></li>{% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+</div>

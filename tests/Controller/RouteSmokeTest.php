@@ -20,17 +20,18 @@ final class RouteSmokeTest extends WebTestCase
     public static function renderingRouteProvider(): array
     {
         return [
-            'Startseite' => ['/'],
+            'adVintage' => ['/advintage'],
+            'App' => ['/app'],
             'Blog' => ['/blog'],
             'Blog-Beitrag' => ['/blog/2026/jeder-block-einmal'],
-            'Häufig gestellte Fragen' => ['/haeufig-gestellte-fragen'],
-            'Kontakt' => ['/kontakt'],
-            'Impressum' => ['/impressum'],
             'Datenschutz' => ['/datenschutz'],
-            'App' => ['/app'],
-            'adVintage' => ['/advintage'],
+            'Häufig gestellte Fragen' => ['/haeufig-gestellte-fragen'],
+            'Impressum' => ['/impressum'],
+            'Kontakt' => ['/kontakt'],
+            'Modell drucken' => ['/modell-drucken'],
             'robots.txt' => ['/robots.txt'],
             'sitemap.xml' => ['/sitemap.xml'],
+            'Startseite' => ['/'],
         ];
     }
 
