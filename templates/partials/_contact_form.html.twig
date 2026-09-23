@@ -7,6 +7,7 @@
    Expects: errors (map field→message), old (submitted values), ts + ts_sig
    (the signed anti-spam timestamp), focus (optional, first invalid field). #}
 {% import _self as field %}
+{% import 'partials/_icons.html.twig' as icons %}
 
 {% macro label(name, text, required) %}
     <label for="f_{{ name }}" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">{{ text }}{% if required %} <span class="text-accent-on-light" aria-hidden="true">*</span>{% endif %}</label>
@@ -66,7 +67,10 @@
     </div>
 
     <div class="mt-8 flex flex-wrap items-center gap-4">
-        <button type="submit" class="{{ include('partials/_button_class.html.twig', {}, with_context = false) }}">Nachricht senden</button>
+        <button type="submit" class="{{ include('partials/_button_class.html.twig', {}, with_context = false) }}">
+            Nachricht senden
+            <span class="transition-transform group-hover:translate-x-1">{{ icons.icon('arrow', 'h-4 w-4') }}</span>
+        </button>
         <p class="font-mono text-xs text-neutral-600">Pflichtfelder <span class="text-accent-on-light">*</span></p>
     </div>
 
