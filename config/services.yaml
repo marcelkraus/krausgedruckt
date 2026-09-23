@@ -19,8 +19,6 @@ parameters:
     app.legal_email_address: 'mail+legal@krausgedruckt.de'
     app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
 
-    # Not an outbound target: the print order states this in two places, the
-    # proof line of the assistant and the contact page.
     app.minimum_order_value: 20
 
 services:

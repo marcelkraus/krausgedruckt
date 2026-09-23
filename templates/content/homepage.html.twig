@@ -162,7 +162,6 @@
         text: 'Ausgewählte Produkte bieten wir in unserem Etsy-Shop an – ohne Anfrage und ohne Wartezeit.',
         label: 'Zum Etsy-Shop',
         href: etsy_url,
-        icon: 'external',
         external: true,
         image: asset('images/etsy-shop.jpg'),
         imageAlt: 'Im 3D-Druck gefertigte Korbschalen und Untersetzer in Blau und Weiß'
@@ -207,8 +206,8 @@
                the arrow link keeps the other one open. One button and no
                second step, so the alternative is a link and not a rival. #}
             <div class="mt-10 flex flex-wrap items-center gap-6">
-                {{ include('partials/_button.html.twig', { href: path('app_print_order'), label: 'Mit einem fertigen Modell starten', icon: 'arrow' }, with_context = false) }}
-                {{ include('partials/_link_arrow.html.twig', { href: path('app_contact'), label: 'Ich habe nur eine Idee', tone: 'dark' }, with_context = false) }}
+                {{ include('partials/_button.html.twig', { href: path('app_print_order'), label: 'Ich habe ein fertiges Modell gefunden' }, with_context = false) }}
+                {{ include('partials/_link_arrow.html.twig', { href: path('app_contact'), label: 'Ich habe eine eigene Idee', tone: 'dark' }, with_context = false) }}
             </div>
         </div>
     </section>

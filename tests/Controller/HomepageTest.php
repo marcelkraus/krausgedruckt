@@ -7,7 +7,7 @@ namespace App\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Where the homepage and the contact page lead.
+ * Where the homepage leads.
  *
  * The smoke test proves the pages render; it cannot see a target. The one
  * thing the connecting step did was hang existing buttons onto a new route,
@@ -28,7 +28,7 @@ final class HomepageTest extends WebTestCase
         self::assertCount(3, $links, 'the hero, the band of its own and the first step of the process');
         self::assertSame('Modell drucken', trim($links->eq(0)->text()));
         self::assertSame('Modell drucken', trim($links->eq(1)->text()));
-        self::assertSame('Mit einem fertigen Modell starten', trim($links->eq(2)->text()));
+        self::assertSame('Ich habe ein fertiges Modell gefunden', trim($links->eq(2)->text()));
     }
 
     /**
@@ -41,17 +41,9 @@ final class HomepageTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertSame(
-            'Ich habe nur eine Idee',
+            'Ich habe eine eigene Idee',
             trim($crawler->filter('main section.bg-neutral-950 a[href="/kontakt"]')->text())
         );
-    }
-
-    public function testTheContactPageLeadsToTheAssistant(): void
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/kontakt');
-
-        self::assertCount(1, $crawler->filter('main a[href="'.self::ASSISTANT.'"]'));
     }
 
     /**

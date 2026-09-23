@@ -19,7 +19,7 @@
 {% import 'partials/_icons.html.twig' as icons %}
 
 {% block title %}Modell drucken – Angebot innerhalb weniger Stunden · krausgedruckt von Marcel Kraus{% endblock %}
-{% block meta_description %}Du hast auf Printables etwas Schönes gefunden, aber selber keinen 3D-Drucker? Fülle das Formular aus und du erhältst innerhalb weniger Stunden dein persönliches Angebot.{% endblock %}
+{% block meta_description %}Du hast auf Printables etwas Schönes gefunden, aber selber keinen 3D-Drucker? Fülle das Formular aus und du erhältst innerhalb weniger Stunden per E-Mail dein persönliches Angebot.{% endblock %}
 
 {% set open = preview is not null or lookupError is not null or errors|length > 0 %}
 {# A pending confirmation must not cover an error: the flash survives a
@@ -34,11 +34,11 @@
                 <span class="text-accent-on-light">Du hast dein Modell gefunden?</span><br>
                 Gut. Wir drucken’s dir.
             </h1>
-            <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-neutral-600">Du hast auf <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="https://www.printables.com">Printables</a> etwas Schönes gefunden, aber selber keinen 3D-Drucker. Wir helfen dir weiter: Fülle einfach das nachfolgende Formular aus und du erhältst innerhalb weniger Stunden dein persönliches Angebot.</p>
+            <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-neutral-600">Du hast auf <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="https://www.printables.com">Printables</a> etwas Schönes gefunden, aber selber keinen 3D-Drucker. Wir helfen dir weiter: Fülle einfach das nachfolgende Formular aus und du erhältst innerhalb weniger Stunden per E-Mail dein persönliches Angebot.</p>
             <ul class="mt-8 flex flex-col items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600 sm:flex-row sm:justify-center sm:gap-3">
-                <li>Mindestbestellwert {{ minimum_order_value }}&nbsp;€</li>
+                <li>Kostenlos &amp; unverbindlich</li>
                 <li aria-hidden="true" class="hidden text-accent-on-light sm:block">·</li>
-                <li>Angebot kostenlos &amp; unverbindlich, innerhalb weniger Stunden</li>
+                <li>Mindestbestellwert {{ minimum_order_value }}&nbsp;€</li>
             </ul>
         </div>
     </section>

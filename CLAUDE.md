@@ -45,7 +45,7 @@ Partials: `_logo`, `_eyebrow`, `_icons`, `_card`, `_post_card` (shared by the ho
 
 Five carry rules rather than just markup:
 
-* **`_button_class`** holds the contrast rule for the filled button and emits nothing but a class string. `_button` renders the link version; the contact form's submit pulls the same string through `include()`. Neither copy can drift, and the rule hangs on exactly one place.
+* **`_button_class`** holds the contrast rule for the filled button and emits nothing but a class string. `_button` renders the link version; the header and every `<button>` pull the same string through `include()`. Neither copy can drift, and the rule hangs on exactly one place.
 * **`_card`** is embedded, not included, because the picture and the running text differ per case while the shell does not. A card **with** an `href` is one click target: the heading link stretches over the whole article (`after:absolute after:inset-0`) and the hover shadow is rendered. A card **without** one stays inert, because a growing shadow is a promise of a click.
 * **`_conversion_band`** has three shapes: plain band, `boxed` as an inset card, and – with an `image` – a two column block with a picture. Its `actions` block defaults to the inquiry button; a page whose closing action is something else embeds it and overrides the block, so ground, measurements and rhythm still come from one place. **An `eyebrow` turns a band into a section**: the mono label is what says a topic begins here, so a band carrying an offer of its own takes one and a band closing a page does not. Its text matches the navigation item word for word.
 * **`_field_class`** emits the class string of an input, a textarea and a select, with the error state as its one parameter. The focus ring, the hairline and the error state are one rule, so they hang on one place – the same reason `_button_class` exists. Both forms of the site pull it.
@@ -85,13 +85,13 @@ Defined in `src/Controller/DefaultController.php`, `src/Controller/BlogControlle
 
 **The posts come from kongtent** through `krausgebaut/kongtent-bundle`; this repository holds none of them. `/` shows the three newest (`HOMEPAGE_POST_LIMIT`), `/blog` all of them, and the sitemap lists every one. Every card shows its date rather than its rubric. **What the bundle enforces is in `../../workbench/kongtent-bundle/README.md`; what every reading site decides – the key and the deploy check, the address, the privacy policy – is in `../../docs/KONGTENT.md`.** What stands here is what this site decided.
 
-**The references are posts like any other**, under a rubric Marcel keeps in kongtent. The site knows no rubric by name and shows the one a post carries above its headline. Their old addresses answer 301 onto the same year and slug, so a reference moved with its slug and its date keeps its links; one that was not moved answers 404 there.
+**The references are posts like any other**, under a rubric Marcel keeps in kongtent. The site knows no rubric by name and shows the one a post carries above its headline. Their addresses under `/referenzen` answer 301 onto the same year and slug under `/blog`; where no post stands there, the redirect ends in 404.
 
 **The route is `/blog/{year}/{slug}`**, and the year is the year of the post's date, compared in `BlogController` – kongtent is asked for the slug alone, and without the comparison one post would answer under every year.
 
 **The site sets five block types itself**, under `templates/bundles/KongtentBundle/blocks/`: picture and gallery with their caption line, quotation on the accent rail, the term list as rows with the name in the mono label voice and the value in the body face, and the paragraph. Heading, list and embed render in the bundle's markup inside `prose`. Everything the site sets carries `not-prose`, and a link in generated markup outside `prose` gets its style from `[data-generated] a` in `public/css/input.css`.
 
-**A paragraph that is one external link and nothing else is set as `_link_arrow` with the external icon**, opening in a new tab – the shape a customer review had on the references. `App\Twig\SoleLinkExtension` recognizes it in the converter's markup; a link within this site stays running text, whether it is a path or an address on the host of the request, with or without `www.`.
+**A paragraph that is one external link and nothing else is set as `_link_arrow` with the external icon**, opening in a new tab – the shape of a customer review. `App\Twig\SoleLinkExtension` recognizes it in the converter's markup; a link within this site stays running text, whether it is a path or an address on the host of the request, with or without `www.`.
 
 **The feed carries the full text** and asks kongtent once per post, because the list carries no blocks.
 
@@ -105,133 +105,47 @@ Defined in `src/Controller/DefaultController.php`, `src/Controller/BlogControlle
 
 ## Reading a model
 
-**One reader per platform, behind `ModelReader`.** Today there is one:
-Printables' pages sit behind a bot check that refuses a server, so
-`PrintablesReader` asks the platform's own GraphQL interface at
-`api.printables.com`, which needs no key.
+**One reader per platform, behind `ModelReader`.** Today there is one: Printables' pages sit behind a bot check that refuses a server, so `PrintablesReader` asks the platform's own GraphQL interface at `api.printables.com`, which needs no key.
 
-**Measure the payload, not the status code, before adding a platform.**
-Thingiverse was dropped after it was built: its pages answer a server with
-200 and carry Open Graph tags, but the tags are the same generic ones on
-every model – the page is rendered in the browser. A reader that trusts them
-gives every model the platform's own name as its title, which is worse than
-no preview, because the card is what the visitor confirms.
+**Measure the payload, not the status code, before adding a platform.** A page rendered in the browser can answer a server with 200 and carry Open Graph tags that are the same generic ones on every model; Thingiverse does. A reader that trusts them gives every model the platform's own name as its title, which is worse than no preview, because the card is what the visitor confirms.
 
-`ModelLookup` picks the reader and shortens what comes back. Everything above
-it sees only a `ModelPreview`. **Entities are decoded by the reader**, not
-centrally: an interface hands its text out encoded, a crawler decodes while
-reading an attribute, and doing it twice turns an ampersand a designer typed
-into the character behind it.
+`ModelLookup` picks the reader and shortens what comes back. Everything above it sees only a `ModelPreview`. **Entities are decoded by the reader**, not centrally: an interface hands its text out encoded, a crawler decodes while reading an attribute, and doing it twice turns an ampersand a designer typed into the character behind it.
 
-**A reader serves its whole platform, and says so when the address is not a
-model.** An address on Printables that points at a profile, a collection or
-a search fails as `NotAModelPage`, not as an unsupported address: the visitor made a mistake he can fix in ten seconds, and telling
-him we do not read his platform leaves him with nothing to correct. Whoever
-is stuck anyway reaches the contact form from the same page.
+**A reader serves its whole platform, and says so when the address is not a model.** An address on Printables that points at a profile, a collection or a search fails as `NotAModelPage`, not as an unsupported address: the visitor made a mistake he can fix in ten seconds, and telling him we do not read his platform leaves him with nothing to correct. Whoever is stuck anyway reaches the contact form from the same page.
 
-**What a platform sends is shown as it arrives.** A title, a summary or a
-license name is someone else's text: its dashes, quotation marks and spelling
-stay untouched, whatever the house typography says. The rule binds what this
-site writes, not what it quotes.
+**What a platform sends is shown as it arrives.** A title, a summary or a license name is someone else's text: its dashes, quotation marks and spelling stay untouched, whatever the house typography says. The rule binds what this site writes, not what it quotes.
 
-**The preview picture is the platform's rendition, never the original.** A
-cover on Printables runs into the megabytes – seven on a measured model –
-which the relay refuses and the card would show as a broken picture. The
-address is built by inserting `thumbs/inside/640x480/<format>/` before the
-file name, the format following the file's own extension; only a fixed set
-of sizes exists and an invented one is answered with 400. If the pattern
-ever changes, the relay refuses an answer that is not an image and the card
-falls back to its own empty state.
+**The preview picture is the platform's rendition, never the original.** A cover on Printables runs into the megabytes – seven on a measured model – which the relay refuses and the card would show as a broken picture. The address is built by inserting `thumbs/inside/640x480/<format>/` before the file name, the format following the file's own extension; only a fixed set of sizes exists and an invented one is answered with 400. If the pattern ever changes, the relay refuses an answer that is not an image and the card falls back to its own empty state.
 
-**Printables also names the license, and it goes into the inquiry mail, never
-onto the page.** The workshop needs to know what it is calculating with; a
-visitor would read it as a promise that nobody checked.
+**Printables also names the license, and it goes into the inquiry mail, never onto the page.** The workshop needs to know what it is calculating with; a visitor would read it as a promise that nobody checked.
 
-**`PlatformFetcher` carries the whole security requirement** for both readers
-– the host list, the resolved address checked against the reserved ranges and
-pinned into the request, and limits on time, size and media type. A redirect
-is checked again at every hop on the fetched path and refused outright on the
-posted one, since the other side may not repeat a body. What is requested is
-rebuilt from the checked parts, never the string a visitor typed.
+**`PlatformFetcher` carries the whole security requirement** for both readers – the host list, the resolved address checked against the reserved ranges and pinned into the request, and limits on time, size and media type. A redirect is checked again at every hop on the fetched path and refused outright on the posted one, since the other side may not repeat a body. What is requested is rebuilt from the checked parts, never the string a visitor typed.
 
-**The interface of Printables is undocumented** and its introspection is off:
-the field names were found by asking and can change without notice. When they
-do, the assistant carries on without a preview – which is why the failure
-path is not a nicety.
+**The interface of Printables is undocumented** and its introspection is off: the field names were found by asking and can change without notice. When they do, the assistant carries on without a preview – which is why the failure path is not a nicety.
 
 ## The print-order assistant
 
-`/modell-drucken`, three steps on one page, the last two closed until a
-model has been read. It is a **special page by decision** – the step bar
-exists nowhere else on the site – **but the header is not part of that**:
-navigation, button and logo are the ones every other page carries, in the
-same position and the same grid.
+`/modell-drucken`, three steps on one page, the last two closed until a model has been read. It is a **special page by decision** – the step bar exists nowhere else on the site – **but the header is not part of that**: navigation, button and logo are the ones every other page carries, in the same position and the same grid.
 
-**„3D-“ is dropped wherever the assistant is meant** – on the page, in the
-navigation, in the band and on the contact page: a visitor who has come
-this far knows which kind of model it is, and the prefix on every second
-noun reads like a catalog. The printer keeps it, „3D-Drucker“ being the
-thing the visitor does not have, and so does the offer section of the
-homepage, which speaks about 3D models as a product rather than about his.
+**„3D-“ is dropped wherever the assistant is meant** – on the page, in the navigation and in the band: a visitor who has come this far knows which kind of model it is, and the prefix on every second noun reads like a catalog. The printer keeps it, „3D-Drucker“ being the thing the visitor does not have, and so does the offer section of the homepage, which speaks about 3D models as a product rather than about his.
 
-**One name for the way, and it is „Modell drucken“** – the route, the
-navigation item, the eyebrow of the band, its button, the arrow link in
-the hero and the document title. Five entrances lead here, and a wording
-of its own at each would read as five offers. **Two of them name what the
-visitor brings instead, and deliberately:** „Mit einem fertigen Modell
-starten“ stands inside the process block, where the arrow link beside it
-offers the other case („Ich habe nur eine Idee“) and the pair has to sort
-the two visitors rather than name the page; „über den Assistenten“ is
-running text on the contact page, where the sentence and not the label
-carries the meaning.
+**One name for the way, and it is „Modell drucken“** – the route, the navigation item, the eyebrow of the band, its button, the arrow link in the hero and the document title. Four entrances lead here, and a wording of its own at each would read as four offers. **One of them names what the visitor brings instead, and deliberately:** „Ich habe ein fertiges Modell gefunden“ stands inside the process block, where the arrow link beside it offers the other case („Ich habe eine eigene Idee“) and the pair has to sort the two visitors rather than name the page.
 
-**No figure for the response time, and no holiday switch.** The page, the
-band on the homepage and the customer's mail say „innerhalb weniger Stunden“; a
-number is a promise that has to hold on the worst day. The wording stands
-written out at each of them rather than in a partial – with nothing left
-to switch, a partial would bundle five words and no decision.
-The one figure that stands – twenty-four hours after a released offer – is
-a production time the workshop controls, and it is written out rather than
-configured.
+**No figure for the response time, and no holiday switch.** The page, the band on the homepage and the customer's mail say „innerhalb weniger Stunden“; a number is a promise that has to hold on the worst day. The wording stands written out at each of them rather than in a partial – with nothing left to switch, a partial would bundle five words and no decision. The one figure that stands – twenty-four hours after a released offer – is a production time the workshop controls, and it is written out rather than configured.
 
-**It works without JavaScript.** One form with two submit buttons: „Weiter“
-carries `lookup` and only reads the model, „Anfrage senden“ sends. A browser
-triggers the first submit button for Enter, so Enter in the address field
-reads rather than sends. Nothing is kept on the server, and the page can
-also be reached with `?url=`, so a campaign link carries a model into it.
+**It works without JavaScript.** One form with two submit buttons: „Weiter“ carries `lookup` and only reads the model, „Anfrage senden“ sends. A browser triggers the first submit button for Enter, so Enter in the address field reads rather than sends. Nothing is kept on the server, and the page can also be reached with `?url=`, so a campaign link carries a model into it.
 
-A second form for the address would be the other way to keep Enter from
-sending, and it was built that way first – but then the address exists
-twice, and whoever corrects the visible field without pressing „Weiter“
-sends the other one.
+A second form for the address would keep Enter from sending as well, but then the address exists twice, and whoever corrects the visible field without pressing „Weiter“ sends the other one.
 
-**A failed lookup opens the steps anyway** and says what went wrong. The
-address alone is enough for the workshop, so the inquiry must never hang on
-a platform answering – that is the promise the whole page is built on.
+**A failed lookup opens the steps anyway** and says what went wrong. The address alone is enough for the workshop, so the inquiry must never hang on a platform answering – that is the promise the whole page is built on.
 
-**The workshop's mail carries the shape of the contact form's**
-(`templates/content/contact.txt.twig`): one sentence saying what came in, a
-label per line, the remarks under their own heading. **It writes an empty
-field out, the customer's copy leaves it away** – „nicht gelesen“, „von
-der Plattform nicht genannt“ and „keine Angabe“ are three different
-starting points for a calculation and a dash would flatten them into one,
-while the same rows on the receipt only tell the customer what he did not
-fill in. The receipt is a letter and not a form: it opens and closes like
-one, and the summary sits between two `+++` rules.
+**The workshop's mail carries the shape of the contact form's** (`templates/content/contact.txt.twig`): one sentence saying what came in, a label per line, the remarks under their own heading. **It writes an empty field out, the customer's copy leaves it away** – „nicht gelesen“, „von der Plattform nicht genannt“ and „keine Angabe“ are three different starting points for a calculation and a dash would flatten them into one, while the same rows on the receipt only tell the customer what he did not fill in. The receipt is a letter and not a form: it opens and closes like one, and the summary sits between two `+++` rules.
 
-**Two mails go out:** the inquiry to the workshop, with the license, and an
-acknowledgement to the customer without it. The second is where the
-instruction behind the license question is written down, in the conditional –
-an indicative sentence would turn the inquiry into the contract it must not
-be. For the same reason the button says „Anfrage senden“ and the page says
-what an order needs: the offer, and its release.
+**Two mails go out:** the inquiry to the workshop, with the license, and an acknowledgement to the customer without it. The second is where the instruction behind the license question is written down, in the conditional – an indicative sentence would turn the inquiry into the contract it must not be. For the same reason the button says „Anfrage senden“ and the page says what an order needs: the offer, and its release.
 
-The mechanism – honeypot, signed timestamp, CSRF token, rate limit – is the
-contact form's, through `SignedTimestamp`, which both now share.
+The mechanism – honeypot, signed timestamp, CSRF token, rate limit – is the contact form's, through `SignedTimestamp`, which both share.
 
-Two enhancements need JavaScript and nothing depends on them: the step bar
-following the scroll position, and the button saying it is working while the
-model is fetched.
+Two enhancements need JavaScript and nothing depends on them: the step bar following the scroll position, and the button saying it is working while the model is fetched.
 
 ## Data model
 
@@ -246,6 +160,7 @@ Tokens, contrast rules and the family bracket are in `../docs/BRAND_FAMILY.md`. 
 * **`surface-warm`** (`orange-50`) is the warm section ground, a token this site has and its siblings do not.
 * **Corners:** `rounded-2xl` for cards and containers. Cards are free-standing: border, white ground, soft shadow.
 * **Two-tone headings:** the statement comes first in `neutral-900` (or white on a dark ground), the flourish follows underneath, smaller and in the accent – `<span class="mt-3 block text-[0.8em] text-accent-on-light">`. This holds on every page. **Two heroes are allowed to reverse it and no third:** the homepage and the print-order assistant, which is a special page by decision. Inventing a further form elsewhere is drift, not personality.
+* **Every filled button ends in an icon:** the arrow inside the site, the off-site icon for an external link. `_button` sets it by default; a `<button>` that pulls `_button_class` writes it out. **The header is the exception:** its button carries the label alone, as on the sibling sites, and shrinks to the mail icon on a phone.
 * **The filled button is `accent` with a `neutral-900` label** (4.98:1) and **lightens** to `accent-hover` on hover (6.21:1); darkening would drop the label to 3.43:1. There is one button and no second step.
 * **Errors are `red-600`, not the accent** – on this brand an orange error would be indistinguishable from an orange heading.
 * Mono sizes: `text-sm` in the mobile menu and on the button, `text-xs` everywhere else.
@@ -261,7 +176,6 @@ The mechanism is in `../../docs/WEB_STACK.md`. Specific here:
 * The field keeps the **browser focus ring** (`focus:outline-2`) on top of the accent border; replacing the ring with a one pixel border change makes the form the only place on the site where keyboard focus is weaker than the default
 * The form-wide message is a live region (`role="alert"`); the honeypot is `sr-only` **and** `aria-hidden`, and keeps `tabindex="-1"`. The tab order alone is not enough: a screen reader's reading mode walks the document, not the tab chain, so without `aria-hidden` the trap is read out to exactly the visitors who cannot see that it is one
 * Discount code can be pre-filled: `/kontakt?discount-code=CODE`
-* The head of the page states the minimum order value and points at the assistant for a visitor who already has a model – two sentences, two paragraphs, because they answer different questions
 * Mail goes out through `TemplatedEmail`
 * The legal mailbox is `mail+legal@krausgedruckt.de`
 
@@ -281,13 +195,13 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 
 ## Tests
 
-137 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
+142 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
 
 | # | File | Covers |
 | --- | --- | --- |
 | 1 | `tests/Controller/RouteSmokeTest.php` | every frontend route answers and carries exactly one `h1` |
 | 2 | `tests/Controller/ContactFormTest.php` | an invalid submission is refused with 422, names the field and sends nothing; a valid one redirects and sends exactly one mail; the confirmation takes the form's place; the discount code arrives from the query string; a filled honeypot and a tampered signature are dropped silently while a stale form is asked to resend |
-| 3 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the old reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
+| 3 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
 | 4 | `tests/Controller/FaqTest.php` | every heading with an answer is a question in its order while the rest is dropped, an answer holds all of its blocks, the head comes from the content, the structured data carries the text of every answer, and a content that is not listed is no post |
 | 5 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
 | 6 | `tests/EventListener/SecurityHeadersListenerTest.php` | every public path carries the hardening headers, and the transport header follows the scheme |
@@ -296,7 +210,8 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 | 9 | `tests/Service/ModelLookupTest.php` | the choice between the readers, and the shortening every answer passes through |
 | 10 | `tests/Controller/PrintOrderTest.php` | which steps are open when, that a failed lookup opens them anyway, that a valid inquiry sends exactly two mails with the license in one of them, and that a honeypot or a tampered timestamp is dropped without sending |
 | 11 | `tests/Controller/ModelImageTest.php` | the relay hands out a signed platform image with the sniffing guard, and refuses an unsigned address, a swapped one and one off the platforms |
-| 12 | `tests/Controller/HomepageTest.php` | where the homepage and the contact page lead: the assistant three times and nowhere else, the way out beside the first step, and the assistant in the navigation |
+| 12 | `tests/Controller/HomepageTest.php` | where the homepage leads: the assistant three times and nowhere else, the way out beside the first step, and the assistant in the navigation |
+| 13 | `tests/Controller/FilledButtonTest.php` | every filled button below the header ends in an icon, the open assistant included |
 
 Files 5 and 7 to 9 are **plain `TestCase`s without kernel**, because the logic behind them is pure – that is what makes it cheap enough to pin every case rather than a sample. **The fetcher's host resolver is an interface** so those tests never reach a name server; the stand-in is `tests/Double/FixedHostResolver`. **The suite cannot reach the network at all:** `when@test` hands `PlatformFetcher` an empty `MockHttpClient` and kongtent its recordings, so a test that forgets to set up an answer fails loudly instead of asking the real platform. A test that spans two requests calls `disableReboot()` – the browser boots a fresh kernel per request otherwise, and a service put into the container before the first one would not survive into the second.
 
@@ -332,7 +247,7 @@ Defaults live in `.env`, overrides in `.env.local` (never committed).
 
 Outbound targets are **not** environment variables. They live in `config/services.yaml` and are read with `getParameter()`: `app.app_store_url_mobile`, `app.contact_email_address`, `app.etsy_url`, `app.google_review_url`, `app.instagram_url`, `app.legal_email_address`, `app.whats_app_url`.
 
-**The minimum order value lives beside them** – `app.minimum_order_value`, handed to Twig as a global in `config/packages/twig.yaml` because it is stated twice: in the proof line of the assistant and on the contact page. Neither mail states it.
+**The minimum order value lives beside them** – `app.minimum_order_value`, handed to Twig as a global in `config/packages/twig.yaml` and stated once, in the proof line of the assistant. Neither mail states it.
 
 **The frequently asked questions are outside all of this.** They are a content in kongtent, so the minimum order value stands there as editorial text and no parameter reaches it; changing `config/services.yaml` leaves it behind, and it has to follow by hand.
 

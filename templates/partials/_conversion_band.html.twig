@@ -27,13 +27,12 @@
    above it and merge into it). #}
 {% set href = href|default(path('app_contact')) %}
 {% set label = label|default('Jetzt anfragen') %}
-{% set icon = icon|default('arrow') %}
 
 {% if boxed|default(false) %}
     <div class="rounded-2xl border border-neutral-200 bg-surface-warm p-8">
         <h2 class="font-display text-xl font-bold text-neutral-900">{{ title }}</h2>
         <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
-        <div class="mt-6">{% block actions_boxed %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}{% endblock %}</div>
+        <div class="mt-6">{% block actions_boxed %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon|default(null), external: external|default(false) }, with_context = false) }}{% endblock %}</div>
     </div>
 {% elseif image|default(null) %}
     {% set ground = tone|default('warm') == 'plain' ? 'border-y border-neutral-200 bg-white' : 'border-t border-neutral-200 bg-surface-warm' %}
@@ -45,7 +44,7 @@
                     {% if eyebrow|default(null) %}<div class="mb-5">{{ include('partials/_eyebrow.html.twig', { text: eyebrow }, with_context = false) }}</div>{% endif %}
                     <h2 class="font-display text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ title }}</h2>
                     <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
-                    <div class="mt-6">{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}</div>
+                    <div class="mt-6">{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon|default(null), external: external|default(false) }, with_context = false) }}</div>
                 </div>
             </div>
         </div>
@@ -59,7 +58,7 @@
                 <h2 class="font-display text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">{{ title }}</h2>
                 <p class="mt-3 text-base leading-relaxed text-neutral-600">{{ text }}</p>
             </div>
-            <div class="shrink-0 self-start lg:self-auto">{% block actions %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon, external: external|default(false) }, with_context = false) }}{% endblock %}</div>
+            <div class="shrink-0 self-start lg:self-auto">{% block actions %}{{ include('partials/_button.html.twig', { href: href, label: label, icon: icon|default(null), external: external|default(false) }, with_context = false) }}{% endblock %}</div>
         </div>
     </section>
 {% endif %}
