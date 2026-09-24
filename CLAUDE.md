@@ -21,6 +21,7 @@ ddev start                                   # https://krausgedruckt.ddev.site
 ddev launch -m                               # Mailpit, captured mail
 ddev exec npm run build                      # Tailwind, minified
 ddev exec bin/phpunit                        # the tests
+bin/signature-cards                          # the table cards as PDF, on the host
 ```
 
 **ddev runs without a database container**, as the sibling sites do.
@@ -28,15 +29,19 @@ ddev exec bin/phpunit                        # the tests
 ## Layout
 
 ```
-config/                advintage-landing-page.json and the Symfony configuration
-src/Controller/        DefaultController, BlogController, PrintOrderController
-src/Entity/            the DTOs of the landing page
+config/                advintage-landing-page.json, signature-models.json
+                       and the Symfony configuration
+src/Controller/        DefaultController, BlogController, PrintOrderController,
+                       ShortLinkController, SignatureCardController
+src/Entity/            the DTOs of the landing page and SignatureModel
 src/Dto/               ContactRequest, ModelPreview, PrintOrderRequest, UsageContext
 src/EventListener/     SecurityHeadersListener
 src/Service/           PlatformFetcher, ModelLookup, a reader per platform,
-                       the host resolver they stand on, SignedTimestamp
+                       the host resolver they stand on, SignedTimestamp,
+                       SignatureModelCatalog, ShortLinkResolver,
+                       SignatureCardRenderer
 src/Twig/              PlainTextExtension, SoleLinkExtension
-templates/             base.html.twig, content/, partials/,
+templates/             base.html.twig, content/, partials/, print/,
                        bundles/KongtentBundle/blocks/
 public/                css/, fonts/, images/, favicon.*
 ```
@@ -55,7 +60,7 @@ The navigation is built once from the `nav_items` list in `base.html.twig`: Mode
 
 ## Routing
 
-Defined in `src/Controller/DefaultController.php`, `src/Controller/BlogController.php` and `src/Controller/PrintOrderController.php` with PHP attributes.
+Defined in `src/Controller/DefaultController.php`, `src/Controller/BlogController.php`, `src/Controller/PrintOrderController.php` and `src/Controller/ShortLinkController.php` with PHP attributes.
 
 | # | Path | Route name | Purpose |
 | --- | --- | --- | --- |
@@ -78,8 +83,32 @@ Defined in `src/Controller/DefaultController.php`, `src/Controller/BlogControlle
 | 17 | `/sitemap.xml` | `app_sitemap` | Public pages plus every post |
 | 18 | `/modell-drucken` | `app_print_order` | The print-order assistant (GET, POST) |
 | 19 | `/modell-bild` | `app_model_image` | Relays a platform's preview image, signed |
+| 20 | `/s/{slug}` | `app_short_link` | 302 to the homepage with a Matomo campaign – the address behind the QR code of a signature card |
+| 21 | `/shop` | `app_shop` | 302 to the Etsy shop, for print only |
+
+`/_signature-cards` exists in `dev` and `test` only and is not in the table – see „Signature cards“.
 
 `/advintage` loads `config/advintage-landing-page.json` and deserialises to `PrintableModel[]`. **The path is anchored to `kernel.project_dir`:** a relative path resolves against the working directory, which holds for the web server and breaks in the test runner.
+
+## Printed short links
+
+**The QR code of every signature card leads to `/s/{slug}`, and every short link leads to the homepage.** What differs is what the scan is counted as: the redirect adds `mtm_campaign` and `mtm_kwd`. The address stays short so the code stays coarse enough to scan from a table, and it answers 302 because what is already printed must be free to lead elsewhere.
+
+**A signature model answers under `signature-<slug>`** and is counted under the campaign of the current event in `config/signature-models.json`, its slug the keyword. The table cards are reprinted for every event, so the campaign sits beside the models and moves with the next event.
+
+**`/shop` is for print only.** The site links Etsy directly, because Matomo counts a click on a foreign address as an outlink and never sees one on an address of the site that the server redirects. Neither route is in the sitemap, and neither is blocked in `robots.txt`: the Location header holds nothing that has to stay out of a corpus.
+
+## Signature cards
+
+**A signature model is an outstanding print shown at events**, and a laminated table card lies in front of it: A4 landscape, in color, printed borderless at home. The model stands behind the card, so the card carries no picture. The left side names the model, its designer, the full address of the model as written – it is the credit – and the figures. The warm right side opens with the line for its kind; below it, the same on every card, stand „Lass drucken!“, the code and the shop, so the code sits in the same place on each.
+
+**Two kinds, and the line says which.** A model that may be ordered says why: the designer released it in person, or its license permits commercial use – then `license` names it. The card does not print it: a license such as CC BY asks for title, author, source and license, and the full address leads to a page that names the license, which the license accepts as attribution. Every other model is a reference: shown, never offered, because a print for money is a commercial use of the model even where only the service is billed. The call to action is the same on both, since it asks for the service and not for the model.
+
+**Chrome prints the cards from a page of the site**, so tokens, fonts and the logo are the website's own rather than an imitation. `/_signature-cards` renders every model of `config/signature-models.json` as one page each through `SignatureCardRenderer`; `bin/signature-cards` runs on the host – ddev has no Chrome, the host no PHP – and writes `var/signature-cards/<campaign>.pdf`, after making sure the page answers – Chrome prints an error page as readily as the cards. `CHROME` overrides the path of the browser. **The route exists in `dev` and `test` only**: the QR code library, `chillerlan/php-qrcode`, is a dev dependency, touched only inside `render()` so production's container never needs it.
+
+**The code holds the production address without `www`**, `https://krausgedruckt.de/s/signature-<slug>`, never the host of the request; the domain keeps the path when it redirects to `www`. Error correction M, the library's quiet zone, on a white card inside a filled button: accent ground, an arrow at its end, 94 mm wide. **Its label „Lass drucken!“ is `surface-warm`, not the site's `neutral-900`** – a deliberate exception on paper: it takes up the ground of the column and closes the block, and at `text-3xl` bold it is large text, where 3:1 is the bar; it measures 3.39:1, so it has little reserve if a home printer lightens the orange.
+
+**The card is read from a table, not a screen.** The type follows one scale: the name at `text-6xl`; „Lass drucken!“, the designer and every figure at `text-3xl`, the line for the kind at `text-2xl`, the text at `text-lg`, and mono labels from `text-sm` rather than `text-xs`; and a shadow is left out – Chrome prints it as a grey box. The line for the kind has one size on every card, however long it runs. **The text is escaped by `SignatureCardRenderer`, not by the template**, because it keeps a word after its „3D-“, a short name in quotation marks and the printer's name on one line – it cuts the text first and escapes every piece, so no pattern sees an entity – and the template prints the result raw. The source address likewise arrives in pieces that break after a slash, never inside `://`. Print time, parts and colors share a row; the material takes the first third of the next and the printer the other two, because its name wraps in one. Both columns end in a foot of one fixed height behind a hairline – the logo on the left, the shop on the right – so the two hairlines meet across the card; the figures and the code hang directly on it, and a longer or shorter text never moves them. **The designer's line sits at half the name rather than the flourish's 0.8em**: it is a credit, not a second statement, and at the size of the name it would outweigh the call to action. The page carries one `h1` per card, because each card is a page of its own once printed.
 
 ## The blog
 
@@ -150,7 +179,8 @@ Two enhancements need JavaScript and nothing depends on them: the step bar follo
 ## Data model
 
 * **Landing pages** use JSON files in `config/`. Flow: JSON → Serializer → entity DTO → Twig.
-* `PrintableModel`, `Image`, `ContactRequest`, `ModelPreview` and `PrintOrderRequest` are plain DTOs; `UsageContext` is the enum behind the purpose question and carries its own labels.
+* **Signature models** are `config/signature-models.json`, read by `SignatureModelCatalog`. Every figure is text, because an estimate often carries a „ca.“.
+* `PrintableModel`, `Image`, `SignatureModel`, `ContactRequest`, `ModelPreview` and `PrintOrderRequest` are plain DTOs; `UsageContext` is the enum behind the purpose question and carries its own labels.
 
 ## Design
 
@@ -195,7 +225,7 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 
 ## Tests
 
-143 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
+161 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
 
 | # | File | Covers |
 | --- | --- | --- |
@@ -212,6 +242,8 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 | 11 | `tests/Controller/ModelImageTest.php` | the relay hands out a signed platform image with the sniffing guard, and refuses an unsigned address, a swapped one and one off the platforms |
 | 12 | `tests/Controller/HomepageTest.php` | where the homepage leads: the assistant three times and nowhere else, the way out beside the first step, and the assistant in the navigation |
 | 13 | `tests/Controller/FilledButtonTest.php` | every filled button below the header ends in an icon, the open assistant included |
+| 14 | `tests/Controller/ShortLinkTest.php` | a signature model leads home under the event's campaign with 302, an unknown slug or one missing its prefix is 404, `/shop` leads to Etsy, and every model's slug is reachable and unique – the model is taken from the catalog, which changes with every event |
+| 15 | `tests/Controller/SignatureCardTest.php` | the route renders one card per model, the code leads to the short link on the production host, a model released in person and one under a license are offered each with their own reason, the license is not printed, and a reference is offered neither, an empty text and the name of the event are left out, a word such as „3D-Druck“ never breaks after its „3D-“ nor a short name in quotation marks or the printer's name inside the text, while the text stays escaped, whatever characters it or the printer's name carry, and the source address breaks after a slash only, and production can never reach the dev dependency – no constructor type from it, no route in `prod` |
 
 Files 5 and 7 to 9 are **plain `TestCase`s without kernel**, because the logic behind them is pure – that is what makes it cheap enough to pin every case rather than a sample. **The fetcher's host resolver is an interface** so those tests never reach a name server; the stand-in is `tests/Double/FixedHostResolver`. **The suite cannot reach the network at all:** `when@test` hands `PlatformFetcher` an empty `MockHttpClient` and kongtent its recordings, so a test that forgets to set up an answer fails loudly instead of asking the real platform. A test that spans two requests calls `disableReboot()` – the browser boots a fresh kernel per request otherwise, and a service put into the container before the first one would not survive into the second.
 

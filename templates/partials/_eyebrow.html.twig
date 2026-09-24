@@ -1,5 +1,6 @@
 {# Section eyebrow: mono label preceded by a small square marker.
-   Params: text, tone.
+   Params: text, tone, size (the mono size, `text-xs` unless a printed
+   card, read from a table, asks for more).
 
    The tone is not decoration. Papaya on a light ground measures 3.60:1 and
    misses AA, so type on light carries `accent-on-light`; on a dark ground the
@@ -10,12 +11,13 @@
    ever used inside the dark cross-promo band, so it carries the brighter
    step for both the label and its marker. #}
 {% set tone = tone|default('light') %}
+{% set size = size|default('text-xs') %}
 {% if tone == 'krausgebaut' %}
     <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-brand-krausgebaut-on-dark">
         <span aria-hidden="true" class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-brand-krausgebaut-on-dark"></span>{{ text }}
     </p>
 {% else %}
-    <p class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] {{ tone == 'dark' ? 'text-accent-on-dark' : 'text-accent-on-light' }}">
+    <p class="flex items-center gap-3 font-mono {{ size }} uppercase tracking-[0.2em] {{ tone == 'dark' ? 'text-accent-on-dark' : 'text-accent-on-light' }}">
         <span aria-hidden="true" class="inline-block h-2 w-2 shrink-0 rounded-[2px] bg-accent"></span>{{ text }}
     </p>
 {% endif %}

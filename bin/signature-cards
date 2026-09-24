@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Prints the table cards of the signature models into one PDF, one A4
+# landscape page per model, named after the campaign of the event. Runs on
+# the host: the page is served by ddev, which has no Chrome, and the host has
+# no PHP. CHROME overrides the path of the browser.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+chrome="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
+url="https://krausgedruckt.ddev.site/_signature-cards"
+campaign="$(python3 -c 'import json; print(json.load(open("config/signature-models.json"))["campaign"]["slug"])')"
+output="var/signature-cards/${campaign}.pdf"
+
+# Chrome prints whatever answers, an error page included, and succeeds.
+if ! curl -fsk -o /dev/null "$url"; then
+    echo "bin/signature-cards: $url does not answer – is ddev running?" >&2
+    exit 1
+fi
+
+mkdir -p "$(dirname "$output")"
+"$chrome" \
+    --headless \
+    --disable-gpu \
+    --ignore-certificate-errors \
+    --no-pdf-header-footer \
+    --virtual-time-budget=5000 \
+    --print-to-pdf="$output" \
+    "$url"
+
+echo "$output"

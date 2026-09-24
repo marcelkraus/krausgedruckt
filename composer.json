@@ -83,6 +83,7 @@
         }
     },
     "require-dev": {
+        "chillerlan/php-qrcode": "^6.0",
         "phpunit/phpunit": "^13.3",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*"

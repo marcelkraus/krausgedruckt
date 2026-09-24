@@ -1,0 +1,117 @@
+{# The printed table cards of the signature models: A4 landscape, one page
+   per model, printed borderless by `bin/signature-cards`. The model stands
+   behind the card, so the card carries no picture; the left side names it,
+   the warm right side asks for the print and carries the code. #}
+{% import 'partials/_icons.html.twig' as icons %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Signature-Drucke · {{ campaign.name }}</title>
+    <link rel="stylesheet" href="{{ asset('css/output.css') }}">
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .signature-card {
+            break-after: page;
+        }
+
+        .signature-card:last-child {
+            break-after: auto;
+        }
+
+        .signature-card__qr svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-neutral-200 font-sans text-neutral-600 antialiased print:bg-white">
+    {% for card in cards %}
+        {% set model = card.model %}
+        <section class="signature-card mx-auto flex h-[210mm] w-[297mm] overflow-hidden bg-white print:mx-0" data-slug="{{ model.slug }}">
+            <div class="flex w-[172mm] shrink-0 flex-col px-[16mm] pt-[16mm] pb-[8mm]">
+                {{ include('partials/_eyebrow.html.twig', { text: 'Signature-Druck', size: 'text-sm' }, with_context = false) }}
+
+                <h1 class="mt-6 font-display text-6xl font-bold leading-[1.05] tracking-tight text-neutral-900">
+                    „{{ model.name }}“
+                    <span class="mt-3 block text-[0.5em] text-accent-on-light">Design: {{ model.designer }}</span>
+                </h1>
+                {# The address is shown in full and as written: it is the credit. It
+                   may break after a slash only, never inside a name. #}
+                <p class="mt-3 font-mono text-sm text-neutral-600">{% for piece in card.sourceUrlPieces %}<span class="whitespace-nowrap">{{ piece }}</span>{% if not loop.last %}<wbr>{% endif %}{% endfor %}</p>
+
+                {% if model.text is not empty %}
+                    <p class="signature-card__text mt-6 max-w-[130mm] text-lg leading-relaxed text-neutral-600">{{ card.text|raw }}</p>
+                {% endif %}
+
+                {# The facts hang on the foot, so a longer or shorter text never
+                   moves them. The printer runs long enough to wrap in a third
+                   of the column, so it takes two beside the material. #}
+                <dl class="mt-auto grid grid-cols-3 gap-x-8 gap-y-5 border-t border-neutral-200 pt-6">
+                    {% for figure in [
+                        { label: 'Druckzeit', value: model.printTime },
+                        { label: 'Teile', value: model.parts },
+                        { label: 'Farben', value: model.colors },
+                        { label: 'Material', value: model.materials },
+                        { label: 'Drucker', value: model.printer, wide: true },
+                    ] %}
+                        <div class="{{ figure.wide|default(false) ? 'col-span-2' : '' }}">
+                            <dt class="font-mono text-sm uppercase tracking-[0.2em] text-neutral-600">{{ figure.label }}</dt>
+                            <dd class="mt-1 font-display text-3xl font-bold leading-tight text-neutral-900">{{ figure.value }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+
+                {# Both feet have one height, so their hairlines meet across
+                   the card. #}
+                <div class="mt-8 flex h-[22mm] shrink-0 items-center border-t border-neutral-200">
+                    {{ include('partials/_logo.html.twig', { class: 'h-12 w-auto' }, with_context = false) }}
+                </div>
+            </div>
+
+            {# The lower block is the same on every card, so the code sits in the
+               same place on each; only the space above it is the model's. #}
+            <div class="flex min-w-0 flex-1 flex-col bg-surface-warm px-[14mm] pt-[16mm] pb-[8mm]">
+                <p class="signature-card__line text-balance font-display text-2xl font-bold leading-snug text-neutral-900">
+                    {% if model.permitted %}
+                        {% if model.license is not empty %}Auch für dich druckbar&nbsp;– die Lizenz erlaubt es.{% else %}Auch für dich druckbar&nbsp;– dank dem Designer, der das Modell ausdrücklich dafür freigegeben hat.{% endif %}
+                    {% else %}
+                        Reines Ausstellungsstück&nbsp;– dieses Modell dürfen wir dir leider nicht anbieten. Andere schon.
+                    {% endif %}
+                </p>
+
+                {# The code sits in a filled button: accent ground, an icon at
+                   its end. The label takes the warm ground of the column rather
+                   than the site's neutral-900 – see „Signature cards“. #}
+                <div class="mt-auto w-[94mm] rounded-2xl bg-accent p-[4mm]">
+                    <p class="flex items-center justify-between px-[1mm] pb-[3mm] font-display text-3xl font-bold leading-tight tracking-tight text-surface-warm">
+                        Lass drucken!
+                        {{ icons.icon('arrow', 'h-8 w-8 rotate-90') }}
+                    </p>
+                    <div class="rounded-xl bg-white p-[3mm]">
+                        <div class="signature-card__qr" data-qr-url="{{ card.shortUrl }}">{{ card.qrCode|raw }}</div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex h-[22mm] shrink-0 flex-col justify-center border-t border-neutral-200 text-sm leading-relaxed text-neutral-600">
+                    <p>Lieber sofort etwas Fertiges?</p>
+                    <p class="font-mono uppercase tracking-[0.15em] text-neutral-900">{{ publicHost }}/shop</p>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+</body>
+</html>
