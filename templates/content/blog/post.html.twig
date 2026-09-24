@@ -6,7 +6,8 @@
    it carries the offset out of the payload and a post dated just after
    midnight would otherwise stand under the wrong day. The blocks this site
    sets itself carry `not-prose`; the plugin styles only what the bundle
-   renders.
+   renders. The teaser went through the converter and stands outside
+   `prose`, so it carries `data-generated`.
    Expects: post. #}
 {% extends 'base.html.twig' %}
 
@@ -29,7 +30,7 @@
                         {{ include('partials/_eyebrow.html.twig', { text: post.category }, with_context = false) }}
                     {% endif %}
                     <h1 class="mt-5 font-display text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl">{{ post.headline }}</h1>
-                    <p class="mt-5 text-lg leading-relaxed text-neutral-600">{{ post.teaser|raw }}</p>
+                    <p class="mt-5 text-lg leading-relaxed text-neutral-600" data-generated>{{ post.teaser|raw }}</p>
                 </div>
 
                 <p class="mt-10 font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">
@@ -45,7 +46,7 @@
         {% endif %}
 
         <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8 lg:py-16">
-            <div class="prose prose-neutral max-w-3xl prose-a:font-semibold prose-a:text-accent-on-light prose-a:no-underline hover:prose-a:underline prose-headings:font-display">
+            <div class="prose prose-neutral max-w-3xl prose-a:font-semibold prose-a:text-accent-on-light prose-a:no-underline prose-a:hover:underline prose-headings:font-display">
                 {% include '@Kongtent/blocks.html.twig' with { blocks: post.blocks } only %}
             </div>
         </div>

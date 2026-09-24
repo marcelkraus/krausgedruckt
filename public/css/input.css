@@ -116,8 +116,10 @@
 }
 
 /* A link inside markup kongtent generated, where the typography plugin does
-   not reach: a quotation or a term-list value carries `not-prose`, and its
-   anchors get the link style `prose-a` gives the running text. */
+   not reach, gets the link style `prose-a` gives the running text. Every
+   element that prints converted markup outside `prose` or under `not-prose`
+   carries `data-generated` – a quotation, a term-list value, a caption line,
+   the teaser of a post. */
 @layer components {
     [data-generated] a {
         @apply font-semibold text-accent-on-light no-underline hover:underline;
