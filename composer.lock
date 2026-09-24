@@ -231,12 +231,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/krausgebaut/kongtent-bundle.git",
-                "reference": "d283cacaa7f65d8e939e5013fda9c1cd1b9c1025"
+                "reference": "14aca3065eb132eced6dedf056a67270973f0eda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/krausgebaut/kongtent-bundle/zipball/d283cacaa7f65d8e939e5013fda9c1cd1b9c1025",
-                "reference": "d283cacaa7f65d8e939e5013fda9c1cd1b9c1025",
+                "url": "https://api.github.com/repos/krausgebaut/kongtent-bundle/zipball/14aca3065eb132eced6dedf056a67270973f0eda",
+                "reference": "14aca3065eb132eced6dedf056a67270973f0eda",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +282,7 @@
                 "issues": "https://github.com/krausgebaut/kongtent-bundle/issues",
                 "source": "https://github.com/krausgebaut/kongtent-bundle"
             },
-            "time": "2026-09-17T07:30:40+00:00"
+            "time": "2026-09-24T12:06:19+00:00"
         },
         {
             "name": "league/commonmark",

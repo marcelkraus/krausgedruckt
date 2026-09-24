@@ -8,10 +8,10 @@
             <figure>
                 <img class="aspect-square w-full rounded-xl object-cover" src="{{ picture.getUrl() }}"{% if picture.getSourceSet() %} srcset="{{ picture.getSourceSet() }}" sizes="(min-width: 51rem) 24rem, 50vw"{% endif %} width="{{ picture.getWidth() }}" height="{{ picture.getHeight() }}" alt="{{ picture.alternativeText }}" loading="lazy" decoding="async">
                 {% if picture.caption or picture.credit %}
-                    <figcaption class="mt-2 text-xs leading-relaxed text-neutral-600">
-                        {{- picture.caption -}}
+                    <figcaption class="mt-2 text-xs leading-relaxed text-neutral-600" data-generated>
+                        {{- picture.caption|raw -}}
                         {%- if picture.caption and picture.credit %} · {% endif -%}
-                        {%- if picture.credit %}Foto: {{ picture.credit }}{% endif -%}
+                        {%- if picture.credit %}Foto: {{ picture.credit|raw }}{% endif -%}
                     </figcaption>
                 {% endif %}
             </figure>

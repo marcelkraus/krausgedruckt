@@ -1,7 +1,7 @@
 {
     "date": "2026-09-10T10:00:00+02:00",
     "headline": "Jeder Block einmal",
-    "teaser": "Ein Testbeitrag mit *allen* acht Blöcken.",
+    "teaser": "Ein Testbeitrag mit *allen* acht Blöcken, gebaut für die [Werkstatt](/werkstatt).",
     "meta_title": "Jeder Block einmal",
     "meta_description": "Ein Testbeitrag mit allen acht Blöcken.",
     "category": "Referenzen",
@@ -63,7 +63,7 @@
         {
             "type": "image",
             "alt": "Ein gedrucktes Teil, Ansicht 2",
-            "caption": "Bildunterschrift 2",
+            "caption": "Bildunterschrift 2 mit [Modell](https://www.printables.com/model/391349)",
             "credit": "Fotograf 2",
             "sources": [
                 {
@@ -136,7 +136,7 @@
                     "type": "image",
                     "alt": "Ein gedrucktes Teil, Ansicht 5",
                     "caption": "Bildunterschrift 5",
-                    "credit": "Fotograf 5",
+                    "credit": "[Fotograf 5](/fotograf)",
                     "sources": [
                         {
                             "url": "https://kongtent.example/media/01a059f7-3c1c-7dba-a5c0-d7fe2a7ac9b3/small.jpg",

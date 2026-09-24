@@ -29,8 +29,9 @@
         <link rel="alternate" type="text/html" href="{{ url('app_blog_post', { year: post.getYear(), slug: post.slug }) }}"/>
         <updated>{{ post.date|date('c', false) }}</updated>
         {# `type="html"`, because the teaser carries markup. Twig escapes it
-           on the way out, which is exactly the form Atom asks for here. #}
-        <summary type="html">{{ post.teaser }}</summary>
+           on the way out, which is exactly the form Atom asks for here; a
+           path is made absolute like everywhere else in the feed. #}
+        <summary type="html">{{ post.teaser|replace({'href="/': 'href="' ~ app.request.schemeAndHttpHost ~ '/'}) }}</summary>
         <content type="html">
             {%- if post.coverImage -%}
                 {{- _self.picture(post.coverImage) -}}
@@ -73,5 +74,5 @@
 {#- One picture as the feed carries it: the cover, a picture in the text and
     every picture of a gallery alike. -#}
 {%- macro picture(picture) -%}
-    &lt;p&gt;&lt;img src="{{ picture.url|e('html')|e('html') }}" alt="{{ picture.alternativeText|e('html')|e('html') }}"&gt;{% if picture.caption %}&lt;br&gt;{{ picture.caption|e('html')|e('html') }}{% endif %}{% if picture.credit %}&lt;br&gt;Foto: {{ picture.credit|e('html')|e('html') }}{% endif %}&lt;/p&gt;
+    &lt;p&gt;&lt;img src="{{ picture.url|e('html')|e('html') }}" alt="{{ picture.alternativeText|e('html')|e('html') }}"&gt;{% if picture.caption %}&lt;br&gt;{{ picture.caption|replace({'href="/': 'href="' ~ app.request.schemeAndHttpHost ~ '/'}) }}{% endif %}{% if picture.credit %}&lt;br&gt;Foto: {{ picture.credit|replace({'href="/': 'href="' ~ app.request.schemeAndHttpHost ~ '/'}) }}{% endif %}&lt;/p&gt;
 {%- endmacro -%}

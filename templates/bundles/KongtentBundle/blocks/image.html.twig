@@ -4,10 +4,10 @@
 <figure class="not-prose my-8">
     <img class="w-full rounded-2xl shadow-sm" src="{{ block.picture.getUrl() }}"{% if block.picture.getSourceSet() %} srcset="{{ block.picture.getSourceSet() }}" sizes="(min-width: 51rem) 48rem, calc(100vw - 3rem)"{% endif %} width="{{ block.picture.getWidth() }}" height="{{ block.picture.getHeight() }}" alt="{{ block.picture.alternativeText }}" loading="lazy" decoding="async">
     {% if block.picture.caption or block.picture.credit %}
-        <figcaption class="mt-3 text-sm leading-relaxed text-neutral-600">
-            {{- block.picture.caption -}}
+        <figcaption class="mt-3 text-sm leading-relaxed text-neutral-600" data-generated>
+            {{- block.picture.caption|raw -}}
             {%- if block.picture.caption and block.picture.credit %} · {% endif -%}
-            {%- if block.picture.credit %}Foto: {{ block.picture.credit }}{% endif -%}
+            {%- if block.picture.credit %}Foto: {{ block.picture.credit|raw }}{% endif -%}
         </figcaption>
     {% endif %}
 </figure>

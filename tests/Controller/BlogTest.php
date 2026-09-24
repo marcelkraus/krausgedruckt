@@ -36,6 +36,8 @@ final class BlogTest extends WebTestCase
         self::assertStringContainsString('<dt>Farbe &lt;b&gt;</dt>', $entry);
         self::assertStringContainsString('<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">', $entry);
         self::assertStringContainsString('<a href="http://localhost/kontakt">', $entry);
+        self::assertStringContainsString('Foto: <a href="http://localhost/fotograf">', $entry);
+        self::assertStringContainsString('<a href="http://localhost/werkstatt">', (string) $document->getElementsByTagName('summary')->item(0)?->textContent);
     }
 
     public function testAPostAnswersOnlyUnderTheYearOfItsDate(): void
@@ -106,6 +108,25 @@ final class BlogTest extends WebTestCase
         self::assertCount(1, $page->filter('.prose dl.not-prose dd[data-generated] a[href="/kontakt"]'));
         self::assertCount(1, $page->filter('.prose h2'));
         self::assertCount(1, $page->filter('.prose a[href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"]'));
+        self::assertCount(1, $page->filter('.prose figure > figcaption[data-generated] a[href="https://www.printables.com/model/391349"]'));
+        self::assertCount(1, $page->filter('.prose li figcaption[data-generated] a[href="/fotograf"]'));
+    }
+
+    /**
+     * The teaser stands outside `prose` in the head of a post and keeps its
+     * link there; on a card it loses it, because the heading link covers the
+     * whole card.
+     */
+    public function testTheTeaserCarriesItsLinkOnlyInThePost(): void
+    {
+        $client = static::createClient();
+
+        $post = $client->request('GET', '/blog/2026/jeder-block-einmal');
+        self::assertCount(1, $post->filter('p[data-generated] a[href="/werkstatt"]'));
+
+        foreach (['/', '/blog'] as $path) {
+            self::assertCount(0, $client->request('GET', $path)->filter('a[href="/werkstatt"]'), $path);
+        }
     }
 
     /**

@@ -195,13 +195,13 @@ Sharing image composition, the deliberate mirror of krausgebaut's: white ground,
 
 ## Tests
 
-142 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
+143 cases, two of them skipped – `robots.txt` and `sitemap.xml` carry no heading, so the heading test steps over them. Tests that read kongtent answer from the recordings in `tests/fixtures/kongtent/` and never reach the network.
 
 | # | File | Covers |
 | --- | --- | --- |
 | 1 | `tests/Controller/RouteSmokeTest.php` | every frontend route answers and carries exactly one `h1` |
 | 2 | `tests/Controller/ContactFormTest.php` | an invalid submission is refused with 422, names the field and sends nothing; a valid one redirects and sends exactly one mail; the confirmation takes the form's place; the discount code arrives from the query string; a filled honeypot and a tampered signature are dropped silently while a stale form is asked to resend |
-| 3 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
+| 3 | `tests/Controller/BlogTest.php` | the feed is well-formed XML and carries every block type with plain text escaped twice, a post answers only under its own year and a year alone is no page, the reference addresses answer 301, every picture carries its measurements, the five block templates are this site's own and a link in generated markup outside `prose` is styled, in a caption line too, the teaser keeps its link in the post and loses it on a card, a lone external link carries the arrow while one within this site – by path or by its own host – does not, and the sitemap lists the posts |
 | 4 | `tests/Controller/FaqTest.php` | every heading with an answer is a question in its order while the rest is dropped, an answer holds all of its blocks, the head comes from the content, the structured data carries the text of every answer, and a content that is not listed is no post |
 | 5 | `tests/Twig/SoleLinkExtensionTest.php` | what counts as a lone external link |
 | 6 | `tests/EventListener/SecurityHeadersListenerTest.php` | every public path carries the hardening headers, and the transport header follows the scheme |
