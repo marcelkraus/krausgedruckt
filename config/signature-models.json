@@ -1,0 +1,61 @@
+{
+    "campaign": {
+        "name": "Gangelt Games Festival 2026",
+        "slug": "gangelt-games-festival-2026"
+    },
+    "models": [
+        {
+            "slug": "dummy-13",
+            "name": "Dummy 13",
+            "designer": "soozafone",
+            "sourceUrl": "https://www.printables.com/model/981111-dummy-13-version-10",
+            "permitted": true,
+            "license": "CC BY 4.0",
+            "printTime": "7 h",
+            "parts": "58",
+            "printer": "Prusa MK4S",
+            "materials": "PLA, ASA",
+            "colors": "2",
+            "text": "Der Dummy 13 ist eine multifunktionale Action-Figur, die sich über mehrere Gelenke komplett frei bewegen lässt. Dank dem 3D-Druck sind sowohl die farbliche Gestaltung als auch die Größe komplett frei zu wählen. Dieser Druck hier z. B. entspricht 150 % der ursprünglichen Größe."
+        },
+        {
+            "slug": "jurassic-print",
+            "name": "JURASSIC PRINT",
+            "designer": "CASADIO",
+            "sourceUrl": "https://youmagine.com/designs/e401421d-b0d7-47b0-82f2-f58ac9c0141c",
+            "permitted": true,
+            "printTime": "202 h",
+            "parts": "316",
+            "printer": "Prusa MK4S",
+            "materials": "PLA",
+            "colors": "10",
+            "text": "Dieser Druck hier ist nicht weniger als der „Jurassic Jeep“ in klein – und ein vollkommen funktionsfähiges RC-Car. Neben den 316 gedruckten Teilen werden mehr als 500 Schrauben und Muttern verbaut – ein gutes Beispiel dafür, was mit 3D-Druck möglich ist."
+        },
+        {
+            "slug": "marlin",
+            "name": "Marlin",
+            "designer": "Cipis",
+            "sourceUrl": "https://www.printables.com/model/5480-marlin-multi-material",
+            "permitted": false,
+            "printTime": "26 h",
+            "parts": "1",
+            "printer": "Prusa CORE One+",
+            "materials": "PLA",
+            "colors": "4",
+            "text": "Gesucht? Gefunden. Marlin heißt dieser nicht ganz so kleine Clownfisch, den wir mit vier Farben auf unserem Prusa CORE One+ mit INDX-System gedruckt haben. Die Grenze ist damit noch lange nicht erreicht – insgesamt sind bis zu acht Farben parallel möglich."
+        },
+        {
+            "slug": "triton-racer",
+            "name": "Triton Racer",
+            "designer": "3D Sets",
+            "sourceUrl": "https://3dsets.com/product/3d-sets-triton-racer/",
+            "permitted": false,
+            "printTime": "340 h",
+            "parts": "179",
+            "printer": "Prusa CORE One+",
+            "materials": "PLA, PC-CF",
+            "colors": "8",
+            "text": "Das Gegenstück des „Jurassic Jeep“ auf dem Wasser. Hätte InGen, die Firma hinter dem „Jurassic Park“, damals auch Speedboote gebaut – wir sind uns sicher, sie hätten in etwa so ausgesehen. Auch dieser Druck ist komplett motorisiert und kann ferngesteuert betrieben werden."
+        }
+    ]
+}
