@@ -53,7 +53,7 @@ final class SignatureCardTest extends WebTestCase
     {
         $card = $this->render([$this->model('frei', true)])->filter('.signature-card');
 
-        self::assertStringContainsString('dank dem Designer, der das Modell ausdrücklich dafür freigegeben hat', $card->filter('.signature-card__line')->text());
+        self::assertStringContainsString('der Designer hat uns dieses und seine anderen Modelle persönlich freigegeben', $card->filter('.signature-card__line')->text());
         self::assertStringNotContainsString('Lizenz', $card->text());
     }
 
