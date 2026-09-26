@@ -17,8 +17,8 @@ final class ShortLinkResolver
     public const SIGNATURE_PREFIX = 'signature-';
 
     /**
-     * What a slug may consist of – shared by the route and the test that
-     * holds every configured slug to it, so nothing printed can answer 404.
+     * What a slug may consist of – held by the resolver and by the test
+     * that checks every configured slug against it.
      */
     public const SLUG_PATTERN = '[a-z0-9-]+';
 
@@ -32,6 +32,10 @@ final class ShortLinkResolver
      */
     public function resolve(string $slug): ?array
     {
+        if (1 !== preg_match('/^' . self::SLUG_PATTERN . '$/', $slug)) {
+            return null;
+        }
+
         if (!str_starts_with($slug, self::SIGNATURE_PREFIX)) {
             return null;
         }
