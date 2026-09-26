@@ -38,6 +38,17 @@ final class SignatureCardTest extends WebTestCase
         self::assertCount(1, $card->filter('.signature-card__qr svg'));
     }
 
+    /**
+     * The library adds to what an instance already holds, so a shared one
+     * chained the addresses of every card before into the code.
+     */
+    public function testEveryCardEncodesItsOwnAddressOnly(): void
+    {
+        $cards = $this->render([$this->model('gleich', false), $this->model('gleich', false)])->filter('.signature-card__qr');
+
+        self::assertSame($cards->eq(0)->html(), $cards->eq(1)->html());
+    }
+
     public function testModelReleasedInPersonIsOffered(): void
     {
         $card = $this->render([$this->model('frei', true)])->filter('.signature-card');

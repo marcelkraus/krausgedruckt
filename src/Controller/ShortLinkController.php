@@ -16,11 +16,16 @@ final class ShortLinkController extends AbstractController
      * the code stays coarse enough to scan from a table, and it answers 302
      * because the target of something already printed must be free to
      * change.
+     *
+     * The cards of the Gangelt Games Festival 2026 carry codes in which the
+     * addresses of the cards before them stand chained, each ending in the
+     * card's own. The path therefore takes anything, and the last short
+     * link in it is the one that counts.
      */
-    #[Route('/s/{slug}', name: 'app_short_link', requirements: ['slug' => ShortLinkResolver::SLUG_PATTERN], methods: ['GET'])]
+    #[Route('/s/{slug}', name: 'app_short_link', requirements: ['slug' => '.+'], methods: ['GET'])]
     public function shortLink(string $slug, ShortLinkResolver $resolver): Response
     {
-        $campaign = $resolver->resolve($slug);
+        $campaign = $resolver->resolve((string) preg_replace('~^.*/s/~', '', $slug));
 
         if (null === $campaign) {
             throw $this->createNotFoundException();

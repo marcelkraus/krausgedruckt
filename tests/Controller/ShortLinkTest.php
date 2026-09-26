@@ -27,6 +27,21 @@ final class ShortLinkTest extends WebTestCase
         self::assertResponseRedirects('/?mtm_campaign=' . $catalog->campaign()['slug'] . '&mtm_kwd=' . $model->slug, 302);
     }
 
+    /**
+     * The codes printed for the Gangelt Games Festival 2026 chain the
+     * addresses of the cards before them; the last one counts.
+     */
+    public function testChainedAddressLeadsToTheLastModel(): void
+    {
+        $client = static::createClient();
+        $catalog = static::getContainer()->get(SignatureModelCatalog::class);
+        [$first, $last] = [$catalog->all()[0], $catalog->all()[\count($catalog->all()) - 1]];
+
+        $client->request('GET', '/s/signature-' . $first->slug . 'https:/krausgedruckt.de/s/signature-' . $last->slug);
+
+        self::assertResponseRedirects('/?mtm_campaign=' . $catalog->campaign()['slug'] . '&mtm_kwd=' . $last->slug, 302);
+    }
+
     public function testSignatureModelWithoutPrefixIsNotFound(): void
     {
         $client = static::createClient();

@@ -37,20 +37,22 @@ final class SignatureCardRenderer
      */
     public function render(array $models, array $campaign): string
     {
-        $qrCode = new QRCode(new QROptions([
+        $qrOptions = new QROptions([
             'eccLevel' => EccLevel::M,
             'outputBase64' => false,
             'svgAddXmlHeader' => false,
             'drawLightModules' => false,
             'connectPaths' => true,
-        ]));
+        ]);
 
         $cards = [];
         foreach ($models as $model) {
             $shortUrl = 'https://' . self::PUBLIC_HOST . '/s/' . ShortLinkResolver::SIGNATURE_PREFIX . $model->slug;
             $cards[] = [
                 'model' => $model,
-                'qrCode' => $qrCode->render($shortUrl),
+                // A fresh instance per card: render() adds its data to what the
+                // instance already holds, so a shared one chains the addresses.
+                'qrCode' => (new QRCode($qrOptions))->render($shortUrl),
                 'shortUrl' => $shortUrl,
                 'sourceUrlPieces' => $this->sourceUrlPieces($model->sourceUrl),
                 'text' => $this->text($model),
