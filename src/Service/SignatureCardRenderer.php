@@ -37,14 +37,6 @@ final class SignatureCardRenderer
      */
     public function render(array $models, array $campaign): string
     {
-        $qrOptions = new QROptions([
-            'eccLevel' => EccLevel::M,
-            'outputBase64' => false,
-            'svgAddXmlHeader' => false,
-            'drawLightModules' => false,
-            'connectPaths' => true,
-        ]);
-
         $cards = [];
         foreach ($models as $model) {
             $shortUrl = 'https://' . self::PUBLIC_HOST . '/s/' . ShortLinkResolver::SIGNATURE_PREFIX . $model->slug;
@@ -52,7 +44,7 @@ final class SignatureCardRenderer
                 'model' => $model,
                 // A fresh instance per card: render() adds its data to what the
                 // instance already holds, so a shared one chains the addresses.
-                'qrCode' => (new QRCode($qrOptions))->render($shortUrl),
+                'qrCode' => (new QRCode(self::qrOptions()))->render($shortUrl),
                 'shortUrl' => $shortUrl,
                 'sourceUrlPieces' => $this->sourceUrlPieces($model->sourceUrl),
                 'text' => $this->text($model),
@@ -63,6 +55,21 @@ final class SignatureCardRenderer
             'campaign' => $campaign,
             'cards' => $cards,
             'publicHost' => self::PUBLIC_HOST,
+        ]);
+    }
+
+    /**
+     * The options of every card's code, open to the test that renders each
+     * configured address on its own and compares it with the card.
+     */
+    public static function qrOptions(): QROptions
+    {
+        return new QROptions([
+            'eccLevel' => EccLevel::M,
+            'outputBase64' => false,
+            'svgAddXmlHeader' => false,
+            'drawLightModules' => false,
+            'connectPaths' => true,
         ]);
     }
 

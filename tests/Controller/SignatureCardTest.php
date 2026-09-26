@@ -8,6 +8,7 @@ use App\Controller\SignatureCardController;
 use App\Entity\SignatureModel;
 use App\Service\SignatureCardRenderer;
 use App\Service\SignatureModelCatalog;
+use chillerlan\QRCode\QRCode;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Routing\Attribute\Route;
@@ -47,6 +48,26 @@ final class SignatureCardTest extends WebTestCase
         $cards = $this->render([$this->model('gleich', false), $this->model('gleich', false)])->filter('.signature-card__qr');
 
         self::assertSame($cards->eq(0)->html(), $cards->eq(1)->html());
+    }
+
+    /**
+     * Every configured card, in the order it is printed, carries exactly the
+     * code of its own short link – the same code a fresh render of that one
+     * address gives.
+     */
+    public function testEveryConfiguredCardCarriesTheCodeOfItsOwnShortLink(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/_signature-cards');
+
+        foreach ($crawler->filter('.signature-card__qr') as $index => $qr) {
+            $qr = new Crawler($qr);
+            $expected = new Crawler((new QRCode(SignatureCardRenderer::qrOptions()))->render($qr->attr('data-qr-url')));
+
+            self::assertSame($expected->filter('svg')->outerHtml(), $qr->filter('svg')->outerHtml(), 'Karte ' . ($index + 1));
+        }
+
+        self::assertGreaterThan(1, $crawler->filter('.signature-card__qr')->count());
     }
 
     public function testModelReleasedInPersonIsOffered(): void
