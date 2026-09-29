@@ -63,7 +63,7 @@
                   {% if errors.message is defined %}aria-invalid="true" aria-describedby="e_message"{% endif %}
                   class="{{ include('partials/_field_class.html.twig', { invalid: errors.message is defined }, with_context = false) }}">{{ old.message|default('') }}</textarea>
         {% if errors.message is defined %}<p id="e_message" class="mt-2 text-sm font-semibold text-error">{{ errors.message }}</p>{% endif %}
-        <p class="mt-2 text-sm text-neutral-600">Falls du auf der Suche nach einem Rabattcode bist, schau doch mal in unsere App.</p>
+        <p class="mt-2 text-sm text-neutral-600">Falls du auf der Suche nach einem Rabattcode bist, schau doch mal in meine App.</p>
     </div>
 
     <div class="mt-8 flex flex-wrap items-center gap-4">
@@ -74,5 +74,5 @@
         <p class="font-mono text-xs text-neutral-600">Pflichtfelder <span class="text-accent-on-light">*</span></p>
     </div>
 
-    <p class="mt-5 text-sm leading-relaxed text-neutral-600">Mit dem Absenden stimmst du unserer <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_data_privacy') }}">Datenschutzerklärung</a> zu.</p>
+    <p class="mt-5 text-sm leading-relaxed text-neutral-600">Mit dem Absenden stimmst du meiner <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_data_privacy') }}">Datenschutzerklärung</a> zu.</p>
 </form>

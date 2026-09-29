@@ -6,7 +6,7 @@ Business website for **krausgedruckt** – the 3D printing branch of Marcel Krau
 
 German only. The blog and the FAQ come from kongtent; everything else is markup or JSON. There is no database and no backend.
 
-**Voice:** the business speaks as „wir“ and addresses the customer as „du“. In the FAQ the customer speaks too, keeping „ich“ for itself and addressing the business as „ihr“ – the same word therefore moves in one entry and stays in the next. Routing uses German URLs throughout.
+**Voice:** Marcel speaks in the first person, „ich“, and addresses the customer as „du“. In the FAQ the customer speaks too, keeping „ich“ for itself and addressing Marcel as „du“ – both words therefore change sides between a question and its answer. Routing uses German URLs throughout.
 
 ## Stack notes
 

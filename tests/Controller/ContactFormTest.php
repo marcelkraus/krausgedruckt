@@ -23,10 +23,10 @@ final class ContactFormTest extends WebTestCase
     public static function invalidSubmissionProvider(): array
     {
         return [
-            'leerer Name' => [['name' => ''], 'Bitte sag uns, wie du heißt.'],
+            'leerer Name' => [['name' => ''], 'Bitte sag mir, wie du heißt.'],
             'leere E-Mail-Adresse' => [['email' => ''], 'Ohne E-Mail-Adresse'],
             'unsinnige E-Mail-Adresse' => [['email' => 'keine-adresse'], 'sieht nicht gültig aus'],
-            'leere Nachricht' => [['message' => ''], 'Erzähl uns kurz, worum es geht.'],
+            'leere Nachricht' => [['message' => ''], 'Erzähl mir kurz, worum es geht.'],
             'zu kurze Nachricht' => [['message' => 'Hallo'], 'etwas ausführlicher'],
         ];
     }

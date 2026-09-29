@@ -76,7 +76,7 @@ final class PrintOrderTest extends WebTestCase
         $crawler = $client->request('GET', self::PATH.'?url='.urlencode(self::MODEL));
 
         self::assertResponseIsSuccessful();
-        self::assertStringContainsString('Schick uns den Link trotzdem', $crawler->filter('#schritt-1')->text());
+        self::assertStringContainsString('Schick mir den Link trotzdem', $crawler->filter('#schritt-1')->text());
         self::assertCount(1, $crawler->filter('#schritt-3 input[name="email"]'));
     }
 
@@ -97,7 +97,7 @@ final class PrintOrderTest extends WebTestCase
 
         $crawler = $client->request('GET', self::PATH.'?url='.urlencode('https://www.thingiverse.com/thing:4711'));
 
-        self::assertStringContainsString('Wir lesen aktuell nur Modelle von Printables', $crawler->filter('#schritt-1')->text());
+        self::assertStringContainsString('Ich lese aktuell nur Modelle von Printables', $crawler->filter('#schritt-1')->text());
     }
 
     public function testAValidInquiryRedirectsAndSendsTwoMails(): void
@@ -154,7 +154,7 @@ final class PrintOrderTest extends WebTestCase
         $workshop = self::getMailerMessage(0)->getTextBody();
 
         self::assertStringContainsString('Modell: nicht gelesen', $workshop);
-        self::assertStringContainsString('Material nach unserer Einschätzung', $workshop);
+        self::assertStringContainsString('Material nach meiner Einschätzung', $workshop);
     }
 
     /**
@@ -194,7 +194,7 @@ final class PrintOrderTest extends WebTestCase
         $crawler = $client->request('POST', self::PATH, $payload);
 
         self::assertResponseStatusCodeSame(422);
-        self::assertSame('Diese Angabe kennen wir nicht.', trim($crawler->filter('#e_context')->text()));
+        self::assertSame('Diese Angabe kenne ich nicht.', trim($crawler->filter('#e_context')->text()));
         self::assertSame('context', $crawler->filter('form[data-error-focus]')->attr('data-error-focus'));
     }
 
