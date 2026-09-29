@@ -166,16 +166,16 @@ final class PrintOrderController extends AbstractController
         }
 
         if ($this->lookupLimiter->create($request->getClientIp() ?? 'anonymous')->consume()->isAccepted() === false) {
-            return [null, 'Das waren gerade viele Anfragen. Schick uns den Link trotzdem – wir sehen selbst nach.'];
+            return [null, 'Das waren gerade viele Anfragen. Schick mir den Link trotzdem – ich sehe selbst nach.'];
         }
 
         try {
             return [$this->modelLookup->lookup($url), null];
         } catch (LookupFailedException $exception) {
             return [null, match ($exception->failure) {
-                LookupFailure::NotAModelPage => 'Das sieht nach einer Übersicht aus, nicht nach einem einzelnen Modell. Nimm die Seite des Modells selbst – oder schick uns den Link trotzdem.',
-                LookupFailure::UnsupportedAddress => 'Wir lesen aktuell nur Modelle von Printables. Von anderen Seiten können wir diese leider (noch) nicht laden – schick uns den Link gerne trotzdem, wir sehen uns das gerne an.',
-                LookupFailure::NoMetadata, LookupFailure::Unreachable => 'Wir konnten die Seite gerade nicht lesen. Schick uns den Link trotzdem – wir sehen selbst nach.',
+                LookupFailure::NotAModelPage => 'Das sieht nach einer Übersicht aus, nicht nach einem einzelnen Modell. Nimm die Seite des Modells selbst – oder schick mir den Link trotzdem.',
+                LookupFailure::UnsupportedAddress => 'Ich lese aktuell nur Modelle von Printables. Von anderen Seiten kann ich diese leider (noch) nicht laden – schick mir den Link gerne trotzdem, ich sehe mir das gerne an.',
+                LookupFailure::NoMetadata, LookupFailure::Unreachable => 'Ich konnte die Seite gerade nicht lesen. Schick mir den Link trotzdem – ich sehe selbst nach.',
             }];
         }
     }
@@ -239,7 +239,7 @@ final class PrintOrderController extends AbstractController
             $this->send($order, $this->look($request, $order->url)[0]);
         } catch (TransportExceptionInterface) {
             return $this->renderErrors($request, [
-                'form' => 'Die Anfrage konnte gerade nicht zugestellt werden. Bitte versuche es später noch einmal oder schreibe uns per E-Mail.',
+                'form' => 'Die Anfrage konnte gerade nicht zugestellt werden. Bitte versuche es später noch einmal oder schreibe mir per E-Mail.',
             ]);
         }
 
@@ -285,7 +285,7 @@ final class PrintOrderController extends AbstractController
                 ->from(new Address($this->contactFrom, 'krausgedruckt von Marcel Kraus'))
                 ->to($order->email)
                 ->replyTo(new Address($this->contactTo))
-                ->subject('Deine Anfrage ist bei uns angekommen')
+                ->subject('Deine Anfrage ist bei mir angekommen')
                 ->textTemplate('content/print-order-confirmation.txt.twig')
                 ->context($context)
         );

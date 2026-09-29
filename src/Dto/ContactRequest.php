@@ -20,11 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 final class ContactRequest
 {
-    #[Assert\NotBlank(message: 'Bitte sag uns, wie du heißt.')]
+    #[Assert\NotBlank(message: 'Bitte sag mir, wie du heißt.')]
     #[Assert\Length(max: 120, maxMessage: 'Der Name ist zu lang.')]
     public string $name = '';
 
-    #[Assert\NotBlank(message: 'Ohne E-Mail-Adresse können wir dir nicht antworten.')]
+    #[Assert\NotBlank(message: 'Ohne E-Mail-Adresse kann ich dir nicht antworten.')]
     #[Assert\Email(message: 'Diese E-Mail-Adresse sieht nicht gültig aus.', mode: 'strict')]
     #[Assert\Length(max: 180, maxMessage: 'Die E-Mail-Adresse ist zu lang.')]
     public string $email = '';
@@ -35,7 +35,7 @@ final class ContactRequest
     #[Assert\Length(max: 60, maxMessage: 'Der Rabattcode ist zu lang.')]
     public string $discountCode = '';
 
-    #[Assert\NotBlank(message: 'Erzähl uns kurz, worum es geht.')]
-    #[Assert\Length(min: 10, max: 3000, minMessage: 'Erzähl uns bitte etwas ausführlicher, worum es geht.', maxMessage: 'Deine Nachricht ist zu lang.')]
+    #[Assert\NotBlank(message: 'Erzähl mir kurz, worum es geht.')]
+    #[Assert\Length(min: 10, max: 3000, minMessage: 'Erzähl mir bitte etwas ausführlicher, worum es geht.', maxMessage: 'Deine Nachricht ist zu lang.')]
     public string $message = '';
 }

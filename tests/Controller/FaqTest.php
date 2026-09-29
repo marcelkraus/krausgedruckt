@@ -36,7 +36,7 @@ final class FaqTest extends WebTestCase
         self::assertSame('FAQPage', $data['@type']);
         self::assertCount(2, $data['mainEntity']);
         self::assertSame('Was kostet PLA & „PETG“?', $data['mainEntity'][0]['name']);
-        self::assertSame('Das hängt vom Modell ab. Frag uns einfach.', $data['mainEntity'][0]['acceptedAnswer']['text']);
+        self::assertSame('Das hängt vom Modell ab. Frag mich einfach.', $data['mainEntity'][0]['acceptedAnswer']['text']);
     }
 
     public function testAContentNotListedIsNoPost(): void

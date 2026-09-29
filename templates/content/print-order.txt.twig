@@ -12,7 +12,7 @@ Modell: {{ preview ? preview.title ~ ' (' ~ url ~ ')' : 'nicht gelesen – bitte
 Plattform: {{ preview ? preview.platform : '–' }}
 Lizenz: {{ preview ? (preview.license ?: 'von der Plattform nicht genannt') : '–' }}
 Stückzahl: {{ quantity }} Stück
-Wofür: {{ usage is empty ? 'keine Angabe – Material nach unserer Einschätzung' : usage|join(', ') }}
+Wofür: {{ usage is empty ? 'keine Angabe – Material nach meiner Einschätzung' : usage|join(', ') }}
 Farbe: {{ color is empty ? '–' : color }}
 E-Mail: {{ emailAddress }}
 
