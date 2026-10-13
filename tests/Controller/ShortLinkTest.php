@@ -4,52 +4,73 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\SignatureModel;
-use App\Service\ShortLinkResolver;
-use App\Service\SignatureModelCatalog;
+use App\Controller\ShortLinkController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * The printed short links: where they lead, what they are counted as, and
  * that nothing printed can answer under two meanings or not at all. The
- * models change with every event, so the tests take theirs from the catalog.
+ * editions change with every print run and the models with what is on
+ * show, so the tests take both from the controller.
  */
 final class ShortLinkTest extends WebTestCase
 {
-    public function testSignatureModelLeadsHomeUnderTheEventCampaign(): void
+    /**
+     * @return iterable<string, array{0: string, 1: string}>
+     */
+    public static function printedProvider(): iterable
+    {
+        foreach (ShortLinkController::PRINT_EDITIONS as $prefix => $codes) {
+            foreach ($codes as $code) {
+                $query = 'mtm_campaign=' . ShortLinkController::PRINT_CAMPAIGNS[$prefix] . '&mtm_medium=print';
+                $query .= $prefix === 'ad'
+                    ? '&mtm_source=' . ShortLinkController::PRINT_SOURCES[substr($code, 0, 2)] . '&mtm_kwd=' . substr($code, 2)
+                    : '&mtm_kwd=' . $code;
+
+                yield $prefix . '-' . $code => [$prefix . '-' . $code, $query];
+            }
+        }
+
+        foreach (ShortLinkController::SIGNATURE_MODELS as $code => $slug) {
+            yield 'sm-' . $code => ['sm-' . $code, 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=' . $slug];
+        }
+    }
+
+    #[DataProvider('printedProvider')]
+    public function testPrintedLeadsHomeCountedAsPrint(string $slug, string $query): void
     {
         $client = static::createClient();
-        $catalog = static::getContainer()->get(SignatureModelCatalog::class);
-        $model = $catalog->all()[0];
 
-        $client->request('GET', '/s/' . ShortLinkResolver::SIGNATURE_PREFIX . $model->slug);
+        $client->request('GET', '/s/' . $slug);
 
-        self::assertResponseRedirects('/?mtm_campaign=' . $catalog->campaign()['slug'] . '&mtm_kwd=' . $model->slug, 302);
+        self::assertResponseRedirects('/?' . $query, 302);
     }
 
     /**
-     * The codes printed for the Gangelt Games Festival 2026 chain the
-     * addresses of the cards before them; the last one counts.
+     * What Matomo reports, written out once rather than derived from the
+     * controller, so a renamed campaign cannot pass unnoticed.
+     *
+     * @return array<string, array{0: string, 1: string}>
      */
-    public function testChainedAddressLeadsToTheLastModel(): void
+    public static function countedAsProvider(): array
     {
-        $client = static::createClient();
-        $catalog = static::getContainer()->get(SignatureModelCatalog::class);
-        [$first, $last] = [$catalog->all()[0], $catalog->all()[\count($catalog->all()) - 1]];
-
-        $client->request('GET', '/s/signature-' . $first->slug . 'https:/krausgedruckt.de/s/signature-' . $last->slug);
-
-        self::assertResponseRedirects('/?mtm_campaign=' . $catalog->campaign()['slug'] . '&mtm_kwd=' . $last->slug, 302);
+        return [
+            'Anzeige' => ['/s/ad-ea2610', 'mtm_campaign=advertisement&mtm_medium=print&mtm_source=erftstadt-aktuell&mtm_kwd=2610'],
+            'Flyer' => ['/s/fl-2610', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2610'],
+            'Signature-Modell' => ['/s/sm-jpjp', 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=jurassic-print'],
+            'Visitenkarte' => ['/s/bc-2610', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2610'],
+        ];
     }
 
-    public function testSignatureModelWithoutPrefixIsNotFound(): void
+    #[DataProvider('countedAsProvider')]
+    public function testPrintedIsCountedUnderItsReadableCampaign(string $path, string $query): void
     {
         $client = static::createClient();
-        $model = static::getContainer()->get(SignatureModelCatalog::class)->all()[0];
 
-        $client->request('GET', '/s/' . $model->slug);
+        $client->request('GET', $path);
 
-        self::assertResponseStatusCodeSame(404);
+        self::assertResponseRedirects('/?' . $query, 302);
     }
 
     /**
@@ -58,12 +79,23 @@ final class ShortLinkTest extends WebTestCase
     public static function unknownSlugProvider(): array
     {
         return [
-            'Präfix ohne Modell' => ['/s/signature-gibt-es-nicht'],
+            'Anzeige in unbekanntem Medium' => ['/s/ad-xx2610'],
+            'Anzeige mit unbekannter Auflage' => ['/s/ad-ea0000'],
+            'Anzeige ohne Auflage' => ['/s/ad-ea'],
+            'Flyer mit unbekannter Auflage' => ['/s/fl-0000'],
+            'Flyer ohne Auflage' => ['/s/fl-'],
+            'Kennung mit Bindestrich' => ['/s/fl-2610-b'],
+            'Modell unter dem Slug statt dem Kürzel' => ['/s/sm-dummy-13'],
+            'Pfad hinter dem Slug' => ['/s/sm-d13/s/fl-2610'],
+            'Präfix mit unbekanntem Modell' => ['/s/sm-gibt'],
             'unbekannt' => ['/s/gibt-es-nicht'],
+            'unbekanntes Präfix' => ['/s/xx-2610'],
+            'Visitenkarte mit unbekannter Auflage' => ['/s/bc-0000'],
+            'Visitenkarte ohne Auflage' => ['/s/bc-'],
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('unknownSlugProvider')]
+    #[DataProvider('unknownSlugProvider')]
     public function testUnknownSlugIsNotFound(string $path): void
     {
         $client = static::createClient();
@@ -81,19 +113,22 @@ final class ShortLinkTest extends WebTestCase
     }
 
     /**
-     * Two models under one slug would share one count, and a slug the route
-     * refuses would put a dead code on paper.
+     * Two prints under one slug would share one count, a slug the route
+     * refuses would put a dead code on paper, and an advertisement in a
+     * medium without a source would answer 404.
      */
     public function testSlugsAreReachableAndUnique(): void
     {
-        static::bootKernel();
+        $slugs = array_map(static fn (array $case): string => $case[0], iterator_to_array(self::printedProvider(), false));
 
-        $modelSlugs = array_map(static fn (SignatureModel $model): string => $model->slug, static::getContainer()->get(SignatureModelCatalog::class)->all());
-
-        foreach ($modelSlugs as $slug) {
-            self::assertMatchesRegularExpression('/^' . ShortLinkResolver::SLUG_PATTERN . '$/', ShortLinkResolver::SIGNATURE_PREFIX . $slug);
+        foreach ($slugs as $slug) {
+            self::assertMatchesRegularExpression('/^[a-z]{2}-[a-z0-9]+$/', $slug);
         }
 
-        self::assertSame(array_values(array_unique($modelSlugs)), $modelSlugs);
+        foreach (ShortLinkController::PRINT_EDITIONS['ad'] as $code) {
+            self::assertArrayHasKey(substr($code, 0, 2), ShortLinkController::PRINT_SOURCES);
+        }
+
+        self::assertSame(array_values(array_unique($slugs)), $slugs);
     }
 }
