@@ -13,7 +13,7 @@ namespace App\Dto;
  *
  * **The license is for the workshop, not for the visitor.** Where a
  * platform names it, it goes into the inquiry mail so the calculation
- * knows what it is dealing with – shown on the page it would read as a
+ * knows what it is dealing with—shown on the page it would read as a
  * promise that nobody checked.
  */
 final readonly class ModelPreview

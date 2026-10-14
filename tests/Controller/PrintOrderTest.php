@@ -20,7 +20,7 @@ use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
  * The assistant: what opens when, what is refused, and what goes out.
  *
  * The platform is replaced with a recording throughout, so no test reaches
- * Printables. The signed timestamp is aged by hand – a submission younger
+ * Printables. The signed timestamp is aged by hand—a submission younger
  * than three seconds is dropped as a machine, and a test suite is always
  * younger than that.
  */
@@ -113,7 +113,7 @@ final class PrintOrderTest extends WebTestCase
 
     /**
      * One mail reaches the workshop with the license, the other reaches the
-     * customer without it – it is a fact for the calculation, not a promise
+     * customer without it—it is a fact for the calculation, not a promise
      * to the visitor.
      */
     public function testTheWorkshopMailCarriesTheLicenseAndTheCustomerMailDoesNot(): void
@@ -134,7 +134,7 @@ final class PrintOrderTest extends WebTestCase
     }
 
     /**
-     * **A dash would be read as „not given“**, and the three cases that
+     * **A dash would be read as “not given”**, and the three cases that
      * carry a sentence instead do not mean that: a page that could not be
      * read, a platform that names no license, and a visitor who clicked
      * nothing are three different starting points for the calculation. The
@@ -179,7 +179,7 @@ final class PrintOrderTest extends WebTestCase
     }
 
     /**
-     * A value the page never offered is refused – and the refusal has a
+     * A value the page never offered is refused—and the refusal has a
      * place to be shown. Keyed by the field rather than by an index, it
      * would otherwise fall out of the page and leave a 422 without a word.
      */
@@ -229,7 +229,7 @@ final class PrintOrderTest extends WebTestCase
     }
 
     /**
-     * Without a token nothing may reach outwards – not the mail, and not
+     * Without a token nothing may reach outward—not the mail, and not
      * the request to the platform that rendering a card would make.
      */
     public function testASubmissionWithoutAValidTokenIsRefusedWithoutSending(): void
@@ -268,7 +268,7 @@ final class PrintOrderTest extends WebTestCase
     }
 
     /**
-     * „Weiter“ reads the model and must not send, however it is pressed –
+     * “Weiter” reads the model and must not send, however it is pressed—
      * the browser triggers it for Enter in the address field.
      */
     public function testThePressedLookupButtonReadsInsteadOfSending(): void
@@ -302,7 +302,7 @@ final class PrintOrderTest extends WebTestCase
     }
 
     /**
-     * A quantity that is not a number must be answered as such – a cast
+     * A quantity that is not a number must be answered as such—a cast
      * would turn it into zero and report a field the visitor did fill in.
      */
     public function testAQuantityThatIsNoNumberIsNamedAsSuch(): void
@@ -352,7 +352,7 @@ final class PrintOrderTest extends WebTestCase
 
     /**
      * The reading limiter guards the posted path too, and the inquiry goes
-     * out regardless – the promise is that a platform cannot stop it.
+     * out regardless—the promise is that a platform cannot stop it.
      */
     public function testAThrottledLookupStillLetsTheInquiryThrough(): void
     {
@@ -379,14 +379,14 @@ final class PrintOrderTest extends WebTestCase
 
     /**
      * The limit is raised out of the way in the test environment, so it is
-     * checked against a limiter of its own – otherwise the one guard that
+     * checked against a limiter of its own—otherwise the one guard that
      * keeps this route from being an open relay would be untested.
      */
     public function testAnInquiryBeyondTheLimitIsRefusedWithoutSending(): void
     {
         $client = static::createClient();
         // The kernel keeps running between the two requests, otherwise the
-        // replaced limiter – and its count – would be gone by the second.
+        // replaced limiter—and its count—would be gone by the second.
         $client->disableReboot();
         $this->replaceFetcher($this->recordedAnswer());
         static::getContainer()->set('limiter.print_order', new RateLimiterFactory(
@@ -395,7 +395,7 @@ final class PrintOrderTest extends WebTestCase
         ));
 
         // The same payload twice: after the first one the page shows the
-        // confirmation and carries no token to read a second time – which
+        // confirmation and carries no token to read a second time—which
         // is also how a replay would look.
         $payload = $this->validPayload($client);
 
@@ -413,7 +413,7 @@ final class PrintOrderTest extends WebTestCase
 
     /**
      * The token is taken from a rendered page, as the contact form's test
-     * does – it lives in the session, which only a real request opens.
+     * does—it lives in the session, which only a real request opens.
      *
      * @return array<string, mixed>
      */
@@ -421,7 +421,7 @@ final class PrintOrderTest extends WebTestCase
     {
         // **Without this the recording is thrown away.** The browser boots
         // a fresh kernel per request, and the fetcher put into the
-        // container before this GET would not survive into the POST – the
+        // container before this GET would not survive into the POST—the
         // submission then asked the real platform over the network.
         $client->disableReboot();
 

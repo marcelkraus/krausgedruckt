@@ -1,9 +1,9 @@
 {# Step one: the address of the model, and what the platform says about it.
 
-   „Weiter“ is the first submit button of the one form and carries the name
+   “Weiter” is the first submit button of the one form and carries the name
    `lookup`, so the controller reads the model and renders again instead of
    sending. Enter in the address field does the same, because a browser
-   triggers the first submit button – which is why the inquiry cannot go out
+   triggers the first submit button—which is why the inquiry cannot go out
    by accident while the visitor is still typing an address.
 
    Expects: open (whether a model has been read), errors, imageUrl,
@@ -40,7 +40,7 @@
        document arrives announces nothing, and the focus sits at the top of
        a page that changed below. Moving it is the only thing that reaches
        anyone here. #}
-    {# The card announces itself after a lookup – but never over a refused
+    {# The card announces itself after a lookup—but never over a refused
        submission, where the focus belongs to the field that was refused. #}
     <div role="status" tabindex="-1" {% if errors is empty and (preview is not null or lookupError is not null) %}autofocus {% endif %}class="scroll-mt-32 outline-none {{ lookupError is null and preview is null ? 'sr-only' : '' }}">
         {% if preview is not null %}
@@ -53,7 +53,7 @@
         {% elseif preview is not null %}
             <div class="mt-8">{{ include('partials/_eyebrow.html.twig', { text: 'Dein Modell' }, with_context = false) }}</div>
             <div class="mt-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm sm:flex">
-                {# The relay may refuse what the platform answers – too large,
+                {# The relay may refuse what the platform answers—too large,
                    or not an image at all once a rendition address changes.
                    Without the handler that reads as a broken picture inside
                    the card the visitor is asked to confirm. #}
@@ -79,7 +79,7 @@
     {% if open %}
         {# Outside the card on purpose: without it the failure path would
            carry no quantity at all, and both mails would still claim one
-           piece – an answer the visitor never gave. #}
+           piece—an answer the visitor never gave. #}
         <div class="mt-6">
             <label for="f_quantity" class="block font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Gewünschte Stückzahl <span class="text-accent-on-light" aria-hidden="true">*</span></label>
             <input type="number" id="f_quantity" name="quantity" value="{{ old.quantity|default(1) }}" min="1" max="999" step="1" inputmode="numeric" aria-required="true"

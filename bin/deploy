@@ -13,17 +13,17 @@ set -euo pipefail
 # after the reset would leave new code standing against old dependencies and an
 # old container.
 if [ ! -f .env.local ]; then
-    echo "bin/deploy: .env.local is missing – aborting." >&2
+    echo "bin/deploy: .env.local is missing—aborting." >&2
     exit 1
 fi
 
 # The secret keys CSRF and the anti-spam timestamp of the contact form, and the
 # repository carries one for development. A missing or copied value therefore
-# does not break the site – it silently ships a secret anybody can read, which
+# does not break the site—it silently ships a secret anybody can read, which
 # makes both tokens forgeable. Invisible from the outside, so it is checked on
 # every release.
 if ! grep -qE '^APP_SECRET=.+' .env.local || grep -qE '^APP_SECRET=(<ChangeMe|""$)' .env.local; then
-    echo "bin/deploy: .env.local has no usable APP_SECRET – aborting." >&2
+    echo "bin/deploy: .env.local has no usable APP_SECRET—aborting." >&2
     exit 1
 fi
 
@@ -32,7 +32,7 @@ fi
 # paragraph above describes, and describing it is not the same as excluding it.
 committed_secret=$(grep -E '^APP_SECRET=' .env | cut -d= -f2-)
 if [ -n "$committed_secret" ] && grep -qF "APP_SECRET=${committed_secret}" .env.local; then
-    echo "bin/deploy: .env.local repeats the APP_SECRET from the repository – aborting." >&2
+    echo "bin/deploy: .env.local repeats the APP_SECRET from the repository—aborting." >&2
     exit 1
 fi
 
@@ -43,16 +43,16 @@ fi
 # `MAILER_DSN` is the one setting that has to be overridden here, because the
 # committed value is `null://null` and throws every mail away without an error.
 if ! grep -qE '^MAILER_DSN=.+' .env.local || grep -qE '^MAILER_DSN=null://' .env.local; then
-    echo "bin/deploy: .env.local sets no usable MAILER_DSN – aborting." >&2
+    echo "bin/deploy: .env.local sets no usable MAILER_DSN—aborting." >&2
     exit 1
 fi
 
 # The contact addresses may come from either file. `.env` ships the real ones,
-# so a project that does not override them is correctly configured – what is
+# so a project that does not override them is correctly configured—what is
 # checked is the value that takes effect, not the file it comes from.
 for setting in CONTACT_TO CONTACT_FROM; do
     if [ -z "$(grep -hE "^${setting}=.+" .env.local .env 2>/dev/null | head -1 | cut -d= -f2-)" ]; then
-        echo "bin/deploy: neither .env.local nor .env sets ${setting} – aborting." >&2
+        echo "bin/deploy: neither .env.local nor .env sets ${setting}—aborting." >&2
         exit 1
     fi
 done
@@ -105,7 +105,7 @@ private_host() {
 # fills with the production one, so a server that does not override it is
 # correctly configured. What is checked is the value that takes effect: a
 # `.env.local` carried over from development can point at ddev or a private
-# host, and then every page that shows a post answers 500 – the start
+# host, and then every page that shows a post answers 500—the start
 # page included. Only `https`, because over plain HTTP the key would travel
 # readable before the redirect.
 kongtent_url_file=.env
@@ -114,7 +114,7 @@ if grep -qE '^[[:space:]]*(export[[:space:]]+)?KONGTENT_URL=' .env.local; then
 fi
 kongtent_url=$(dotenv_value KONGTENT_URL "$kongtent_url_file")
 if [[ ! "$kongtent_url" =~ ^https://[^[:space:]/]+ ]] || private_host "$kongtent_url"; then
-    echo "bin/deploy: the KONGTENT_URL in effect, from ${kongtent_url_file}, is no public https address – aborting." >&2
+    echo "bin/deploy: the KONGTENT_URL in effect, from ${kongtent_url_file}, is no public https address—aborting." >&2
     exit 1
 fi
 
@@ -122,14 +122,14 @@ fi
 # missing setting: kongtent answers 401 and the site reports a fault it did not
 # cause.
 if [[ ! "$(dotenv_value KONGTENT_KEY .env.local)" =~ ^[^[:space:]]+$ ]]; then
-    echo "bin/deploy: .env.local sets no KONGTENT_KEY – aborting." >&2
+    echo "bin/deploy: .env.local sets no KONGTENT_KEY—aborting." >&2
     exit 1
 fi
 
 # `.env` carries APP_ENV=dev for development. Without an override the
 # auto-scripts of `composer install` build the cache for the wrong environment.
 if ! grep -qE '^APP_ENV=prod$' .env.local; then
-    echo "bin/deploy: .env.local does not set APP_ENV=prod – aborting." >&2
+    echo "bin/deploy: .env.local does not set APP_ENV=prod—aborting." >&2
     exit 1
 fi
 
@@ -139,7 +139,7 @@ git reset --hard origin/main
 # The compiled container is moved aside rather than cleared, and it happens
 # **before** `composer install`. `cache:clear` loads the existing container
 # before it replaces it, so a release that drops a bundle makes it die on a
-# class that no longer exists – and `composer install` runs `cache:clear`
+# class that no longer exists—and `composer install` runs `cache:clear`
 # itself, through `@auto-scripts`, at the moment when the class is already
 # gone from `vendor/` and still named in the old container. Clearing after the
 # install is therefore too late: the packages are in place, but the install

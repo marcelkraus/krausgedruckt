@@ -39,7 +39,7 @@ final class ModelImageTest extends WebTestCase
     /**
      * The relay carries bytes this site did not write, which makes it the
      * one answer where sniffing would matter. The header comes from the
-     * listener, and the listener is tested elsewhere – here it is checked
+     * listener, and the listener is tested elsewhere—here it is checked
      * on the one path that needs it.
      */
     public function testTheRelayedImageCarriesTheSniffingGuard(): void

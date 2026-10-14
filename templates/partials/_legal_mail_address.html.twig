@@ -4,13 +4,13 @@
    The address stands there in plain text: it can be read, selected and
    copied, and a screen reader announces it correctly, because a hidden
    element is neither copied nor read aloud. What a harvester takes out of the
-   markup is `mail+legal@nospam.<domain>` – an address that does not exist.
+   markup is `mail+legal@nospam.<domain>`—an address that does not exist.
 
    Two decisions are baked in and both are deliberate:
 
    * **The decoy is hidden with an inline style, not a utility class.** The
      partial has to work on any page, including one that loads a different
-     stylesheet – and a decoy that fails to hide is worse than no decoy.
+     stylesheet—and a decoy that fails to hide is worse than no decoy.
    * **The address is the plus-addressed one.** It appears in the imprint and
      the privacy policy and nowhere else, so whatever is harvested from a
      legal page can be told apart from real mail and filtered without losing

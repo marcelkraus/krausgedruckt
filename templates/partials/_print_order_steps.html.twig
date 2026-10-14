@@ -1,12 +1,12 @@
 {# The progress bar of the assistant: 01 Modell · 02 Details · 03 Kontakt.
 
-   The numbers are borrowed, not invented – they are the ones from the
-   printed poster that the homepage already carries in its „Ablauf“ block.
+   The numbers are borrowed, not invented—they are the ones from the
+   printed poster that the homepage already carries in its “Ablauf” block.
 
    It sticks below the header, so anything it links to needs a scroll
    margin of both heights together; the sections carry `scroll-mt-32`.
 
-   Params: current (1, 2 or 3 – the step the visitor is working on). #}
+   Params: current (1, 2 or 3—the step the visitor is working on). #}
 {% import 'partials/_icons.html.twig' as icons %}
 
 {% set steps = [
@@ -37,7 +37,7 @@
                 <li data-step="schritt-{{ index }}"{% if index == current %} aria-current="step"{% endif %} class="{{ index == current ? 'font-semibold' : '' }}">
                     {# A locked step is no jump target: following it would land
                        on a box with nothing in it. The entry stays, so the
-                       visitor still sees what is coming – it just does not
+                       visitor still sees what is coming—it just does not
                        pretend to be a way there.
 
                        Two branches rather than a computed tag name: Twig

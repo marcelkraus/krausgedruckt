@@ -32,10 +32,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * it.
  *
  * **The assistant works without JavaScript.** One form with two submit
- * buttons: „Weiter“ reads the model and renders again, „Anfrage senden“
+ * buttons: “Weiter” reads the model and renders again, “Anfrage senden”
  * sends. Enter in the address field triggers the first one, which is the
- * reading. Nothing is kept on the server – no session state, no draft
- * record – and the page can also be reached with `?url=`, so a campaign
+ * reading. Nothing is kept on the server—no session state, no draft
+ * record—and the page can also be reached with `?url=`, so a campaign
  * link carries a model straight into it.
  *
  * **Every request that reaches outwards passes a limiter, whichever way
@@ -76,7 +76,7 @@ final class PrintOrderController extends AbstractController
 
         // The token is checked before a submission reaches outwards, so a
         // forged post cannot spend the lookup budget or send a mail. The
-        // GET path carries no token by design – a campaign link has none –
+        // GET path carries no token by design—a campaign link has none—
         // and stands on the rate limiter alone.
         if ($this->isCsrfTokenValid('print_order', (string) $request->request->get('_token')) === false) {
             return $this->renderAssistant(
@@ -188,7 +188,7 @@ final class PrintOrderController extends AbstractController
         );
 
         // Silent drop for clear bot signals, with a fake success so nothing
-        // is learned from the difference – the contact form does the same.
+        // is learned from the difference—the contact form does the same.
         $honeypot = trim((string) $request->request->get('website', ''));
 
         if ($honeypot !== '' || $timestampState === TimestampState::Invalid || $timestampState === TimestampState::TooFast) {
@@ -199,7 +199,7 @@ final class PrintOrderController extends AbstractController
 
         $order = new PrintOrderRequest();
         $order->url = trim((string) $request->request->get('url', ''));
-        // Not a cast: „abc“ would become 0 and be answered as a missing
+        // Not a cast: “abc” would become 0 and be answered as a missing
         // quantity rather than as one that is not a number.
         $quantity = trim((string) $request->request->get('quantity', ''));
         $order->quantity = ctype_digit($quantity) ? (int) $quantity : null;
@@ -217,7 +217,7 @@ final class PrintOrderController extends AbstractController
         }
 
         // A valid but stale signature is a real person whose form sat open
-        // too long – never silently drop it, ask them to resend instead.
+        // too long—never silently drop it, ask them to resend instead.
         if ($timestampState === TimestampState::Expired) {
             $errors['form'] = 'Das Formular war zu lange geöffnet. Bitte sende es noch einmal ab.';
         }
@@ -277,9 +277,9 @@ final class PrintOrderController extends AbstractController
         );
 
         // The confirmation is where the instruction behind the license
-        // question is written down – it reaches the customer and stays with
+        // question is written down—it reaches the customer and stays with
         // him, which a sentence on a page he has left does not. It answers
-        // to the workshop, because „Bis gleich“ invites a reply.
+        // to the workshop, because “Bis gleich” invites a reply.
         $this->mailer->send(
             (new TemplatedEmail())
                 ->from(new Address($this->contactFrom, 'krausgedruckt von Marcel Kraus'))
@@ -349,7 +349,7 @@ final class PrintOrderController extends AbstractController
 
     /**
      * Signed without a host, so the same page works under whichever name
-     * it is reached – the site's own, a tunnel, a proxy. The signature
+     * it is reached—the site's own, a tunnel, a proxy. The signature
      * covers path and query, and the host is ours in every case.
      */
     private function signedImageUrl(string $imageUrl): string

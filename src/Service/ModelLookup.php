@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
  * The one place that knows there is more than one way in. Everything above
  * asks here and gets a preview or a failure, whichever platform it was.
  *
- * **Only the page is ever fetched, never the model file** – that one is
+ * **Only the page is ever fetched, never the model file**—that one is
  * downloaded by hand after an order, on the customer's instruction, which
  * is what keeps a non-commercial license intact.
  */
@@ -48,7 +48,7 @@ final class ModelLookup
 
     /**
      * A reader hands over a stranger's text, decoded, and a platform allows
-     * more of it than a card can hold – the line breaks of a description
+     * more of it than a card can hold—the line breaks of a description
      * would grow the card until the fields below it leave the screen.
      */
     private function clamped(ModelPreview $preview): ModelPreview

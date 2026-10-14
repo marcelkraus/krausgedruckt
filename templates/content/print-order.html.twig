@@ -1,11 +1,11 @@
 {# The print-order assistant: three steps on one page, the last two closed
    until a model has been read.
 
-   **It works without JavaScript.** One form with two submit buttons – the
+   **It works without JavaScript.** One form with two submit buttons—the
    first reads the model and renders again, the second sends. Nothing is
    kept on the server, and the page can also be reached with `?url=`.
 
-   A failed lookup opens the steps all the same and says what went wrong –
+   A failed lookup opens the steps all the same and says what went wrong—
    the address alone is enough for the workshop, so the inquiry must never
    hang on a platform answering.
 
@@ -56,14 +56,14 @@
     {% else %}
         {{ include('partials/_print_order_steps.html.twig', { current: open ? 2 : 1 }, with_context = false) }}
 
-        {# One form over all three steps, with two submit buttons: „Weiter“
-           carries `lookup` and only reads the model, „Anfrage senden“ sends.
+        {# One form over all three steps, with two submit buttons: “Weiter”
+           carries `lookup` and only reads the model, “Anfrage senden” sends.
            Enter in the address field triggers the first one, because it is
            the first submit button in the form.
 
            A second form for the address would be the other way to keep
-           Enter from sending – but then the address would exist twice, and
-           whoever corrects the field without pressing „Weiter“ would send
+           Enter from sending—but then the address would exist twice, and
+           whoever corrects the field without pressing “Weiter” would send
            the old one. Here there is one field and one truth. #}
         <form method="post" action="{{ path('app_print_order') }}" novalidate{% if focus %} data-error-focus="{{ focus }}"{% endif %}>
             <input type="hidden" name="_token" value="{{ csrf_token('print_order') }}">
@@ -71,7 +71,7 @@
             <input type="hidden" name="ts_sig" value="{{ timestampSignature }}">
 
             {# Honeypot: hidden from people, tempting to bots. Hidden from a
-               screen reader as well – reading mode walks the document, not
+               screen reader as well—reading mode walks the document, not
                the tab chain, so without aria-hidden the trap is read out to
                exactly the visitors who cannot see that it is one. #}
             <div class="sr-only" aria-hidden="true">
@@ -126,7 +126,7 @@
             // while the model is fetched.
             (function () {
                 // The bar states where the reader is, not what the server
-                // decided – with every step open, a fixed marker would claim
+                // decided—with every step open, a fixed marker would claim
                 // a position the page no longer has.
                 const entries = Array.from(document.querySelectorAll('nav[aria-label="Fortschritt"] li[data-step]'));
                 const sections = entries
@@ -158,7 +158,7 @@
 
                 // Fetching the model takes a moment on someone else's
                 // server, and sending writes two mails. Saying so beats a
-                // button that looks untouched – and a disabled button
+                // button that looks untouched—and a disabled button
                 // cannot be pressed a second time.
                 //
                 // The name of the pressed button decides what the server

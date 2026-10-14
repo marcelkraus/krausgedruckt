@@ -5,7 +5,7 @@
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex index.php
 
-# There is nothing to browse here – every path either is a real asset or goes
+# There is nothing to browse here—every path either is a real asset or goes
 # through the front controller.
 Options -Indexes
 
@@ -92,7 +92,7 @@ Options -Indexes
 # Two headers that cost nothing and answer what every audit tool asks first.
 # `nosniff` stops the browser guessing a file's type instead of believing the
 # one that was sent. The referrer policy sends the domain but not the path when
-# a link leaves the site – which is what current browsers default to anyway,
+# a link leaves the site—which is what current browsers default to anyway,
 # said out loud rather than left to the browser.
 #
 # Deliberately not here: a Content-Security-Policy, because the pages carry an
@@ -101,7 +101,7 @@ Options -Indexes
     Header always set X-Content-Type-Options "nosniff"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-    # The third one covers what never reaches the kernel – a stylesheet, an
+    # The third one covers what never reaches the kernel—a stylesheet, an
     # icon, a picture. It belongs to the site rather than to the machine
     # underneath: a host that adds one of its own states the same year, and a
     # host that adds none leaves the promise where it is made.
@@ -110,7 +110,7 @@ Options -Indexes
     # sending it there states something that is not true.
     #
     # The scheme has to come from the forwarded header. `%{HTTPS}` is a mod_ssl
-    # variable, and behind the proxy there is no mod_ssl to set it – a
+    # variable, and behind the proxy there is no mod_ssl to set it—a
     # condition on it is never true, so the header never goes out at all. It
     # reads as working, which is why this says so.
     Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTP:X-Forwarded-Proto} == 'https'"

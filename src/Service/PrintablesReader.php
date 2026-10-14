@@ -74,7 +74,7 @@ final class PrintablesReader implements ModelReader
     /**
      * The address of a rendition rather than of the original.
      *
-     * **A cover on Printables runs into the megabytes** – seven of them on
+     * **A cover on Printables runs into the megabytes**—seven of them on
      * a measured model, which the relay refuses and the card shows as a
      * broken picture. The platform keeps renditions beside the original,
      * addressed by inserting `thumbs/inside/<size>/<format>/` before the
@@ -112,7 +112,7 @@ final class PrintablesReader implements ModelReader
 
     /**
      * The numeric part of `/model/1042371-parametric-cable-clip`, which is
-     * what the interface asks for – the slug behind it is decoration and
+     * what the interface asks for—the slug behind it is decoration and
      * may be missing.
      */
     private function idOf(string $url): ?string

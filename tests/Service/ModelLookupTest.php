@@ -58,7 +58,7 @@ final class ModelLookupTest extends TestCase
 
     /**
      * The license is what the workshop calculates with, and it passes
-     * through here on its way to the mail – untouched but for the
+     * through here on its way to the mail—untouched but for the
      * shortening every field gets.
      */
     public function testCarriesTheLicenseThrough(): void

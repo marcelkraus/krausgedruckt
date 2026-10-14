@@ -25,7 +25,7 @@ final class ShortLinkController extends AbstractController
 
     /**
      * Prefix => codes in print: the edition, the year and month of the print
-     * run – for an advertisement behind the two letters of its medium.
+     * run—for an advertisement behind the two letters of its medium.
      *
      * @var array<string, list<string>>
      */
@@ -113,7 +113,7 @@ final class ShortLinkController extends AbstractController
 
     /**
      * A readable address for print only. The site itself links the shop
-     * directly, so that Matomo counts the click as an outlink – a click on an
+     * directly, so that Matomo counts the click as an outlink—a click on an
      * address of the site that is redirected on the server is never seen.
      */
     #[Route('/shop', name: 'app_shop', methods: ['GET'])]

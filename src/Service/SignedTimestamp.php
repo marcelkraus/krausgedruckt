@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * The signed timestamp both hand-rolled forms carry against bots.
  *
  * A form states when it was rendered, and the statement is signed against
- * the application secret – without the signature a bot would simply post a
+ * the application secret—without the signature a bot would simply post a
  * value old enough to look human. Too fast is a machine, too old is a
  * person whose tab sat open, and the two are answered differently.
  */

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Carries and validates an inquiry from the print-order assistant.
  *
- * Hand-rolled like the contact form – no symfony/form – so both paths
+ * Hand-rolled like the contact form—no symfony/form—so both paths
  * answer a submission through one mechanism instead of two.
  *
  * **Two fields are required, and they are the two the workshop cannot

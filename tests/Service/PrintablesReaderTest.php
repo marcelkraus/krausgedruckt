@@ -37,7 +37,7 @@ final class PrintablesReaderTest extends TestCase
      * cover runs into the megabytes, which the relay refuses and the card
      * shows as a broken picture; the rendition of the same file is a few
      * hundred kilobytes. The format segment follows the file's own
-     * extension – it is `jpg` here and `png` on a model stored as one.
+     * extension—it is `jpg` here and `png` on a model stored as one.
      */
     public function testAsksForTheRenditionRatherThanTheOriginalCover(): void
     {
@@ -73,7 +73,7 @@ final class PrintablesReaderTest extends TestCase
     }
 
     /**
-     * The interface hands its text out encoded – the reader on the other
+     * The interface hands its text out encoded—the reader on the other
      * path gets it decoded from the crawler, and both must arrive in the
      * same shape.
      */
@@ -99,8 +99,8 @@ final class PrintablesReaderTest extends TestCase
     }
 
     /**
-     * A profile or a collection is served by this reader – it is a
-     * Printables address – but it is not a model, and saying so is a
+     * A profile or a collection is served by this reader—it is a
+     * Printables address—but it is not a model, and saying so is a
      * different sentence than saying we do not read the platform.
      */
     public function testNamesAnAddressThatIsNoModelPageAsSuch(): void

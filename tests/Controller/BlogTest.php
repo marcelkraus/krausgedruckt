@@ -75,7 +75,7 @@ final class BlogTest extends WebTestCase
 
     /**
      * Every picture carries its measurements, so the text below it does not
-     * jump while it loads – on the homepage, the overview and the post.
+     * jump while it loads—on the homepage, the overview and the post.
      */
     public function testEveryPictureCanHoldItsPlace(): void
     {

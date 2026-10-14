@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
  *
  * One implementation per platform, because no two of them answer the same
  * way: Printables serves its own interface while its pages sit behind a bot
- * check. Whoever asks sees none of that – the assistant, the mail and the
+ * check. Whoever asks sees none of that—the assistant, the mail and the
  * image relay know only this interface and the preview it returns.
  */
 #[AutoconfigureTag('app.model_reader')]

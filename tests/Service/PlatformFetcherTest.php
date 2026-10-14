@@ -17,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
  * Pins the guard around the fetcher: which addresses are refused, and what
  * is actually sent for one that is not.
  *
- * A plain TestCase without a kernel – nothing here needs the container, and
+ * A plain TestCase without a kernel—nothing here needs the container, and
  * the host resolver is a stub, so no test ever asks a name server or
  * reaches the network.
  */
@@ -203,7 +203,7 @@ final class PlatformFetcherTest extends TestCase
 
     /**
      * The posted path is the one the interface of Printables runs on, and
-     * it carries the same guard as the rest – these three hold it, because
+     * it carries the same guard as the rest—these three hold it, because
      * nothing else in the suite touches the branch.
      */
     public function testSendsThePostedBodyWithTheJsonTypeAndThePin(): void

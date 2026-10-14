@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  *
  * The smoke test proves the pages render; it cannot see a target. The one
  * thing the connecting step did was hang existing buttons onto a new route,
- * and a wrong route name renders just as happily as the right one – so the
+ * and a wrong route name renders just as happily as the right one—so the
  * targets are pinned here rather than left to the eye.
  */
 final class HomepageTest extends WebTestCase
@@ -47,7 +47,7 @@ final class HomepageTest extends WebTestCase
     }
 
     /**
-     * Once in the desktop navigation and once in the mobile menu – both are
+     * Once in the desktop navigation and once in the mobile menu—both are
      * rendered on every page, and the assistant opens the bar: the homepage
      * has no entry of its own any more, it is reached through the logo.
      */

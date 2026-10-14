@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Fetches a document from one of the model platforms – and nothing else.
+ * Fetches a document from one of the model platforms—and nothing else.
  *
  * A visitor types the address and this side requests it, which is a
  * server-side request forgery unless something stands against it. What
@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  *
  * **The resolved address is pinned into the request.** Checking a name and
  * then letting the client resolve it a second time leaves a window in which
- * the answer can change – the check would pass on a public address and the
+ * the answer can change—the check would pass on a public address and the
  * request would go to a private one.
  *
  * **What is requested is rebuilt from the checked parts**, never the string
@@ -93,13 +93,13 @@ final class PlatformFetcher
     }
 
     /**
-     * Posts a JSON document and expects one back – the shape a GraphQL
+     * Posts a JSON document and expects one back—the shape a GraphQL
      * endpoint speaks. A redirect is refused rather than followed: the
      * other side may not repeat the body, and a silently emptied request
      * would look like an answer with no data.
      *
      * Unlike its neighbors the address here is a caller's constant, never
-     * something a visitor typed – the guard runs all the same.
+     * something a visitor typed—the guard runs all the same.
      *
      * @throws LookupFailedException
      */
