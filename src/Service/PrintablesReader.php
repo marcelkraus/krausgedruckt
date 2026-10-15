@@ -7,16 +7,8 @@ namespace App\Service;
 use App\Dto\ModelPreview;
 
 /**
- * Reads a Printables model through the interface the platform's own site
- * runs on.
- *
- * **The pages themselves answer a server with a bot check**, measured from
- * the deploy host, so the Open Graph tags are out of reach there. The
- * interface answers without a key and is not behind that check. It is
- * undocumented, though: the field names were found by asking, since
- * introspection is switched off, and they can change without notice. When
- * they do, the failure is caught like any other and the assistant carries
- * on without a preview.
+ * The pages answer a server with a bot check, so the platform's own, undocumented
+ * interface is read; a changed field ends in a lookup without preview.
  */
 final class PrintablesReader implements ModelReader
 {
@@ -71,22 +63,7 @@ final class PrintablesReader implements ModelReader
         );
     }
 
-    /**
-     * The address of a rendition rather than of the original.
-     *
-     * **A cover on Printables runs into the megabytes**—seven of them on
-     * a measured model, which the relay refuses and the card shows as a
-     * broken picture. The platform keeps renditions beside the original,
-     * addressed by inserting `thumbs/inside/<size>/<format>/` before the
-     * file name, and only a fixed set of sizes exists: an invented one is
-     * answered with 400. Measured at 640 by 480 in png and jpeg: real
-     * images of a few hundred kilobytes, which is what a card 176 pixels
-     * wide needs even on a phone with three times the pixels.
-     *
-     * Like the interface itself this is undocumented and may change. If it
-     * does, the relay refuses an answer that is not an image and the card
-     * falls back to its own empty state.
-     */
+    // The original runs into megabytes; only fixed rendition sizes exist.
     private function thumbnail(string $path): string
     {
         $cut = strrpos($path, '/');
@@ -99,22 +76,12 @@ final class PrintablesReader implements ModelReader
         return substr($path, 0, $cut).'/thumbs/inside/'.self::THUMBNAIL_SIZE.'/'.$format.'/'.substr($path, $cut + 1);
     }
 
-    /**
-     * The interface hands its text out encoded. Decoding belongs to the
-     * reader rather than to a shared step above it: another platform may
-     * well hand its text over decoded already, and doing it twice turns an
-     * ampersand a designer typed into the character behind it.
-     */
+    // Decoded here, not centrally: decoding twice would mangle a typed ampersand.
     private function decoded(string $value): string
     {
         return html_entity_decode($value, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
     }
 
-    /**
-     * The numeric part of `/model/1042371-parametric-cable-clip`, which is
-     * what the interface asks for—the slug behind it is decoration and
-     * may be missing.
-     */
     private function idOf(string $url): ?string
     {
         $path = parse_url($url, PHP_URL_PATH);

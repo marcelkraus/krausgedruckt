@@ -29,10 +29,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DefaultController extends AbstractController
 {
-    /**
-     * The number of posts the homepage teaser shows before it hands over to
-     * the blog.
-     */
     private const HOMEPAGE_POST_LIMIT = 3;
 
     protected Serializer $serializer;
@@ -65,10 +61,7 @@ final class DefaultController extends AbstractController
     #[Route('/advintage', name: 'app_landing_page_advintage', methods: ['GET'])]
     public function advintage(): Response
     {
-        // Anchored to the project directory rather than to the working
-        // directory: a relative path resolves against wherever the process
-        // was started, which holds for the web server and breaks everywhere
-        // else, the test runner included.
+        // A relative path would resolve against the working directory of the process.
         $printableModels = $this->serializer->deserialize(
             file_get_contents($this->getParameter('kernel.project_dir') . '/config/advintage-landing-page.json'),
             'App\Entity\PrintableModel[]',
@@ -84,8 +77,6 @@ final class DefaultController extends AbstractController
     public function contact(Request $request): Response
     {
         if ($request->isMethod('POST') === false) {
-            // A code handed over in the address pre-fills the field, so a
-            // campaign link does not make the visitor copy anything.
             $discountCode = (string) $request->query->get('discount-code', '');
 
             return $this->renderContactPage(['discountCode' => $discountCode]);
@@ -96,9 +87,7 @@ final class DefaultController extends AbstractController
             (string) $request->request->get('ts_sig', ''),
         );
 
-        // Silent drop only for clear bot signals—a filled honeypot, a
-        // missing or tampered signature, or an inhumanly fast submission.
-        // These get a fake success so bots learn nothing; nothing is sent.
+        // A clear bot signal gets a fake success, so the bot learns nothing.
         $honeypot = trim((string) $request->request->get('website', ''));
         if ($honeypot !== '' || $timestampState === TimestampState::Invalid || $timestampState === TimestampState::TooFast) {
             $this->addFlash('contact_success', true);
@@ -113,9 +102,7 @@ final class DefaultController extends AbstractController
         $contactRequest->discountCode = trim((string) $request->request->get('discountCode', ''));
         $contactRequest->message = trim((string) $request->request->get('message', ''));
 
-        // Keep the first violation per field: the constraints are written in
-        // order of relevance, so an empty message must report NotBlank rather
-        // than the minimum-length rule that fires alongside it.
+        // The constraints are written in order of relevance; the first one wins.
         $errors = [];
         foreach ($this->validator->validate($contactRequest) as $violation) {
             $errors[$violation->getPropertyPath()] ??= $violation->getMessage();
@@ -125,8 +112,7 @@ final class DefaultController extends AbstractController
             $errors['form'] = 'Deine Sitzung ist abgelaufen. Bitte sende das Formular noch einmal ab.';
         }
 
-        // A valid but stale signature is a real person whose form sat open
-        // too long—never silently drop it, ask them to resend instead.
+        // A stale signature is a real visitor whose form sat open too long.
         if ($timestampState === TimestampState::Expired) {
             $errors['form'] = 'Das Formular war zu lange geöffnet. Bitte sende es noch einmal ab.';
         }
@@ -135,18 +121,14 @@ final class DefaultController extends AbstractController
             return $this->renderContactErrors($request, $errors);
         }
 
-        // Throttle per address so a scraped token cannot be replayed into a
-        // flood.
+        // Per IP, so a scraped token cannot be replayed into a flood.
+
         if ($this->contactFormLimiter->create($request->getClientIp() ?? 'anonymous')->consume(1)->isAccepted() === false) {
             return $this->renderContactErrors($request, [
                 'form' => 'Es sind zu viele Nachrichten eingegangen. Bitte versuche es später noch einmal.',
             ]);
         }
 
-        // A transport failure must not cost the inquiry and must not hand a
-        // visitor a bare error page: the sendmail DSN has two documented ways
-        // of being wrong on this host, and Apache replaces the Symfony error
-        // page with its own.
         try {
             $this->mailer->send(
                 (new TemplatedEmail())
@@ -169,17 +151,13 @@ final class DefaultController extends AbstractController
             ]);
         }
 
-        // Redirect back onto the same address, as the sister site does: the
-        // confirmation takes the form's place instead of living on a page of
-        // its own, and a reload cannot send the message twice.
+        // The confirmation takes the form's place; a reload cannot send twice.
         $this->addFlash('contact_success', true);
 
         return $this->redirectToRoute('app_contact');
     }
 
     /**
-     * Renders the contact page with a fresh signed timestamp.
-     *
      * @param array<string, string> $old
      * @param array<string, string> $errors
      */
@@ -203,10 +181,6 @@ final class DefaultController extends AbstractController
     }
 
     /**
-     * A rejected submission answers 422 rather than 200: the request was
-     * understood and refused, and a crawler or a test can tell the two apart
-     * without parsing the body.
-     *
      * @param array<string, string> $errors
      */
     private function renderContactErrors(Request $request, array $errors): Response
@@ -219,9 +193,7 @@ final class DefaultController extends AbstractController
             }
         }
 
-        // The visitor's still-valid pair is kept on re-render so a quick
-        // fix-and-resend is not misclassified as a bot; the service seeds a
-        // fresh one only when none is reusable.
+        // A fresh timestamp would make a quick fix-and-resend look too fast.
         return $this->renderContactPage(
             $request->request->all(),
             $errors,
@@ -247,8 +219,6 @@ final class DefaultController extends AbstractController
     {
         $sitemap = $this->generateUrl('app_sitemap', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        // Which routes are disallowed, and why `/bewerten` is not: see
-        // `BRAND_FAMILY.md`, “robots.txt”.
         $disallowed = [
             '/kontakt-per-email',
             '/kontakt-per-whats-app',
@@ -269,9 +239,7 @@ final class DefaultController extends AbstractController
     #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'])]
     public function sitemap(Client $kongtent): Response
     {
-        // The public pages plus every post of the blog. The legal pages and
-        // the confirmation are noindex and stay out, and so does the landing
-        // page, which is only meant to be reached through its own link.
+        // The landing page is reached through its own link only.
         $locations = [
             [$this->generateUrl('app_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL), '1.0'],
             [$this->generateUrl('app_print_order', [], UrlGeneratorInterface::ABSOLUTE_URL), '0.9'],
@@ -319,11 +287,7 @@ final class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * One content in kongtent, not listed: every heading opens a question and
-     * the blocks up to the next one are its answer. A heading without an
-     * answer and whatever stands before the first heading are dropped.
-     */
+    // A heading without an answer and whatever precedes the first heading drop out.
     #[Route('/haeufig-gestellte-fragen', name: 'app_faq', methods: ['GET'])]
     public function faq(Client $kongtent): Response
     {

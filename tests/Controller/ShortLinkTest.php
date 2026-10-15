@@ -8,12 +8,6 @@ use App\Controller\ShortLinkController;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * The printed short links: where they lead, what they are counted as, and
- * that nothing printed can answer under two meanings or not at all. The
- * editions change with every print run and the models with what is on
- * show, so the tests take both from the controller.
- */
 final class ShortLinkTest extends WebTestCase
 {
     /**
@@ -48,9 +42,6 @@ final class ShortLinkTest extends WebTestCase
     }
 
     /**
-     * What Matomo reports, written out once rather than derived from the
-     * controller, so a renamed campaign cannot pass unnoticed.
-     *
      * @return array<string, array{0: string, 1: string}>
      */
     public static function countedAsProvider(): array
@@ -112,11 +103,6 @@ final class ShortLinkTest extends WebTestCase
         self::assertResponseRedirects(static::getContainer()->getParameter('app.etsy_url'), 302);
     }
 
-    /**
-     * Two prints under one slug would share one count, a slug the route
-     * refuses would put a dead code on paper, and an advertisement in a
-     * medium without a source would answer 404.
-     */
     public function testSlugsAreReachableAndUnique(): void
     {
         $slugs = array_map(static fn (array $case): string => $case[0], iterator_to_array(self::printedProvider(), false));

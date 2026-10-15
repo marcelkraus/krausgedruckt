@@ -6,11 +6,6 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * The questions come out of one content in kongtent, split at its headings.
- * What cannot be split is dropped without a word, and the structured data
- * carries the text of every answer that stands.
- */
 final class FaqTest extends WebTestCase
 {
     public function testEveryHeadingWithAnAnswerIsAQuestionInItsOrder(): void

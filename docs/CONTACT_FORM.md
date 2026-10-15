@@ -1,7 +1,5 @@
 # Contact form
 
-## Contact form
-
 The mechanism is in `../../../docs/WEB_STACK.md`. Specific here:
 
 * **Five fields:** `name`, `email`, `phone`, `discountCode`, `message`. **The two required ones open the form and the optional ones follow**, because a private customer is the majority here and should not have to skip a field before starting. The sister sites order their forms differently on purpose—there a company is the normal case

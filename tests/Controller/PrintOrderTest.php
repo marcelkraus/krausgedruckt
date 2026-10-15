@@ -16,14 +16,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 
-/**
- * The assistant: what opens when, what is refused, and what goes out.
- *
- * The platform is replaced with a recording throughout, so no test reaches
- * Printables. The signed timestamp is aged by hand—a submission younger
- * than three seconds is dropped as a machine, and a test suite is always
- * younger than that.
- */
 final class PrintOrderTest extends WebTestCase
 {
     private const string MODEL = 'https://www.printables.com/model/1042371-tpu-lid-instert';
@@ -40,8 +32,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertCount(0, $crawler->filter('#schritt-2 input[name="context[]"]'));
         self::assertCount(0, $crawler->filter('#schritt-3 input[name="email"]'));
 
-        // A locked step announces itself: no fields, but a heading that a
-        // screen reader can find, so it is a step to come and not a hole.
         self::assertSame('Deine Details', trim($crawler->filter('#schritt-2 h2')->text()));
         self::assertSame('Dein Kontakt', trim($crawler->filter('#schritt-3 h2')->text()));
     }
@@ -57,17 +47,11 @@ final class PrintOrderTest extends WebTestCase
         self::assertStringContainsString('TPU lid instert for rugged SD card case', $crawler->filter('#schritt-1')->text());
         self::assertCount(6, $crawler->filter('#schritt-2 input[name="context[]"]'));
 
-        // Bound to the enum rather than to a number: a case the display
-        // order forgets stays valid in the validator and never reaches the
-        // page, and a count would still be green.
+        // Bound to the enum: a count would stay green when the display order forgets a case.
         self::assertEqualsCanonicalizing(UsageContext::cases(), UsageContext::inDisplayOrder());
         self::assertCount(1, $crawler->filter('#schritt-3 input[name="email"]'));
     }
 
-    /**
-     * The failure path is the promise of the whole assistant: whatever the
-     * platform does, the inquiry must stay sendable.
-     */
     public function testAFailedLookupOpensTheStepsAnyway(): void
     {
         $client = static::createClient();
@@ -111,11 +95,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(2);
     }
 
-    /**
-     * One mail reaches the workshop with the license, the other reaches the
-     * customer without it—it is a fact for the calculation, not a promise
-     * to the visitor.
-     */
     public function testTheWorkshopMailCarriesTheLicenseAndTheCustomerMailDoesNot(): void
     {
         $client = static::createClient();
@@ -133,14 +112,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertStringContainsString('Kosten entstehen dir bis zur ausdrücklichen Freigabe', $customer);
     }
 
-    /**
-     * **A dash would be read as “not given”**, and the three cases that
-     * carry a sentence instead do not mean that: a page that could not be
-     * read, a platform that names no license, and a visitor who clicked
-     * nothing are three different starting points for the calculation. The
-     * mail is where the workshop learns which one it has, and a text that
-     * quietly turns into a dash breaks nothing that is visible.
-     */
     public function testTheWorkshopMailSaysWhyAFieldIsEmptyRatherThanShowingADash(): void
     {
         $client = static::createClient();
@@ -157,12 +128,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertStringContainsString('Material nach meiner Einschätzung', $workshop);
     }
 
-    /**
-     * A refused submission points at what was refused. The model card sits
-     * at the top of the page and takes the focus after a lookup; over an
-     * error it must not, or the visitor lands on the picture and has to
-     * hunt for the field two steps below.
-     */
     public function testARefusedSubmissionPointsAtTheFieldRatherThanTheCard(): void
     {
         $client = static::createClient();
@@ -178,11 +143,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertCount(0, $crawler->filter('[role="status"][autofocus]'));
     }
 
-    /**
-     * A value the page never offered is refused—and the refusal has a
-     * place to be shown. Keyed by the field rather than by an index, it
-     * would otherwise fall out of the page and leave a 422 without a word.
-     */
     public function testAnUnknownPurposeIsRefusedWhereTheVisitorCanSeeIt(): void
     {
         $client = static::createClient();
@@ -198,11 +158,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertSame('context', $crawler->filter('form[data-error-focus]')->attr('data-error-focus'));
     }
 
-    /**
-     * The whole point of sending two is that they go to different people.
-     * Without this the addresses could be swapped and every test would
-     * still pass, with the license landing at the customer.
-     */
     public function testEachMailGoesToItsOwnRecipient(): void
     {
         $client = static::createClient();
@@ -228,16 +183,10 @@ final class PrintOrderTest extends WebTestCase
         self::assertCount(0, $crawler->filter('input[name="email"]'));
     }
 
-    /**
-     * Without a token nothing may reach outward—not the mail, and not
-     * the request to the platform that rendering a card would make.
-     */
     public function testASubmissionWithoutAValidTokenIsRefusedWithoutSending(): void
     {
         $client = static::createClient();
-        // No answers at all: the mock client throws on the first request,
-        // so a fetch that should not happen fails loudly instead of
-        // passing unnoticed.
+        // The mock client throws on the first request, so an unwanted fetch fails loudly.
         $this->replaceFetcher([]);
 
         $payload = $this->validPayload($client);
@@ -267,10 +216,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(0);
     }
 
-    /**
-     * “Weiter” reads the model and must not send, however it is pressed—
-     * the browser triggers it for Enter in the address field.
-     */
     public function testThePressedLookupButtonReadsInsteadOfSending(): void
     {
         $client = static::createClient();
@@ -301,10 +246,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(0);
     }
 
-    /**
-     * A quantity that is not a number must be answered as such—a cast
-     * would turn it into zero and report a field the visitor did fill in.
-     */
     public function testAQuantityThatIsNoNumberIsNamedAsSuch(): void
     {
         $client = static::createClient();
@@ -320,10 +261,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(0);
     }
 
-    /**
-     * A filled honeypot is a machine: it gets the same answer a person
-     * gets, so nothing is learned from the difference, and nothing is sent.
-     */
     public function testAFilledHoneypotIsDroppedSilently(): void
     {
         $client = static::createClient();
@@ -350,10 +287,6 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(0);
     }
 
-    /**
-     * The reading limiter guards the posted path too, and the inquiry goes
-     * out regardless—the promise is that a platform cannot stop it.
-     */
     public function testAThrottledLookupStillLetsTheInquiryThrough(): void
     {
         $client = static::createClient();
@@ -377,16 +310,10 @@ final class PrintOrderTest extends WebTestCase
         self::assertEmailCount(2);
     }
 
-    /**
-     * The limit is raised out of the way in the test environment, so it is
-     * checked against a limiter of its own—otherwise the one guard that
-     * keeps this route from being an open relay would be untested.
-     */
     public function testAnInquiryBeyondTheLimitIsRefusedWithoutSending(): void
     {
         $client = static::createClient();
-        // The kernel keeps running between the two requests, otherwise the
-        // replaced limiter—and its count—would be gone by the second.
+        // Without it the replaced limiter would be gone by the second request.
         $client->disableReboot();
         $this->replaceFetcher($this->recordedAnswer());
         static::getContainer()->set('limiter.print_order', new RateLimiterFactory(
@@ -394,9 +321,6 @@ final class PrintOrderTest extends WebTestCase
             new InMemoryStorage(),
         ));
 
-        // The same payload twice: after the first one the page shows the
-        // confirmation and carries no token to read a second time—which
-        // is also how a replay would look.
         $payload = $this->validPayload($client);
 
         $client->request('POST', self::PATH, $payload);
@@ -407,22 +331,15 @@ final class PrintOrderTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(422);
         self::assertStringContainsString('zu viele Anfragen', $crawler->filter('main')->text());
-        // The count is per request: the refused one sent nothing.
         self::assertEmailCount(0);
     }
 
     /**
-     * The token is taken from a rendered page, as the contact form's test
-     * does—it lives in the session, which only a real request opens.
-     *
      * @return array<string, mixed>
      */
     private function validPayload(KernelBrowser $client): array
     {
-        // **Without this the recording is thrown away.** The browser boots
-        // a fresh kernel per request, and the fetcher put into the
-        // container before this GET would not survive into the POST—the
-        // submission then asked the real platform over the network.
+        // A fresh kernel per request would drop the recording and ask the real platform.
         $client->disableReboot();
 
         $crawler = $client->request('GET', self::PATH);

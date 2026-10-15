@@ -4,7 +4,7 @@ Business website for **krausgedruckt**, Marcel Kraus's 3D printing (https://www.
 
 ## Rules
 
-* **Marcel speaks in the first person and addresses the customer as „du“.** In the FAQ the customer speaks too, so „ich“ and „du“ change sides between a question and its answer.
+* **Marcel speaks in the first person and addresses the customer as “du”.** In the FAQ the customer speaks too, so “ich” and “du” change sides between a question and its answer.
 * **Forms are hand-written**, the contact form and the assistant alike, on the mechanism in `../../docs/WEB_STACK.md`; `symfony/form` is not installed.
 * **Outbound targets and the minimum order value are parameters in `config/services.yaml`.** The FAQ in kongtent states the minimum order value as text and follows a change by hand.
 * **A printed piece answers under `/s/<prefix>-<code>`** and leads to the homepage; the scheme is in `../../docs/WORKSPACE.md` › Short links, this site's codes in `ShortLinkController`. `/shop` exists for print only; the site links Etsy directly.

@@ -1,7 +1,5 @@
 # The print-order assistant
 
-## The print-order assistant
-
 `/modell-drucken`, three steps on one page, the last two closed until a model has been read. It is a **special page by decision**—the step bar exists nowhere else on the site—**but the header is not part of that**: navigation, button and logo are the ones every other page carries, in the same position and the same grid.
 
 **“3D-” is dropped wherever the assistant is meant**—on the page, in the navigation and in the band: a visitor who has come this far knows which kind of model it is, and the prefix on every second noun reads like a catalog. The printer keeps it, “3D-Drucker” being the thing the visitor does not have, and so does the offer section of the homepage, which speaks about 3D models as a product rather than about his.
@@ -17,6 +15,10 @@ A second form for the address would keep Enter from sending as well, but then th
 **A failed lookup opens the steps anyway** and says what went wrong. The address alone is enough for the workshop, so the inquiry stands whether or not a platform answers—that is the promise the whole page is built on.
 
 **The workshop's mail carries the shape of the contact form's** (`templates/content/contact.txt.twig`): one sentence saying what came in, a label per line, the remarks under their own heading. **It writes an empty field out, the customer's copy leaves it away**—“nicht gelesen,” “von der Plattform nicht genannt” and “keine Angabe” are three different starting points for a calculation and a dash would flatten them into one, while the same rows on the receipt only tell the customer what he did not fill in. The receipt is a letter and not a form: it opens and closes like one, and the summary sits between two `+++` rules.
+
+**The customer's receipt replies to the workshop**, because its “Bis gleich” invites a reply.
+
+**A locked step keeps a real heading**, so heading navigation finds a step to come rather than a hole.
 
 **Two mails go out:** the inquiry to the workshop, with the license, and an acknowledgment to the customer without it. The second is where the instruction behind the license question is written down, in the conditional—an indicative sentence would turn the inquiry into the contract it must not be. For the same reason the button says “Anfrage senden” and the page says what an order needs: the offer, and its release.
 
@@ -38,13 +40,15 @@ Two enhancements need JavaScript and nothing depends on them: the step bar follo
 
 **The preview picture is the platform's rendition, never the original.** A cover on Printables runs into the megabytes—seven on a measured model—which the relay refuses and the card would show as a broken picture. The address is built by inserting `thumbs/inside/640x480/<format>/` before the file name, the format following the file's own extension; only a fixed set of sizes exists and an invented one is answered with 400. If the pattern ever changes, the relay refuses an answer that is not an image and the card falls back to its own empty state.
 
+**The preview picture is relayed, never embedded.** An `img src` on the platform would hand it the address of every visitor and make it a third party in the privacy policy; relaying without storing a copy keeps it out and keeps the picture from becoming a reproduction of our own. **The relay address is signed**, so it fetches only what this site produced and is no open fetch service.
+
 **Printables also names the license, and it goes into the inquiry mail, never onto the page.** The workshop needs to know what it is calculating with; a visitor would read it as a promise that nobody checked.
 
-**`PlatformFetcher` carries the whole security requirement** for both readers—the host list, the resolved address checked against the reserved ranges and pinned into the request, and limits on time, size and media type. A redirect is checked again at every hop on the fetched path and refused outright on the posted one, since the other side may not repeat a body. What is requested is rebuilt from the checked parts, never the string a visitor typed.
+**`PlatformFetcher` carries the whole security requirement** for both readers—the host list, the resolved address checked against the reserved ranges and pinned into the request, and limits on time, size and media type. A redirect is checked again at every hop on the fetched path and refused outright on the posted one, since the other side may not repeat a body. What is requested is rebuilt from the checked parts, never the string a visitor typed. **The resolved address is pinned** because a second resolution by the client leaves a window in which the answer can change from public to private; **the request is rebuilt** because every disagreement between two parsers of one address is a way around the guard.
 
 **The interface of Printables is undocumented** and its introspection is off: the field names were found by asking and can change without notice. When they do, the assistant carries on without a preview—which is why the failure path is not a nicety.
 
 ## Data model
 
 * **Landing pages** use JSON files in `config/`. Flow: JSON → Serializer → entity DTO → Twig. `/advintage` loads `config/advintage-landing-page.json`; **the path is anchored to `kernel.project_dir`**, because a relative path resolves against the working directory, which holds for the web server and breaks in the test runner.
-* `UsageContext` is the enum behind the purpose question and carries its own labels.
+* `UsageContext` is the enum behind the purpose question and carries its own labels. The workshop reads the material out of the situation: PLA for decoration, PETG where the part must stay flexible, ASA for sun and heat, ASA or PC-CF under real load, and a faster print where the surface does not matter. The page shows the everyday case first, then the four demands on the material, and last the one about the print rather than the part.

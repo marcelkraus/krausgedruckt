@@ -11,10 +11,6 @@ use App\Service\ModelLookup;
 use App\Service\ModelReader;
 use PHPUnit\Framework\TestCase;
 
-/**
- * The choice between the readers, and what every answer passes through on
- * its way out.
- */
 final class ModelLookupTest extends TestCase
 {
     public function testAsksTheReaderThatServesThePlatform(): void
@@ -39,10 +35,6 @@ final class ModelLookupTest extends TestCase
         }
     }
 
-    /**
-     * Whatever a platform hands over is a stranger's text; the card has to
-     * survive a description with line breaks and one of any length.
-     */
     public function testCollapsesWhitespaceAndShortensWhatIsTooLong(): void
     {
         $lookup = new ModelLookup([
@@ -56,11 +48,6 @@ final class ModelLookupTest extends TestCase
         self::assertStringEndsWith('…', $preview->description);
     }
 
-    /**
-     * The license is what the workshop calculates with, and it passes
-     * through here on its way to the mail—untouched but for the
-     * shortening every field gets.
-     */
     public function testCarriesTheLicenseThrough(): void
     {
         $lookup = new ModelLookup([

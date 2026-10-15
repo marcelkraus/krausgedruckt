@@ -12,12 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * The blog: the overview, one page per post and the feed, all read out of
- * kongtent.
- *
- * **The year in the address is this site's, the slug is kongtent's.** The
- * year comes from the post's own date, so a published date must not be
- * corrected afterwards: that moves the page.
+ * The year in the address comes from the post's date, so correcting a published
+ * date moves the page.
  */
 final class BlogController extends AbstractController
 {
@@ -33,10 +29,7 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    /**
-     * The feed carries the full text, so it asks once per post: the list of a
-     * channel carries no blocks.
-     */
+    // The list of a channel carries no blocks, so the feed asks once per post.
     #[Route('/blog/feed.xml', name: 'app_blog_feed', methods: ['GET'])]
     public function feed(): Response
     {
@@ -64,8 +57,7 @@ final class BlogController extends AbstractController
     {
         $post = $this->kongtent->one($slug);
 
-        // kongtent is asked for the slug alone, so the year is compared here. A
-        // content that is not listed is a page of its own, never a post.
+        // kongtent knows the slug alone; an unlisted content is never a post.
         if (null === $post || false === $post->listed || $post->getYear() !== $year) {
             throw $this->createNotFoundException();
         }
@@ -73,10 +65,6 @@ final class BlogController extends AbstractController
         return $this->render('content/blog/post.html.twig', ['post' => $post]);
     }
 
-    /**
-     * The references moved into the blog under the same slug and date, so
-     * the old addresses keep their links and their place in search engines.
-     */
     #[Route('/referenzen', name: 'app_references_redirect', methods: ['GET'])]
     public function references(): RedirectResponse
     {

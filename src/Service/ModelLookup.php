@@ -8,14 +8,8 @@ use App\Dto\ModelPreview;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
- * Hands a model address to the reader that serves its platform.
- *
- * The one place that knows there is more than one way in. Everything above
- * asks here and gets a preview or a failure, whichever platform it was.
- *
- * **Only the page is ever fetched, never the model file**—that one is
- * downloaded by hand after an order, on the customer's instruction, which
- * is what keeps a non-commercial license intact.
+ * Only the page is ever fetched, never the model file—that keeps a
+ * non-commercial license intact.
  */
 final class ModelLookup
 {
@@ -46,11 +40,7 @@ final class ModelLookup
         throw new LookupFailedException(LookupFailure::UnsupportedAddress);
     }
 
-    /**
-     * A reader hands over a stranger's text, decoded, and a platform allows
-     * more of it than a card can hold—the line breaks of a description
-     * would grow the card until the fields below it leave the screen.
-     */
+    // A description's line breaks would grow the card past the screen.
     private function clamped(ModelPreview $preview): ModelPreview
     {
         return new ModelPreview(

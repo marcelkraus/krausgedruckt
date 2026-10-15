@@ -1,16 +1,9 @@
-/* source(none) switches off Tailwind's automatic project scan. Without it
-   every file in the tree is a candidate source, so a stray word in a
-   Markdown file can end up as a CSS rule in the build. The templates are
-   the only place utilities are written. */
+/* source(none): only the templates may produce utilities. */
 @import "tailwindcss" source(none);
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 @source "../../templates/**/*.html.twig";
 
-/* Self-hosted fonts—no external requests. Aller carries the wordmark,
-   headlines and body, which ties the type to the logo; JetBrains Mono is
-   the technical voice for eyebrows, labels and spec data. Latin covers the
-   German umlauts (ä ö ü ß). */
 @font-face {
     font-family: "Aller";
     src: url("../fonts/aller_regular.ttf") format("truetype");
@@ -40,49 +33,22 @@
     --font-display: "Aller", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 
-    /* One vocabulary, both brands: the role is in the name, so the
-       difference between the two brands falls into the values and not into
-       the naming.
-
-         accent                 the brand itself—surfaces, borders, markers,
-                                the mark. Never type without a checked step.
-         accent-on-light        type on a light ground
-         accent-on-dark         type on a dark ground
-         accent-hover           hover of a filled surface
-         accent-on-light-hover  hover of type on a light ground
-
-       The papaya is a light color: it misses AA as type on white (3.60:1)
-       and needs a darker step there, while it carries a dark ground as it
-       is (4.98:1 on the footer, 5.50:1 on the band). The sibling's petrol has the mirror problem, which is
-       why its tokens carry different values under the same names.
-
-       The hover of a filled surface moves in whichever direction keeps its
-       label readable—here the label is near-black, so the fill LIGHTENS.
-       Darkening it would drop the label to 3.43:1. */
+    /* Papaya is light: 3.60:1 as type on white, where the on-light step takes over.
+       The filled hover lightens; darkening drops the label to 3.43:1. */
     --color-accent: var(--color-orange-600);
     --color-accent-on-light: var(--color-orange-700);
     --color-accent-on-dark: var(--color-orange-600);
     --color-accent-hover: var(--color-orange-500);
     --color-accent-on-light-hover: var(--color-orange-800);
 
-    /* The warm ground the sections alternate on. */
     --color-surface-warm: var(--color-orange-50);
 
-    /* Sibling brands in the footer network. Foreign colors carry their own
-       token so they stay out of the accent scale. */
     --color-brand-marcelkraus: var(--color-purple-700);
     --color-brand-krausgebaut: var(--color-cyan-800);
     --color-brand-krausgebaut-hover: var(--color-cyan-900);
-    /* marcelkraus is purple now—the left square of the new family logo,
-       which stands for the employment career. Like the petrol below it is a
-       dark color and measures 2.54:1 on the footer's neutral-900, so the
-       marker there uses the brighter step. All of these bind to the palette
-       instead of carrying a copied hex, so they cannot drift from it. */
+    /* Purple (2.54:1) and petrol (2.74:1) miss on the footer; their markers take the
+       brighter step. */
     --color-brand-marcelkraus-on-dark: var(--color-purple-400);
-    /* The petrol is too dark to be type on a dark ground—it measures
-       2.74:1 there, where 4.5:1 is required. This is the same split the
-       accent already has, only in the other direction: papaya needs a
-       darker step for light grounds, petrol a brighter one for dark. */
     --color-brand-krausgebaut-on-dark: var(--color-cyan-600);
 
     --animate-rise: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -97,17 +63,8 @@
             transform: translateY(0);
         }
     }
-    /* Error is the second semantic color of the interface and gets the same
-       role treatment as the accent, so its contrast is checkable by name.
-
-         error             type on a light ground (4.77:1 on white)
-         error-surface     the tinted panel behind a form-level message
-         error-on-surface  type on that panel (5.87:1)
-         error-border      the outline of an invalid field and of the panel
-                           (3.81:1 on white, 3.48:1 on the panel)
-
-       The border step used to be red-300, which measures 1.75:1 on the panel
-       and misses the 3:1 WCAG 1.4.11 asks of a state indicator. */
+    /* error 4.77:1 on white, error-on-surface 5.87:1 on the panel, error-border
+       3.48:1 on the panel. */
     --color-error: var(--color-red-600);
     --color-error-surface: var(--color-red-50);
     --color-error-on-surface: var(--color-red-700);
@@ -115,22 +72,16 @@
 
 }
 
-/* A link inside markup kongtent generated, where the typography plugin does
-   not reach, gets the link style `prose-a` gives the running text. Every
-   element that prints converted markup outside `prose` or under `not-prose`
-   carries `data-generated`—a quotation, a term-list value, a caption line,
-   the teaser of a post. */
+/* Converted kongtent markup outside `prose` carries `data-generated`. */
 @layer components {
     [data-generated] a {
         @apply font-semibold text-accent-on-light no-underline hover:underline;
     }
 }
 
-/* Base layer. */
 @layer base {
     html {
         scroll-behavior: smooth;
-        /* Offset anchor targets for the fixed header. */
         scroll-padding-top: 5rem;
     }
 
@@ -139,7 +90,6 @@
         text-rendering: optimizeLegibility;
     }
 
-    /* Contact and postal addresses should not render italic. */
     address {
         font-style: normal;
     }

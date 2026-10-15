@@ -28,19 +28,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * The print order by model link: the assistant and the image relay behind
- * it.
- *
- * **The assistant works without JavaScript.** One form with two submit
- * buttons: “Weiter” reads the model and renders again, “Anfrage senden”
- * sends. Enter in the address field triggers the first one, which is the
- * reading. Nothing is kept on the server—no session state, no draft
- * record—and the page can also be reached with `?url=`, so a campaign
- * link carries a model straight into it.
- *
- * **Every request that reaches outwards passes a limiter, whichever way
- * in.** Reading and sending both leave this host on a stranger's word, and
- * a route that does that without counting is an amplifier.
+ * Every request that reaches outwards passes a limiter, whichever way in;
+ * otherwise the route is an amplifier.
  */
 final class PrintOrderController extends AbstractController
 {
@@ -74,10 +63,7 @@ final class PrintOrderController extends AbstractController
                 : $this->renderAssistant(['url' => $url], ...$this->look($request, $url));
         }
 
-        // The token is checked before a submission reaches outwards, so a
-        // forged post cannot spend the lookup budget or send a mail. The
-        // GET path carries no token by design—a campaign link has none—
-        // and stands on the rate limiter alone.
+        // Checked before anything reaches outwards; a campaign GET carries no token.
         if ($this->isCsrfTokenValid('print_order', (string) $request->request->get('_token')) === false) {
             return $this->renderAssistant(
                 $request->request->all(),
@@ -101,25 +87,13 @@ final class PrintOrderController extends AbstractController
     }
 
     /**
-     * Passes the platform's preview image through instead of embedding it
-     * directly.
-     *
-     * An `img src` pointing at the platform hands it the address of every
-     * visitor who opens the page and makes it a third party in the privacy
-     * policy. Relaying keeps that out without storing a copy, which is what
-     * would turn an embedded picture into a reproduction of our own.
-     *
-     * **The address is signed, so only one this site produced is fetched.**
-     * Without the signature the route is a fetch service for the platform,
-     * open to anyone: the host list would keep the request inside it, but
-     * nothing would tie it to a page a visitor actually asked for.
+     * Relayed, so the platform never sees a visitor; signed, so only an address
+     * this site produced is fetched.
      */
     #[Route('/modell-bild', name: 'app_model_image', methods: ['GET'])]
     public function image(Request $request, PlatformFetcher $fetcher): Response
     {
-        // Checked against path and query alone, because that is what was
-        // signed: an absolute signature carries the host, and the host
-        // differs behind a tunnel or a proxy while the site is the same.
+        // Path and query only: the host differs behind a tunnel or a proxy.
         if ($this->uriSigner->check($request->getRequestUri()) === false) {
             throw $this->createNotFoundException();
         }
@@ -147,15 +121,7 @@ final class PrintOrderController extends AbstractController
     }
 
     /**
-     * Reads the model, and turns a failure into a sentence.
-     *
-     * **A failure never closes the assistant.** Whatever went wrong, the
-     * remaining steps open and the inquiry can be sent: the address alone
-     * is enough for the workshop, and the preview is a convenience, not the
-     * product.
-     *
-     * Every path that fetches goes through here, so the limiter cannot be
-     * stepped around by choosing a different method.
+     * A failure never closes the assistant: the address alone is enough.
      *
      * @return array{0: ?ModelPreview, 1: ?string}
      */
@@ -187,8 +153,7 @@ final class PrintOrderController extends AbstractController
             (string) $request->request->get('ts_sig', ''),
         );
 
-        // Silent drop for clear bot signals, with a fake success so nothing
-        // is learned from the difference—the contact form does the same.
+        // A clear bot signal gets a fake success, so the bot learns nothing.
         $honeypot = trim((string) $request->request->get('website', ''));
 
         if ($honeypot !== '' || $timestampState === TimestampState::Invalid || $timestampState === TimestampState::TooFast) {
@@ -199,8 +164,7 @@ final class PrintOrderController extends AbstractController
 
         $order = new PrintOrderRequest();
         $order->url = trim((string) $request->request->get('url', ''));
-        // Not a cast: “abc” would become 0 and be answered as a missing
-        // quantity rather than as one that is not a number.
+        // Not a cast: “abc” would become 0, a missing quantity.
         $quantity = trim((string) $request->request->get('quantity', ''));
         $order->quantity = ctype_digit($quantity) ? (int) $quantity : null;
         $order->context = array_values(array_filter(
@@ -216,8 +180,7 @@ final class PrintOrderController extends AbstractController
             $errors[$violation->getPropertyPath()] ??= $violation->getMessage();
         }
 
-        // A valid but stale signature is a real person whose form sat open
-        // too long—never silently drop it, ask them to resend instead.
+        // A stale signature is a real visitor whose form sat open too long.
         if ($timestampState === TimestampState::Expired) {
             $errors['form'] = 'Das Formular war zu lange geöffnet. Bitte sende es noch einmal ab.';
         }
@@ -226,9 +189,7 @@ final class PrintOrderController extends AbstractController
             return $this->renderErrors($request, $errors);
         }
 
-        // Throttle per address: an inquiry sends two mails, one of them to
-        // an address the sender picks and with text the sender writes, so
-        // an unthrottled route is an open relay.
+        // Unthrottled, a route that mails an address the sender picks is an open relay.
         if ($this->orderLimiter->create($request->getClientIp() ?? 'anonymous')->consume()->isAccepted() === false) {
             return $this->renderErrors($request, [
                 'form' => 'Es sind zu viele Anfragen eingegangen. Bitte versuche es später noch einmal.',
@@ -276,10 +237,6 @@ final class PrintOrderController extends AbstractController
                 ->context($context)
         );
 
-        // The confirmation is where the instruction behind the license
-        // question is written down—it reaches the customer and stays with
-        // him, which a sentence on a page he has left does not. It answers
-        // to the workshop, because “Bis gleich” invites a reply.
         $this->mailer->send(
             (new TemplatedEmail())
                 ->from(new Address($this->contactFrom, 'krausgedruckt von Marcel Kraus'))
@@ -347,11 +304,6 @@ final class PrintOrderController extends AbstractController
         ], new Response('', $status));
     }
 
-    /**
-     * Signed without a host, so the same page works under whichever name
-     * it is reached—the site's own, a tunnel, a proxy. The signature
-     * covers path and query, and the host is ours in every case.
-     */
     private function signedImageUrl(string $imageUrl): string
     {
         return $this->uriSigner->sign($this->generateUrl('app_model_image', ['url' => $imageUrl]));

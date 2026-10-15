@@ -1,6 +1,4 @@
-{# **This site's version.** Two columns of square tiles, each picture with its
-   own caption line, so every picture keeps what the library says about it.
-   `not-prose`, because the plugin would space the figures a second time. #}
+{# `not-prose`, because the plugin would space the figures a second time. #}
 <ul class="not-prose my-8 grid grid-cols-2 gap-3" role="list">
     {% for image in block.images %}
         {% set picture = image.picture %}

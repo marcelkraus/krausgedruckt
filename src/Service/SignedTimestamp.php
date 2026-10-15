@@ -6,25 +6,12 @@ namespace App\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-/**
- * The signed timestamp both hand-rolled forms carry against bots.
- *
- * A form states when it was rendered, and the statement is signed against
- * the application secret—without the signature a bot would simply post a
- * value old enough to look human. Too fast is a machine, too old is a
- * person whose tab sat open, and the two are answered differently.
- */
 final class SignedTimestamp
 {
-    /**
-     * Under three seconds nobody has read the form, let alone filled it.
-     */
+    // Under three seconds nobody has read the form, let alone filled it.
     public const int MINIMUM_AGE = 3;
 
-    /**
-     * Two hours: long enough for a page left open over lunch, short enough
-     * that a harvested pair is worthless by the time it is used.
-     */
+    // Long enough for a page left open over lunch, short enough to make a harvested pair worthless.
     public const int LIFETIME = 7200;
 
     public function __construct(
@@ -63,9 +50,6 @@ final class SignedTimestamp
     }
 
     /**
-     * Keeps a pair the visitor already carries when a submission comes back
-     * with errors, so a corrected form is not suddenly too fast.
-     *
      * @return array{timestamp: string, signature: string}
      */
     public function reissueOrKeep(string $timestamp, string $signature): array

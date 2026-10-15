@@ -6,10 +6,6 @@ namespace App\Twig;
 
 use Twig\Attribute\AsTwigFilter;
 
-/**
- * Markup out of kongtent as plain text, for the structured data: tags gone,
- * entities decoded, every run of white space one space.
- */
 final class PlainTextExtension
 {
     #[AsTwigFilter('plain_text')]

@@ -1,11 +1,4 @@
-{# Hand-rolled contact form—no symfony/form, the same mechanism the sister
-   project uses, so one submission path exists in the family instead of two.
-
-   The field classes are in `_field_class`, which the assistant pulls too;
-   this file holds the layout and the order of the fields.
-
-   Expects: errors (map field→message), old (submitted values), ts + ts_sig
-   (the signed anti-spam timestamp), focus (optional, first invalid field). #}
+{# Params: errors (field → message), old, ts, ts_sig, focus. #}
 {% import _self as field %}
 {% import 'partials/_icons.html.twig' as icons %}
 
@@ -33,8 +26,7 @@
     <input type="hidden" name="ts" value="{{ contact_timestamp }}">
     <input type="hidden" name="ts_sig" value="{{ contact_timestamp_signature }}">
 
-    {# Honeypot: hidden from people, tempting to bots. A neutral field name
-       that browser autofill is unlikely to populate for a real visitor. #}
+    {# Honeypot, named so that autofill leaves it empty. #}
     <div class="sr-only" aria-hidden="true">
         <label for="f_website">Dieses Feld bitte leer lassen</label>
         <input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off">
@@ -44,9 +36,7 @@
         <p class="mb-5 rounded-lg border border-error-border bg-error-surface px-4 py-3 text-sm font-semibold text-error-on-surface" role="alert">{{ errors.form }}</p>
     {% endif %}
 
-    {# The two required fields open the form. Anything optional follows in the
-       second row, so a private customer—the majority here—starts with
-       something that concerns them rather than skipping a field first. #}
+    {# The required fields come first: most senders are private customers. #}
     <div class="grid gap-5 sm:grid-cols-2">
         {{ field.input('name', 'Name', old, errors, { required: true, autocomplete: 'name' }) }}
         {{ field.input('email', 'E-Mail', old, errors, { required: true, type: 'email', autocomplete: 'email' }) }}

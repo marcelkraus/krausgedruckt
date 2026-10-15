@@ -6,12 +6,6 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * The parts of the blog that break without being seen: the feed nobody
- * looks at, the year in the address, the old addresses of the references and
- * the block templates of this site, which only take effect under the exact
- * path the bundle looks in.
- */
 final class BlogTest extends WebTestCase
 {
     public function testTheFeedIsValidXmlAndCarriesEveryBlock(): void
@@ -31,8 +25,7 @@ final class BlogTest extends WebTestCase
         $entry = (string) $contents->item(0)?->textContent;
         self::assertSame(5, substr_count($entry, '<img'), 'Titelbild, Bild oder Galerie fehlen im Feed.');
         self::assertStringContainsString('<blockquote>', $entry);
-        // A label is plain text and escaped twice: once for the XML, once for
-        // the HTML the reader finds inside it.
+        // Escaped twice: once for the XML, once for the HTML inside it.
         self::assertStringContainsString('<dt>Farbe &lt;b&gt;</dt>', $entry);
         self::assertStringContainsString('<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">', $entry);
         self::assertStringContainsString('<a href="http://localhost/kontakt">', $entry);
@@ -51,10 +44,6 @@ final class BlogTest extends WebTestCase
         self::assertResponseStatusCodeSame(404, 'Der Beitrag antwortet unter einem fremden Jahr.');
     }
 
-    /**
-     * A year on its own would show what the overview already shows, so it is
-     * not a page.
-     */
     public function testAYearOnItsOwnIsNotAPage(): void
     {
         static::createClient()->request('GET', '/blog/2026');
@@ -73,10 +62,6 @@ final class BlogTest extends WebTestCase
         self::assertResponseRedirects('/blog/2026/jeder-block-einmal', 301);
     }
 
-    /**
-     * Every picture carries its measurements, so the text below it does not
-     * jump while it loads—on the homepage, the overview and the post.
-     */
     public function testEveryPictureCanHoldItsPlace(): void
     {
         $client = static::createClient();
@@ -91,8 +76,6 @@ final class BlogTest extends WebTestCase
             }
         }
 
-        // Cover on the homepage and the overview, then cover, picture and
-        // three gallery tiles on the post.
         self::assertSame(7, $seen);
     }
 
@@ -112,11 +95,6 @@ final class BlogTest extends WebTestCase
         self::assertCount(1, $page->filter('.prose li figcaption[data-generated] a[href="/fotograf"]'));
     }
 
-    /**
-     * The teaser stands outside `prose` in the head of a post and keeps its
-     * link there; on a card it loses it, because the heading link covers the
-     * whole card.
-     */
     public function testTheTeaserCarriesItsLinkOnlyInThePost(): void
     {
         $client = static::createClient();
@@ -129,10 +107,6 @@ final class BlogTest extends WebTestCase
         }
     }
 
-    /**
-     * A paragraph that is one external link is set as the arrow link and opens
-     * in a new tab; a lone link within this site stays running text.
-     */
     public function testALoneExternalLinkCarriesTheArrow(): void
     {
         $page = static::createClient()->request('GET', '/blog/2026/jeder-block-einmal');

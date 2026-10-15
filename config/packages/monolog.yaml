@@ -29,10 +29,7 @@ when@test:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
 
-# Production writes to a rotating file rather than the recipe's php://stderr:
-# on the Uberspace host the FastCGI error stream is not readable from the
-# account, so an error would leave no trace that can be looked at over SSH.
-# Only errors are kept, together with the request that led up to them.
+# On the host the FastCGI error stream is unreadable, so errors go to a file.
 when@prod:
     monolog:
         handlers:

@@ -6,16 +6,6 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Carries and validates an inquiry from the print-order assistant.
- *
- * Hand-rolled like the contact form—no symfony/form—so both paths
- * answer a submission through one mechanism instead of two.
- *
- * **Two fields are required, and they are the two the workshop cannot
- * work without:** the address of the model and somewhere to send the
- * offer. Everything else is the visitor telling us more than he has to.
- */
 final class PrintOrderRequest
 {
     #[Assert\NotBlank(message: 'Bitte füge die Adresse deines Modells ein.')]
@@ -31,9 +21,7 @@ final class PrintOrderRequest
     /**
      * @var list<string>
      */
-    // `Choice` over the whole list, not `All` around a single one: `All`
-    // reports under `context[0]`, and a violation keyed by an index has no
-    // field on the page to be shown at.
+    // `All` would report under `context[0]`, which no field on the page shows.
     #[Assert\Choice(callback: [UsageContext::class, 'values'], multiple: true, multipleMessage: 'Diese Angabe kenne ich nicht.')]
     public array $context = [];
 

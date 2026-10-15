@@ -1,19 +1,4 @@
-{# The print-order assistant: three steps on one page, the last two closed
-   until a model has been read.
-
-   **It works without JavaScript.** One form with two submit buttons—the
-   first reads the model and renders again, the second sends. Nothing is
-   kept on the server, and the page can also be reached with `?url=`.
-
-   A failed lookup opens the steps all the same and says what went wrong—
-   the address alone is enough for the workshop, so the inquiry must never
-   hang on a platform answering.
-
-   This page stands outside the usual pattern by decision, but not in its
-   header: the navigation is the site's own, unchanged, and the step bar is
-   the one thing here that exists nowhere else.
-
-   Expects: errors, focus, imageUrl, lookupError, old, preview, timestamp,
+{# Expects: errors, focus, imageUrl, lookupError, old, preview, timestamp,
    timestampSignature, usageContexts. #}
 {% extends 'base.html.twig' %}
 {% import 'partials/_icons.html.twig' as icons %}
@@ -22,9 +7,7 @@
 {% block meta_description %}Du hast auf Printables etwas Schönes gefunden, aber selber keinen 3D-Drucker? Fülle das Formular aus und du erhältst innerhalb weniger Stunden per E-Mail dein persönliches Angebot.{% endblock %}
 
 {% set open = preview is not null or lookupError is not null or errors|length > 0 %}
-{# A pending confirmation must not cover an error: the flash survives a
-   submission that never followed its redirect, and the visitor would be
-   told his inquiry arrived while the form is refusing it. #}
+{# The flash may survive a submission that never followed its redirect. #}
 {% set done = errors|length == 0 and app.flashes('print_order_success')|length > 0 %}
 
 {% block main %}
@@ -56,24 +39,13 @@
     {% else %}
         {{ include('partials/_print_order_steps.html.twig', { current: open ? 2 : 1 }, with_context = false) }}
 
-        {# One form over all three steps, with two submit buttons: “Weiter”
-           carries `lookup` and only reads the model, “Anfrage senden” sends.
-           Enter in the address field triggers the first one, because it is
-           the first submit button in the form.
-
-           A second form for the address would be the other way to keep
-           Enter from sending—but then the address would exist twice, and
-           whoever corrects the field without pressing “Weiter” would send
-           the old one. Here there is one field and one truth. #}
+        {# One form, so the address exists once; Enter triggers “Weiter”, the first submit. #}
         <form method="post" action="{{ path('app_print_order') }}" novalidate{% if focus %} data-error-focus="{{ focus }}"{% endif %}>
             <input type="hidden" name="_token" value="{{ csrf_token('print_order') }}">
             <input type="hidden" name="ts" value="{{ timestamp }}">
             <input type="hidden" name="ts_sig" value="{{ timestampSignature }}">
 
-            {# Honeypot: hidden from people, tempting to bots. Hidden from a
-               screen reader as well—reading mode walks the document, not
-               the tab chain, so without aria-hidden the trap is read out to
-               exactly the visitors who cannot see that it is one. #}
+            {# Honeypot, aria-hidden too: reading mode walks the document, not the tab chain. #}
             <div class="sr-only" aria-hidden="true">
                 <label for="f_website">Dieses Feld bitte leer lassen</label>
                 <input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off">
@@ -120,14 +92,8 @@
     {{ include('partials/_error_focus.html.twig', {}, with_context = false) }}
     {% if not done %}
         <script>
-            // Print-order assistant: two enhancements, neither of them load
-            // bearing. Without JavaScript the step bar simply marks the step
-            // the server rendered, and the browser shows its own progress
-            // while the model is fetched.
             (function () {
-                // The bar states where the reader is, not what the server
-                // decided—with every step open, a fixed marker would claim
-                // a position the page no longer has.
+                // The bar follows the reader; every step may be open.
                 const entries = Array.from(document.querySelectorAll('nav[aria-label="Fortschritt"] li[data-step]'));
                 const sections = entries
                     .map((entry) => document.getElementById(entry.dataset.step))
@@ -156,14 +122,7 @@
                     sections.forEach((section) => observer.observe(section));
                 }
 
-                // Fetching the model takes a moment on someone else's
-                // server, and sending writes two mails. Saying so beats a
-                // button that looks untouched—and a disabled button
-                // cannot be pressed a second time.
-                //
-                // The name of the pressed button decides what the server
-                // does, so it is submitted by hand before the button is
-                // disabled: a disabled control sends nothing.
+                // The pressed button's name is submitted by hand: a disabled control sends nothing.
                 const form = document.querySelector('main form');
 
                 if (form !== null) {

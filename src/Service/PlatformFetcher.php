@@ -9,32 +9,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Fetches a document from one of the model platforms—and nothing else.
- *
- * A visitor types the address and this side requests it, which is a
- * server-side request forgery unless something stands against it. What
- * stands against it is here and nowhere else: the host list, the address
- * check behind it, a redirect that is checked again at every hop, and hard
- * limits on time, size and media type.
- *
- * **The resolved address is pinned into the request.** Checking a name and
- * then letting the client resolve it a second time leaves a window in which
- * the answer can change—the check would pass on a public address and the
- * request would go to a private one.
- *
- * **What is requested is rebuilt from the checked parts**, never the string
- * the visitor typed: the guard and the client would otherwise have to agree
- * on how to read an address, and every disagreement between two parsers is
- * a way around the guard.
+ * The whole guard against server-side request forgery: host list, address check,
+ * a resolved address pinned into the request, and limits on time, size and type.
  */
 final class PlatformFetcher
 {
-    /**
-     * The platforms this site reads, and the name each one is shown under.
-     * Subdomains are included, anything else is not: a host must equal one
-     * of these or end in a dot plus one of them, so `evil-printables.com`
-     * does not pass as `printables.com`.
-     */
+    // A host equals one of these or ends in a dot plus one, so `evil-printables.com` fails.
     public const array PLATFORMS = [
         'printables.com' => 'Printables',
     ];
@@ -43,11 +23,7 @@ final class PlatformFetcher
 
     public const int MAX_PAGE_BYTES = 2_097_152;
 
-    /**
-     * The budget for the whole lookup, redirects included. Per request it
-     * would be this much times four, and a visitor waiting on a page that
-     * fetches has no way to tell a slow answer from a hung one.
-     */
+    // For the whole lookup, redirects included.
     private const float BUDGET = 5.0;
 
     private const float MIN_SLICE = 0.5;
@@ -62,9 +38,6 @@ final class PlatformFetcher
     ) {
     }
 
-    /**
-     * The platform's display name, or null for an address we do not serve.
-     */
     public function platformOf(string $url): ?string
     {
         $host = parse_url($url, PHP_URL_HOST);
@@ -93,13 +66,7 @@ final class PlatformFetcher
     }
 
     /**
-     * Posts a JSON document and expects one back—the shape a GraphQL
-     * endpoint speaks. A redirect is refused rather than followed: the
-     * other side may not repeat the body, and a silently emptied request
-     * would look like an answer with no data.
-     *
-     * Unlike its neighbors the address here is a caller's constant, never
-     * something a visitor typed—the guard runs all the same.
+     * A redirect is refused: the other side may not repeat the body.
      *
      * @throws LookupFailedException
      */
@@ -200,8 +167,7 @@ final class PlatformFetcher
             throw new LookupFailedException(LookupFailure::UnsupportedAddress, 'Only the default port is fetched.');
         }
 
-        // Credentials in the authority would be handed to the platform, and
-        // nothing on a public model page asks for them.
+        // Credentials in the authority would be handed to the platform.
         if (isset($parts['user']) || isset($parts['pass'])) {
             throw new LookupFailedException(LookupFailure::UnsupportedAddress, 'No credentials are sent.');
         }
@@ -217,8 +183,7 @@ final class PlatformFetcher
             throw new LookupFailedException(LookupFailure::Unreachable, 'Host does not resolve.');
         }
 
-        // Every answer is checked, not just the one that would be used: a
-        // name that points at a public and a private address must not pass.
+        // Every answer is checked, so a public-and-private name fails.
         foreach ($addresses as $address) {
             if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
                 throw new LookupFailedException(LookupFailure::UnsupportedAddress, 'Host points into a reserved range.');
@@ -265,8 +230,7 @@ final class PlatformFetcher
     }
 
     /**
-     * Reads in chunks and stops at the limit rather than trusting
-     * `Content-Length`, which the other side writes and may understate.
+     * `Content-Length` is written by the other side and may understate.
      *
      * @throws LookupFailedException
      */

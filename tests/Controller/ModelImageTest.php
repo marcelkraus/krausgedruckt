@@ -12,12 +12,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\UriSigner;
 
-/**
- * The image relay: what it hands out, and what it refuses.
- *
- * The fetcher is replaced with one that answers from memory, so the route
- * is exercised without either platform being asked.
- */
 final class ModelImageTest extends WebTestCase
 {
     private const string COVER = 'https://media.printables.com/media/prints/1/cover.png';
@@ -36,12 +30,6 @@ final class ModelImageTest extends WebTestCase
         self::assertSame(self::PIXEL, $client->getResponse()->getContent());
     }
 
-    /**
-     * The relay carries bytes this site did not write, which makes it the
-     * one answer where sniffing would matter. The header comes from the
-     * listener, and the listener is tested elsewhere—here it is checked
-     * on the one path that needs it.
-     */
     public function testTheRelayedImageCarriesTheSniffingGuard(): void
     {
         $client = static::createClient();
@@ -52,10 +40,6 @@ final class ModelImageTest extends WebTestCase
         self::assertResponseHeaderSame('X-Content-Type-Options', 'nosniff');
     }
 
-    /**
-     * Without the signature the route would be a fetch service for the
-     * platforms, usable by anyone who knows the address.
-     */
     public function testRefusesAnAddressWithoutASignature(): void
     {
         $client = static::createClient();

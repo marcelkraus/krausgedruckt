@@ -6,12 +6,6 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * Calls every frontend route once and expects it to answer. This is the
- * cheapest insurance against a template that breaks on a page nobody clicks
- * during development—a missing variable or a renamed partial surfaces here
- * instead of in front of a visitor.
- */
 final class RouteSmokeTest extends WebTestCase
 {
     /**
@@ -67,11 +61,6 @@ final class RouteSmokeTest extends WebTestCase
         self::assertResponseRedirects();
     }
 
-    /**
-     * Every page carries exactly one visible top-level heading. Before the
-     * redesign each of them inherited a hidden one from the navigation and
-     * started at h2, which left no page with a heading of its own.
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('renderingRouteProvider')]
     public function testPageHasExactlyOneMainHeading(string $path): void
     {

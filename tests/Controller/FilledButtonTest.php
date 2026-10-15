@@ -12,11 +12,6 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-/**
- * Every filled button below the header ends in an icon. `_button` sets it
- * itself, a `<button>` pulling `_button_class` writes it out by hand—and
- * that is where a new one would go without.
- */
 final class FilledButtonTest extends WebTestCase
 {
     /**

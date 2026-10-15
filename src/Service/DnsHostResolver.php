@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 /**
- * Resolves a host through the system's name service.
- *
- * Asks for A and AAAA in one call, because a name that answers on both must
- * have both checked: letting the client pick afterwards would hand it an
- * address this side never saw.
+ * A and AAAA in one call, so every address the client could use is checked.
  */
 final class DnsHostResolver implements HostResolver
 {

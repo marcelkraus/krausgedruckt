@@ -1,5 +1,4 @@
-{# Inline line icons (Heroicons v2 outline, stroke = currentColor). Kept as a
-   macro so sections stay declarative and no icon is pasted twice. #}
+{# Heroicons v2 outline, stroke = currentColor. #}
 {% macro icon(name, class) %}
     {%- set class = class|default('h-6 w-6') -%}
     {%- set attrs = 'fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"' -%}

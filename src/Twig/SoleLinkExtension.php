@@ -6,21 +6,10 @@ namespace App\Twig;
 
 use Twig\Attribute\AsTwigFilter;
 
-/**
- * Recognizes a paragraph out of kongtent that is nothing but one link to
- * another site, so the paragraph template can set it as a link with an arrow
- * rather than as running text.
- */
 final class SoleLinkExtension
 {
     /**
-     * The address and the label of the one external link the paragraph
-     * consists of, decoded to plain text, or `null` for anything else.
-     *
-     * The paragraph went through the bundle's converter, so its markup is
-     * known: a link with inline markup inside it, a link among words, a path
-     * and an address on this site's own host all answer `null`. The host is
-     * compared without a leading `www.`, so both spellings count as this site.
+     * The host is compared without `www.`, so both spellings count as this site.
      *
      * @return array{href: string, label: string}|null
      */

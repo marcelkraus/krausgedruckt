@@ -31,11 +31,7 @@
 {% endblock %}
 
 {% block main %}
-    {# ── Hero ───────────────────────────────────────────────────── #}
-    {# The grid spans the full width so the photo can bleed off the right
-       edge. The text column is capped at half the container width and
-       pushed right, which lands its left edge exactly on the container
-       gutter every other section uses. #}
+    {# The text column is pushed right, so its left edge meets the container gutter. #}
     <section class="border-b border-neutral-200 bg-surface-warm pt-20">
         <div class="items-stretch lg:grid lg:grid-cols-2">
             <div class="animate-rise mx-auto w-full max-w-[36rem] px-6 py-16 lg:mr-0 lg:ml-auto lg:py-24 lg:pr-12 lg:pl-8">
@@ -57,8 +53,6 @@
 
             </div>
 
-            {# The product carries the hero. No type sits on the photo, so the
-               contrast never depends on the crop. #}
             <div class="relative min-h-[20rem] lg:min-h-full">
                 <img src="{{ asset('images/prusa-mk4s-with-print-on-black-background--square.jpg') }}"
                      alt="Ein Prusa MK4S mit einem frisch gedruckten Teil"
@@ -67,7 +61,6 @@
         </div>
     </section>
 
-    {# ── Angebot ────────────────────────────────────────────────── #}
     <section class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
         <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -84,7 +77,6 @@
                 </div>
             </div>
 
-            {# The sustainability promise sits apart, as its own card. #}
             <div class="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
                 <img class="aspect-16/9 w-full object-cover" src="{{ asset('images/prusa-core-one-in-workshop--wide.jpg') }}" alt="Ein Original Prusa CORE One">
                 <div class="p-8">
@@ -100,7 +92,6 @@
         </div>
     </section>
 
-    {# ── Blog ───────────────────────────────────────────────────── #}
     {% if posts %}
         <section class="border-y border-neutral-200 bg-surface-warm">
             <div class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
@@ -111,10 +102,7 @@
                 </div>
 
                 <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {# Three cards, and the grid holds two between `sm` and `lg`.
-                       Rather than leaving the third one alone on its own row,
-                       that width shows two: the section is a teaser, and the
-                       link below it leads to all of them anyway. #}
+                    {# Between sm and lg the grid holds two, so the third card is hidden there. #}
                     {% for post in posts %}
                         {{ include('partials/_post_card.html.twig', {
                             post: post,
@@ -133,17 +121,7 @@
         </section>
     {% endif %}
 
-    {# ── Druckauftrag ───────────────────────────────────────────── #}
-    {# Whoever has just seen examples splits here into “I want one of my own”
-       and “I want one off the shelf”. The own way comes first: it is the one
-       this site is built for, and it is what the shop band's “Lieber…”
-       answers. The two bands keep the rhythm alternating—blog on warm,
-       this one on white, the shop back on warm, then the dark section.
-
-       It carries an eyebrow because it is an offer rather than furniture,
-       and none of the other calls of the band do. Without a picture: the
-       three photographs of the page are spoken for, and showing one of them
-       a second time would be worse than type. #}
+    {# The own way comes before the shop band, which answers it. #}
     {{ include('partials/_conversion_band.html.twig', {
         eyebrow: 'Modell drucken',
         title: 'Du hast ein fertiges Modell gefunden?',
@@ -153,10 +131,6 @@
         tone: 'plain'
     }, with_context = false) }}
 
-    {# ── Shop ───────────────────────────────────────────────────── #}
-    {# The other way to buy, and deliberately the second one. It keeps the
-       picture and its size; what it gives up is being the first way out of
-       the page, before the visitor has seen the way that stays on it. #}
     {{ include('partials/_conversion_band.html.twig', {
         title: 'Lieber sofort etwas Fertiges?',
         text: 'Ausgewählte Produkte biete ich in meinem Etsy-Shop an – ohne Anfrage und ohne Wartezeit.',
@@ -167,11 +141,6 @@
         imageAlt: 'Im 3D-Druck gefertigte Korbschalen und Untersetzer in Blau und Weiß'
     }, with_context = false) }}
 
-    {# ── Ablauf (dunkel) ────────────────────────────────────────── #}
-    {# One step shallower than the other sections: since the steps do
-       without a box, this block carries half the content of, say, the blog
-       section, and at the same padding that is twice the air per line. It
-       stays the dark pause in the rhythm all the same. #}
     <section class="bg-neutral-950">
         <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
             <div class="max-w-2xl">
@@ -185,9 +154,6 @@
                     { no: '02', title: 'Ich drucke.', text: 'Ob ein oder hundert Stück. Auf Wunsch farbig, aber immer maßhaltig.', note: 'In Tagen – nicht Wochen.' },
                     { no: '03', title: 'Du hältst es in der Hand.', text: 'Deine Idee ist nun Realität. Ob Geschenk, Ersatzteil, Werkzeug oder Gadget.', note: 'Gedacht, gemacht – passt!' }
                 ] %}
-                {# A rule above the figure rather than a box. On the dark
-                   ground the rule takes a muted step of white, so it marks
-                   the division without outshining the figure. #}
                 {% for step in steps %}
                     <li class="border-t-2 border-white/25 pt-5">
                         <span class="font-mono text-2xl font-bold text-accent-on-dark">{{ step.no }}</span>
@@ -198,9 +164,6 @@
                 {% endfor %}
             </ol>
 
-            {# The filled button leads to the way that carries the promise;
-               the arrow link keeps the other one open. One button and no
-               second step, so the alternative is a link and not a rival. #}
             <div class="mt-10 flex flex-wrap items-center gap-6">
                 {{ include('partials/_button.html.twig', { href: path('app_print_order'), label: 'Ich habe ein fertiges Modell gefunden' }, with_context = false) }}
                 {{ include('partials/_link_arrow.html.twig', { href: path('app_contact'), label: 'Ich habe eine eigene Idee', tone: 'dark' }, with_context = false) }}
@@ -208,10 +171,6 @@
         </div>
     </section>
 
-    {# ── Team ───────────────────────────────────────────────────── #}
-    {# The text runs at reading width and the portraits get a row of their
-       own below it, across the full width. Beside the long text they stood
-       too small and were lost. #}
     <section class="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
         <div class="max-w-3xl">
             {{ include('partials/_eyebrow.html.twig', { text: 'Team' }) }}
@@ -226,10 +185,6 @@
             </div>
         </div>
 
-        {# The same card as in the blog section: picture edge to edge across
-           the full width, text below it. Round portraits in a box are the
-           most generic team pattern there is, and the box competes with the
-           photograph instead of carrying it. #}
         <ul class="mt-14 grid gap-6 sm:grid-cols-3">
             {% set team = [
                 { name: 'Marcel', role: 'Inhaber', image: 'images/marcel.jpg', alt: 'Marcel Kraus' },
@@ -259,7 +214,6 @@
 
     {{ include('partials/_conversion_band.html.twig', { title: 'Und jetzt deins?', text: 'Erzähle mir von deiner Idee – unverbindlich und ohne Kosten. Ich melde mich mit einer Einschätzung zurück.' }, with_context = false) }}
 
-    {# ── Verweis auf die Schwestermarke ─────────────────────────── #}
     {{ include('partials/_sibling_band.html.twig', {
         title: 'Deine Idee soll auch digital laufen?<br>Software baue ich auch.',
         text: 'Neben dem 3D-Druck biete ich mit <strong>krausgebaut</strong> auch Internet- &amp; IT-Dienstleistungen aus Erftstadt bei Köln an.',

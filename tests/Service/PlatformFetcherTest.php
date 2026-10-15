@@ -13,14 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-/**
- * Pins the guard around the fetcher: which addresses are refused, and what
- * is actually sent for one that is not.
- *
- * A plain TestCase without a kernel—nothing here needs the container, and
- * the host resolver is a stub, so no test ever asks a name server or
- * reaches the network.
- */
 final class PlatformFetcherTest extends TestCase
 {
     public static function refusedAddresses(): iterable
@@ -76,12 +68,6 @@ final class PlatformFetcherTest extends TestCase
             ->fetchPage('https://www.printables.com/model/1');
     }
 
-    /**
-     * The head of the fetcher claims the resolved address is pinned into the
-     * request. Without this test the claim holds only until someone deletes
-     * the option: every other test passes with the client resolving a second
-     * time, which is the window the whole guard exists to close.
-     */
     public function testSendsTheCheckedAddressWithThePinAndTheUserAgent(): void
     {
         $seen = [];
@@ -201,11 +187,6 @@ final class PlatformFetcherTest extends TestCase
         }
     }
 
-    /**
-     * The posted path is the one the interface of Printables runs on, and
-     * it carries the same guard as the rest—these three hold it, because
-     * nothing else in the suite touches the branch.
-     */
     public function testSendsThePostedBodyWithTheJsonTypeAndThePin(): void
     {
         $seen = [];
@@ -225,11 +206,6 @@ final class PlatformFetcherTest extends TestCase
         self::assertContains('Content-Type: application/json', $seen['options']['headers']);
     }
 
-    /**
-     * A redirect is refused rather than followed: the other side may not
-     * repeat the body, and a silently emptied request would come back
-     * looking like an answer with no data.
-     */
     public function testRefusesARedirectOnThePostedPath(): void
     {
         $fetcher = $this->fetcher([

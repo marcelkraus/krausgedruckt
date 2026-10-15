@@ -1,11 +1,4 @@
-{# Step two: what the part is for, in which color, and anything else.
-
-   Closed until a model has been read—the numbered box says so rather
-   than hiding, so the visitor can see what is still coming. The fields do
-   not exist while it is closed, so there is nothing to take out of the tab
-   order and nothing that could reach the server.
-
-   Expects: open (whether a model has been read), errors, old,
+{# The fields do not exist while the step is closed. Expects: open, errors, old,
    usageContexts. #}
 {% import 'partials/_icons.html.twig' as icons %}
 
@@ -49,9 +42,6 @@
     </section>
 {% else %}
     <section id="schritt-2" class="mx-auto mt-10 max-w-3xl scroll-mt-32 px-6">
-        {# The heading is a real heading, not decoration: a step that
-           cannot be found by heading navigation is not an announcement of
-           what is coming, it is a hole. #}
         <div class="rounded-2xl border border-dashed border-neutral-400 bg-neutral-50 p-6">
             <div class="flex items-center gap-4">
                 <span class="font-mono text-2xl font-bold text-neutral-600" aria-hidden="true">02</span>

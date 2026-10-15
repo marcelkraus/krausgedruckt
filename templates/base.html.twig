@@ -5,29 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block meta_robots %}<meta name="robots" content="index,follow">{% endblock %}
-    {# The brand description feeds two places: the meta tag and the paragraph
-       under the logo in the footer. One source, so they cannot drift apart.
-       Subpages override meta_description alone; the footer keeps naming the
-       brand rather than the page. #}
     <meta name="description" content="{% block meta_description %}{% block brand_description %}krausgedruckt von Marcel Kraus: individueller 3D-Druck aus Erftstadt bei Köln – Einzelteile, Kleinserien und Prototypen nach deinen Vorgaben.{% endblock %}{% endblock %}">
     <title>{% block title %}krausgedruckt von Marcel Kraus · 3D-Druck aus Erftstadt bei Köln{% endblock %}</title>
 
-    {# Favicons. Three files, all derived from the master Kachel: the SVG scales
-       to any size a browser asks for, the ICO carries 16 and 32 px and answers
-       the implicit /favicon.ico request, the PNG covers the iOS home screen.
-       The SVG must keep its width/height—without them it has no intrinsic
-       size, a browser rasterizes it into a default box and scales that into the
-       tab slot, which leaves a pale rim around the tile. #}
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
 
-    {# Open Graph / social sharing. The image block is captured into a
-       variable rather than printed where it is defined, because the card
-       needs the same path twice and a bare block would emit the value into
-       the document at its definition site. #}
+    {# Captured, because the card needs the path twice. #}
     {% set meta_image %}{% block meta_image %}images/sharing.jpg{% endblock %}{% endset %}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="krausgedruckt">
@@ -52,10 +39,7 @@
     {% endblock %}
 
     {% if app.environment == 'prod' %}
-        {# Privacy-first analytics: self-hosted Matomo (SiteId 8), run cookieless
-           via disableCookies. Nothing is stored on or read from the visitor's
-           device, so no consent banner is required. Production only—local and
-           test traffic must not pollute the statistics. #}
+        {# Cookieless, so no consent banner is needed. #}
         <script>
             var _paq = window._paq = window._paq || [];
             _paq.push(['disableCookies']);
@@ -74,17 +58,7 @@
 <body class="min-h-screen bg-white font-sans text-neutral-600 antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-neutral-900 focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-wider focus:text-white">Zum Inhalt springen</a>
 
-    {# One list feeds both navigations. Written twice, it has to be maintained
-       in ten places instead of five. A page may narrow it down by setting
-       `nav_items` at its own top level—a landing page that stands apart
-       from the site does that.
-
-       An item names either a `route` inside the site or an external `url`.
-       The shop is the only external one and it sits last, after the pages
-       that belong to the site itself. It earns the place because there are
-       two ways to buy here—commission something or take something ready
-       made—and without it the second one is only reachable from the middle
-       of the homepage. #}
+    {# A page may narrow the list by setting `nav_items` at its top level. #}
     {% set nav_items = nav_items|default([
         { label: 'Modell drucken', route: 'app_print_order', matches: ['app_print_order'] },
         { label: 'Blog', route: 'app_blog', matches: ['app_blog', 'app_blog_post'] },
@@ -94,24 +68,13 @@
     ]) %}
     {% set current_route = app.request.attributes.get('_route') %}
 
-    {# ── Header ─────────────────────────────────────────────────── #}
-    {# The three columns are a grid, not a flex row with `justify-between`.
-       In a flex row the navigation is squeezed between logo and actions, so
-       its starting edge follows the total width of its own labels—and
-       lands somewhere else on the sibling site, whose labels are longer.
-       A fixed first column gives both brands the same edge.
-
-       The fixed column only applies from `lg` up, where the navigation is
-       visible and the shared edge is actually perceived. Below that it would
-       reserve 160 pixels for a logo that needs less and push the actions off
-       a 320 pixel screen, which WCAG 1.4.10 forbids. #}
+    {# A fixed first column from lg gives both siblings the same navigation edge. #}
     <header class="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
         <div class="mx-auto grid h-20 max-w-6xl grid-cols-[auto_1fr_auto] lg:grid-cols-[10rem_1fr_auto] items-center gap-6 px-6 lg:px-8">
             <a href="{{ path('app_homepage') }}" class="inline-flex items-center" aria-label="Startseite">
                 {{ include('partials/_logo.html.twig', { class: 'h-8 w-auto md:h-9' }, with_context = false) }}
             </a>
 
-            {# Desktop navigation #}
             <nav class="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
                 {% for item in nav_items %}
                     {% set is_current = current_route in item.matches|default([]) %}
@@ -135,7 +98,6 @@
             </div>
         </div>
 
-        {# Mobile menu #}
         <div id="mobile-menu" class="hidden border-t border-neutral-200 bg-white lg:hidden">
             <nav class="mx-auto flex max-w-6xl flex-col px-6 py-2" aria-label="Mobile Navigation">
                 {% for item in nav_items %}
@@ -151,12 +113,10 @@
         </div>
     </header>
 
-    {# ── Content ────────────────────────────────────────────────── #}
     <main id="main" tabindex="-1">
         {% block main %}{% endblock %}
     </main>
 
-    {# ── Footer ─────────────────────────────────────────────────── #}
     {% block footer %}
         <footer class="border-t border-neutral-800 bg-neutral-900 text-neutral-400">
             <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8">
@@ -201,7 +161,6 @@
 
     {% block javascript %}
         <script>
-            // Mobile menu toggle.
             (function () {
                 const toggle = document.getElementById('menu-toggle');
                 const menu = document.getElementById('mobile-menu');
@@ -225,8 +184,7 @@
                     link.addEventListener('click', () => setOpen(false));
                 });
 
-                // A tap next to an open menu is a request to close it—without
-                // this the panel stays open until the burger is hit again.
+                // A tap next to the open menu closes it.
                 document.addEventListener('click', (event) => {
                     if (menu.classList.contains('hidden')) {
                         return;
@@ -244,7 +202,6 @@
                     }
                 });
 
-                // Close when resizing up to desktop.
                 window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
                     if (event.matches) {
                         setOpen(false);

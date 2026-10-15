@@ -1,7 +1,5 @@
 # Deployment and configuration
 
-## Deployment
-
 Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host `nix`. Mechanism, deploy keys and the mailer are in `../../../docs/DEPLOYMENT.md`.
 
 **The mail is on the same account.** The MX record points at `in-mx.uberspace.de`, and `krausgedruckt.de` is registered for mail on `krswrk`, so `mail@krausgedruckt.de` is a mailbox of that account and the contact form delivers locally. The sender is not this domain—see “The sender on `krswrk`” in `../../../docs/DEPLOYMENT.md`.

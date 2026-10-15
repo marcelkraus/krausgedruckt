@@ -5,7 +5,6 @@
 {% block meta_description %}Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte. Für iPhone und iPad.{% endblock %}
 
 {% block main %}
-    {# ── Hero ───────────────────────────────────────────────────── #}
     <section class="border-b border-neutral-200 bg-surface-warm pt-20">
         <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-8 lg:py-20">
             <div class="order-2 lg:order-1">
@@ -24,7 +23,6 @@
         </div>
     </section>
 
-    {# ── Beschreibung ───────────────────────────────────────────── #}
     <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
         <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -55,8 +53,6 @@
         </div>
     </section>
 
-
-    {# ── Verweis auf die Schwestermarke ─────────────────────────── #}
     {{ include('partials/_sibling_band.html.twig', {
         title: 'Du möchtest auch eine App?<br>Ich baue auch Software.',
         text: 'Der 3D-Druck-Kostenrechner ist ein Teil meines Portfolios. Unter der Marke <strong>krausgebaut</strong> baue ich Apps &amp; Websites – und kümmere mich auf Wunsch auch um die IT vor Ort.',
@@ -64,9 +60,6 @@
         label: 'krausgebaut besuchen'
     }, with_context = false) }}
 
-    {# ── Konversionsband ────────────────────────────────────────── #}
-    {# Same shell as every other closing band; only the action differs, because
-       here it is a store badge rather than the inquiry button. #}
     {% embed 'partials/_conversion_band.html.twig' with {
         title: 'Jetzt kostenlos herunterladen.',
         text: 'Verfügbar für iPhone und iPad.',

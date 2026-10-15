@@ -1,14 +1,5 @@
-{# One post of the blog, laid out like a reference was: the head on the
-   warm ground, the cover below it, the blocks in one `prose` container.
-
-   `meta_title` carries no brand—kongtent leaves that to the channel—so
-   the title appends it. The date is printed with `timezone: false`, because
-   it carries the offset out of the payload and a post dated just after
-   midnight would otherwise stand under the wrong day. The blocks this site
-   sets itself carry `not-prose`; the plugin styles only what the bundle
-   renders. The teaser went through the converter and stands outside
-   `prose`, so it carries `data-generated`.
-   Expects: post. #}
+{# The date is printed with `timezone: false`, or a post just after midnight
+   stands under the wrong day. Expects: post. #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ post.metaTitle }} · krausgedruckt von Marcel Kraus{% endblock %}

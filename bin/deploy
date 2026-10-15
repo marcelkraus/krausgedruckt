@@ -2,54 +2,35 @@
 #
 # Rolls the checked-out branch out. Run it on the server, inside the
 # application directory.
-#
-# `set -e` matters here: without it a failed `composer install` would be
-# followed by a cache rebuild against half-installed dependencies, and the
-# site would come back up broken instead of staying on the old release.
+# Without -e a failed `composer install` would be followed by a cache rebuild
+# against half-installed dependencies.
 set -euo pipefail
 
-# Everything the release needs from `.env.local` is checked before anything on
-# disk moves. A refusal then leaves the site exactly as it was; the same check
-# after the reset would leave new code standing against old dependencies and an
-# old container.
+# Checked before anything on disk moves, so a refusal leaves the site as it was.
 if [ ! -f .env.local ]; then
     echo "bin/deploy: .env.local is missing—aborting." >&2
     exit 1
 fi
 
-# The secret keys CSRF and the anti-spam timestamp of the contact form, and the
-# repository carries one for development. A missing or copied value therefore
-# does not break the site—it silently ships a secret anybody can read, which
-# makes both tokens forgeable. Invisible from the outside, so it is checked on
-# every release.
+# A copied secret makes CSRF and the anti-spam timestamp forgeable, invisibly.
 if ! grep -qE '^APP_SECRET=.+' .env.local || grep -qE '^APP_SECRET=(<ChangeMe|""$)' .env.local; then
     echo "bin/deploy: .env.local has no usable APP_SECRET—aborting." >&2
     exit 1
 fi
 
-# The check above only proves the line is not empty, so a `.env.local` that
-# copied the committed value would pass it. That is the exact case the
-# paragraph above describes, and describing it is not the same as excluding it.
 committed_secret=$(grep -E '^APP_SECRET=' .env | cut -d= -f2-)
 if [ -n "$committed_secret" ] && grep -qF "APP_SECRET=${committed_secret}" .env.local; then
     echo "bin/deploy: .env.local repeats the APP_SECRET from the repository—aborting." >&2
     exit 1
 fi
 
-# Whether a message from the contact form reaches anyone fails silently: the
-# form answers with its confirmation page either way, so a mailbox nobody reads
-# looks exactly like a mailbox that works.
-#
-# `MAILER_DSN` is the one setting that has to be overridden here, because the
-# committed value is `null://null` and throws every mail away without an error.
+# The committed `null://null` throws every mail away while the form says it was sent.
 if ! grep -qE '^MAILER_DSN=.+' .env.local || grep -qE '^MAILER_DSN=null://' .env.local; then
     echo "bin/deploy: .env.local sets no usable MAILER_DSN—aborting." >&2
     exit 1
 fi
 
-# The contact addresses may come from either file. `.env` ships the real ones,
-# so a project that does not override them is correctly configured—what is
-# checked is the value that takes effect, not the file it comes from.
+# The value that takes effect is checked, whichever file it comes from.
 for setting in CONTACT_TO CONTACT_FROM; do
     if [ -z "$(grep -hE "^${setting}=.+" .env.local .env 2>/dev/null | head -1 | cut -d= -f2-)" ]; then
         echo "bin/deploy: neither .env.local nor .env sets ${setting}—aborting." >&2
@@ -57,8 +38,7 @@ for setting in CONTACT_TO CONTACT_FROM; do
     fi
 done
 
-# The value of a setting as Dotenv reads it: the last line that sets it, which
-# may be indented and carry an `export`, a pair of quotes and a comment.
+# Reads a setting as Dotenv does: the last line wins.
 dotenv_value() {
     local value double single
     double='^"([^"]*)"[[:space:]]*(#.*)?$'
@@ -73,11 +53,7 @@ dotenv_value() {
     printf '%s' "$value"
 }
 
-# Whether an address names a host only this machine or a private network
-# reaches: a name without a dot, a local, test or reserved name, a loopback,
-# private, shared or link-local IPv4 address, an IPv4 address in any but the
-# plain dotted form, or any IPv6 literal. A host counts as an IPv4 address when
-# its last label is a number, as a browser reads it.
+# True for a host only this machine or a private network reaches.
 private_host() {
     local host octet
     host=$(printf '%s' "$1" | sed -E 's#^[a-zA-Z]+://##; s#[/?#].*$##; s#^[^@]*@##' | tr '[:upper:]' '[:lower:]')
@@ -101,13 +77,8 @@ private_host() {
     return 1
 }
 
-# The editorial system is reached with a key, under an address that `.env`
-# fills with the production one, so a server that does not override it is
-# correctly configured. What is checked is the value that takes effect: a
-# `.env.local` carried over from development can point at ddev or a private
-# host, and then every page that shows a post answers 500—the start
-# page included. Only `https`, because over plain HTTP the key would travel
-# readable before the redirect.
+# A `.env.local` from development may point kongtent at ddev, and every page
+# with a post answers 500. Only `https`, so the key never travels readable.
 kongtent_url_file=.env
 if grep -qE '^[[:space:]]*(export[[:space:]]+)?KONGTENT_URL=' .env.local; then
     kongtent_url_file=.env.local
@@ -118,16 +89,13 @@ if [[ ! "$kongtent_url" =~ ^https://[^[:space:]/]+ ]] || private_host "$kongtent
     exit 1
 fi
 
-# Empty in `.env`, so an unset key is an unauthorized request rather than a
-# missing setting: kongtent answers 401 and the site reports a fault it did not
-# cause.
+# Empty in `.env`, so an unset key would surface as a 401 from kongtent.
 if [[ ! "$(dotenv_value KONGTENT_KEY .env.local)" =~ ^[^[:space:]]+$ ]]; then
     echo "bin/deploy: .env.local sets no KONGTENT_KEY—aborting." >&2
     exit 1
 fi
 
-# `.env` carries APP_ENV=dev for development. Without an override the
-# auto-scripts of `composer install` build the cache for the wrong environment.
+# Without it the auto-scripts of `composer install` build the cache for dev.
 if ! grep -qE '^APP_ENV=prod$' .env.local; then
     echo "bin/deploy: .env.local does not set APP_ENV=prod—aborting." >&2
     exit 1
@@ -136,21 +104,8 @@ fi
 git fetch --all
 git reset --hard origin/main
 
-# The compiled container is moved aside rather than cleared, and it happens
-# **before** `composer install`. `cache:clear` loads the existing container
-# before it replaces it, so a release that drops a bundle makes it die on a
-# class that no longer exists—and `composer install` runs `cache:clear`
-# itself, through `@auto-scripts`, at the moment when the class is already
-# gone from `vendor/` and still named in the old container. Clearing after the
-# install is therefore too late: the packages are in place, but the install
-# script fails and aborts the deployment.
-#
-# Moved rather than deleted outright, because a plain `rm -rf` races the web
-# server: PHP-FPM writes into the directory while rm walks it and rm gives up
-# with "Directory not empty". Under `set -e` that aborts the deployment right
-# between removing the cache and rebuilding it, which is the worst possible
-# moment. The rename is atomic and cannot race; sweeping the leftovers
-# afterwards may fail harmlessly, so it is allowed to.
+# Moved aside before `composer install`, whose `cache:clear` would load the old
+# container and die on a dropped bundle; `rm -rf` races PHP-FPM, the rename is atomic.
 if [ -d var/cache/prod ]; then
     discard="var/cache/prod.discard.$$"
     mv var/cache/prod "$discard"

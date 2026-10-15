@@ -6,18 +6,6 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Carries and validates the data submitted through the contact form.
- *
- * The form is hand-rolled—no symfony/form—the same way the sister
- * project does it, so both sites answer a submission through one mechanism
- * instead of two. This object is filled from the request and handed to
- * symfony/validator.
- *
- * Constraints are attributes, never doc-block annotations: Symfony 8 does
- * not read the latter, and the class once shipped with `@Assert\Email` in a
- * doc block, which let an invalid address through into the mailer.
- */
 final class ContactRequest
 {
     #[Assert\NotBlank(message: 'Bitte sag mir, wie du heißt.')]

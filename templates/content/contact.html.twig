@@ -18,14 +18,9 @@
         </div>
     </section>
 
-    {# Same split as the sibling site: the ways to reach us on the narrow
-       side, the form on the wide one. The form is first in the document so
-       that a stacked phone shows it before the links that lead away. #}
+    {# The form comes first in the document, so a phone shows it before the links. #}
     <section class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
         <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-            {# Form or confirmation, exactly as the sister site does it: after a
-               successful submission the confirmation takes the form's place
-               rather than living on a page of its own. #}
             <div class="lg:order-2">
                 {% if app.flashes('contact_success') %}
                     <div class="flex items-start gap-4 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm sm:gap-6 sm:p-10" role="status">

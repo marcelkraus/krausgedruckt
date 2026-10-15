@@ -1,30 +1,5 @@
-{# The closing invitation. It sat written out on two pages and as a variant on
-   a third, so a change to the wording or the button had to be found in three
-   places.
-
-   The `actions` block is the inquiry button by default, which is what every
-   caller wants—those keep using {% include %} and never see the block. A
-   page whose closing action is not a button (the app, which offers two store
-   badges) reaches for {% embed %} and overrides it, so the ground, the
-   measurements and the rhythm still come from here.
-
-   An `image` turns the band into a two column block: picture on one side,
-   type on the other. The shop needs that—two identically shaped bands say
-   the two ways to buy are equivalent, and a strip of type between two blocks
-   of nine hundred pixels says the opposite. The picture also answers the one
-   question the band could not: what is actually in there.
-
-   An `eyebrow` lifts the band out of the furniture and makes it a section:
-   on this site the mono label is the signal that a topic begins, so a band
-   that carries an offer of its own takes one and a band that closes a page
-   does not. Its text matches the navigation item word for word.
-
-   Params: title, text, label (optional), href (optional), icon (optional),
-   external (optional), eyebrow (optional), image (optional, path), imageAlt
-   (required with an image), boxed (optional—renders as an inset card
-   instead of a full-width band), tone ('warm' default, 'plain' for a white
-   ground where the band would otherwise sit on the same color as the section
-   above it and merge into it). #}
+{# Params: title, text, label, href, icon, external, eyebrow (matches the
+   navigation item), image, imageAlt, boxed, tone ('warm' or 'plain'). Embed to override `actions`. #}
 {% set href = href|default(path('app_contact')) %}
 {% set label = label|default('Jetzt anfragen') %}
 

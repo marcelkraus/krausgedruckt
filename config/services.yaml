@@ -4,18 +4,13 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    # Outbound targets. Each of them appears in more than one place—the
-    # footer, a page, a redirect route—and a changed address must not have
-    # to be hunted through the templates. Values that differ per machine
-    # belong in .env instead; these do not.
+    # Outbound targets, the same on every machine.
     app.app_store_url_mobile: 'https://apps.apple.com/de/app/3d-druck-kostenrechner/id6502561182'
     app.contact_email_address: 'mail@krausgedruckt.de'
     app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
     app.google_review_url: 'https://g.page/r/CW-IKJ1ZcOv8EBM/review'
     app.instagram_url: 'https://www.instagram.com/krausgedruckt'
-    # Only the imprint and the privacy policy show an address, and they show
-    # this one: whatever is harvested from a legal page arrives on its own
-    # tag and can be filtered without touching the mailbox.
+    # Shown on the legal pages only, so what is harvested there arrives on its own tag.
     app.legal_email_address: 'mail+legal@krausgedruckt.de'
     app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
 
@@ -36,21 +31,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Symfony does not alias an interface to its only implementation on its
-    # own, and the fetcher asks for the interface so a test can hand it an
-    # address without a name server.
     App\Service\HostResolver: '@App\Service\DnsHostResolver'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-
 when@test:
     services:
-        # The suite never reaches a platform. kongtent is fenced off the same
-        # way in its own file; without a fence here the promise hangs on every
-        # test remembering to swap the fetcher, and one that forgets asks the
-        # real interface over the network instead of failing.
+        # A test that forgets to set up an answer fails instead of reaching a platform.
         App\Service\PlatformFetcher:
             arguments:
                 $httpClient: '@app.refusing_http_client'

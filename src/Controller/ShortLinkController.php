@@ -11,8 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ShortLinkController extends AbstractController
 {
     /**
-     * Prefix => campaign. A printed short link reads `<prefix>-<code>`, and
-     * the code carries no hyphen of its own.
+     * Prefix => campaign.
      *
      * @var array<string, string>
      */
@@ -24,8 +23,7 @@ final class ShortLinkController extends AbstractController
     ];
 
     /**
-     * Prefix => codes in print: the edition, the year and month of the print
-     * run—for an advertisement behind the two letters of its medium.
+     * Prefix => codes in print.
      *
      * @var array<string, list<string>>
      */
@@ -36,8 +34,7 @@ final class ShortLinkController extends AbstractController
     ];
 
     /**
-     * The medium an advertisement appears in => the source it is counted
-     * under.
+     * Medium => the source it is counted under.
      *
      * @var array<string, string>
      */
@@ -46,8 +43,7 @@ final class ShortLinkController extends AbstractController
     ];
 
     /**
-     * Code => slug of the signature models in print, counted with the slug
-     * as the keyword.
+     * Code => slug of a signature model in print.
      *
      * @var array<string, string>
      */
@@ -58,13 +54,7 @@ final class ShortLinkController extends AbstractController
         'trtn' => 'triton-racer',
     ];
 
-    /**
-     * The address behind the QR code of a printed piece. It stays short so
-     * the code stays coarse enough to scan, and it answers 302 because the
-     * target of something already printed must be free to change. Every
-     * scan is counted as print, under the piece's campaign; an
-     * advertisement under its medium as the source.
-     */
+    // 302, because the target of something already printed must be free to change.
     #[Route('/s/{slug}', name: 'app_short_link', methods: ['GET'], requirements: ['slug' => '[a-z0-9-]+'])]
     public function shortLink(string $slug): Response
     {
@@ -78,9 +68,6 @@ final class ShortLinkController extends AbstractController
     }
 
     /**
-     * What a scan of the short link is counted as, or null where nothing is
-     * printed under it.
-     *
      * @return array<string, string>|null
      */
     private function countedAs(string $slug): ?array
@@ -111,11 +98,7 @@ final class ShortLinkController extends AbstractController
         return $query + ['mtm_kwd' => $code];
     }
 
-    /**
-     * A readable address for print only. The site itself links the shop
-     * directly, so that Matomo counts the click as an outlink—a click on an
-     * address of the site that is redirected on the server is never seen.
-     */
+    // For print only: Matomo sees a click on a server redirect as no outlink.
     #[Route('/shop', name: 'app_shop', methods: ['GET'])]
     public function shop(): Response
     {

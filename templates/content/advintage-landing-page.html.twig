@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{# The landing page stands apart from the site, so the header is reduced to
-   a way back. The inquiry button stays—the page links to contact routes
-   three times in its own copy. #}
+{# The header is reduced to a way back; the copy links to contact itself. #}
 {% set nav_items = [
     { label: 'Zur Übersicht', route: 'app_homepage', matches: [] }
 ] %}
@@ -12,18 +10,9 @@
 {% block meta_description %}krausgedruckt und adVintage haben sich zusammengetan und einen modularen Hutständer für deinen Fedora entwickelt – und darüber hinaus noch ein besonderes Angebot für dich.{% endblock %}
 
 {% block main %}
-    {# ── Hero ───────────────────────────────────────────────────── #}
     <section class="relative isolate flex min-h-[24rem] items-center overflow-hidden border-b border-neutral-200 pt-20 lg:min-h-[28rem]">
         <img src="{{ asset('images/advintage-landing-page/hero.jpg') }}" alt="" aria-hidden="true" class="absolute inset-0 -z-20 h-full w-full object-cover">
-        {# A gradient scrim rather than a flat veil: the type stays readable
-           regardless of what sits behind it in the crop.
-
-           Its direction follows the type. From `lg` up the headline sits in
-           the left half, so the scrim runs to the right and leaves the photo
-           breathing on the far side. Below that the headline spans the full
-           width, where a horizontal scrim would drop its right end onto the
-           bright part of the picture—so the scrim runs upward instead and
-           carries the type across the whole line. #}
+        {# The scrim follows the type: to the right from lg, upward below. #}
         <div class="absolute inset-0 -z-10 bg-gradient-to-t from-neutral-950/90 to-neutral-950/50 lg:bg-gradient-to-r lg:from-neutral-950/90 lg:via-neutral-950/70 lg:to-neutral-950/30"></div>
 
         <div class="mx-auto w-full max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
@@ -37,7 +26,6 @@
         </div>
     </section>
 
-    {# ── Text ───────────────────────────────────────────────────── #}
     <section class="bg-surface-warm">
         <div class="mx-auto max-w-3xl px-6 py-16 lg:py-20">
             <h2 class="font-display text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
@@ -51,13 +39,10 @@
                 <p>Ich habe diese Landing Page für dich und die anderen stolzen Besitzer eingerichtet, als kleine Einladung, tiefer in die Welt des 3D-Drucks einzutauchen. Unten findest du ein paar Modelle aus der Welt von Indiana Jones, bereitgestellt von kreativen Menschen auf den Portalen <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="https://www.printables.com">Printables</a> und <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="https://www.thingiverse.com">Thingiverse</a>.</p>
             </div>
 
-            {# The offer, set apart on the accent. #}
             <div class="mt-8 rounded-2xl border border-accent/30 bg-white p-8 text-center shadow-sm">
                 <p class="text-base leading-relaxed text-neutral-600">Schick mir ein Foto deines Hutes auf deinem Hutständer, oder poste es auf Instagram und markiere <a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ instagram_url }}" title="krausgedruckt auf Instagram">@krausgedruckt</a>, und erhalte satte</p>
                 <p class="my-4 font-display text-3xl font-bold text-accent-on-light">20 % Rabatt</p>
                 <p class="text-base leading-relaxed text-neutral-600">auf deine erste Bestellung bei mir!</p>
-                {# Das Kontaktformular kann den Code aus der Adresszeile
-                   übernehmen; ohne diesen Knopf blieb die Mechanik ungenutzt. #}
                 <div class="mt-6">
                     {{ include('partials/_button.html.twig', {
                         href: path('app_contact', { 'discount-code': 'ADVINTAGE' }),
@@ -77,7 +62,6 @@
         </div>
     </section>
 
-    {# ── Modelle ────────────────────────────────────────────────── #}
     <section class="border-t border-neutral-200">
         <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
             {{ include('partials/_eyebrow.html.twig', { text: 'Modelle zum Nachdrucken' }) }}
