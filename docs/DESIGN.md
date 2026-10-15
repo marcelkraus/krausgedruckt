@@ -16,7 +16,7 @@ The navigation is built once from the `nav_items` list in `base.html.twig`: Mode
 
 ## Look
 
-Tokens, contrast rules and the family bracket are in `../../docs/BRAND_FAMILY.md`. What differs here is deliberate: papaya instead of petrol, the nozzle instead of the gear, a warm ground instead of a cool one, soft cards with a shadow instead of flat hairline cards, and a product photo where the sibling uses typography.
+Tokens, contrast rules and the family bracket are in `../../../docs/BRAND_FAMILY.md`. What differs here is deliberate: papaya instead of petrol, the nozzle instead of the gear, a warm ground instead of a cool one, soft cards with a shadow instead of flat hairline cards, and a product photo where the sibling uses typography.
 
 * **Section rhythm:** warm → white → warm → dark → white, with the bands set between. The single dark block (`Ablauf`) arrives late on purpose. **The print-order band comes before the shop band**, because the way that stays on this site is offered before the way off it, and because the shop's “Lieber sofort etwas Fertiges?” answers the question the band before it asks. The two bands carry the tones that keep the alternation: the print-order band `plain`, the shop band `warm`.
 * **`surface-warm`** (`orange-50`) is the warm section ground, a token this site has and its siblings do not.
