@@ -1,6 +1,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
     csrf_protection: true
+    assets:
+        version_strategy: App\Asset\FileMtimeVersionStrategy
     http_method_override: false
     handle_all_throwables: true
     session:
