@@ -8,10 +8,6 @@ Server directory `~/www/html/krausgedruckt`, on the account `krswrk`, host `nix`
 
 ## Configuration
 
-**Outbound targets are parameters in `config/services.yaml`**, read with `getParameter()`, not environment variables.
-
-**The minimum order value lives beside them**—`app.minimum_order_value`, handed to Twig as a global in `config/packages/twig.yaml` and stated once, in the proof line of the assistant. Neither mail states it.
-
-**The frequently asked questions are outside all of this.** They are a content in kongtent, so the minimum order value stands there as editorial text and no parameter reaches it; changing `config/services.yaml` leaves it behind, and it has to follow by hand.
+**The minimum order value is the parameter `app.minimum_order_value`**, handed to Twig as a global in `config/packages/twig.yaml` and stated once, in the proof line of the assistant. Neither mail states it.
 
 The app is promoted for iOS only; there is no Mac badge and no variable for one.
