@@ -9,6 +9,7 @@
         "name": "krausgedruckt",
         "image": "{{ app.request.schemeAndHttpHost ~ asset('images/sharing.jpg') }}",
         "url": "{{ url('app_homepage') }}",
+        "telephone": "{{ phone_number|replace({' ': ''}) }}",
         "priceRange": "€€",
         "areaServed": [
             { "@type": "City", "name": "Erftstadt" },

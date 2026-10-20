@@ -8,6 +8,7 @@ twig:
         instagram_url: '%app.instagram_url%'
         legal_email_address: '%app.legal_email_address%'
         minimum_order_value: '%app.minimum_order_value%'
+        phone_number: '%app.phone_number%'
 
 when@test:
     twig:

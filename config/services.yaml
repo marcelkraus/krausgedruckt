@@ -4,7 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    # Outbound targets, the same on every machine.
     app.app_store_url_mobile: 'https://apps.apple.com/de/app/3d-druck-kostenrechner/id6502561182'
     app.contact_email_address: 'mail@krausgedruckt.de'
     app.etsy_url: 'https://www.etsy.com/shop/krausgedrucktDE'
@@ -12,6 +11,7 @@ parameters:
     app.instagram_url: 'https://www.instagram.com/krausgedruckt'
     # Shown on the legal pages only, so what is harvested there arrives on its own tag.
     app.legal_email_address: 'mail+legal@krausgedruckt.de'
+    app.phone_number: '+49 151 47828523'
     app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
 
     app.minimum_order_value: 20

@@ -44,6 +44,13 @@
             <div class="lg:order-1">
                 <dl class="divide-y divide-neutral-200 border-y border-neutral-200">
                     <div class="flex items-start gap-4 py-5">
+                        <span class="mt-0.5 text-accent-on-light">{{ icons.icon('clock', 'h-5 w-5') }}</span>
+                        <div>
+                            <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Reaktionszeit</dt>
+                            <dd class="mt-1.5 text-sm text-neutral-800">In der Regel innerhalb eines Werktags</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 py-5">
                         <span class="mt-0.5 text-accent-on-light">{{ icons.icon('mail', 'h-5 w-5') }}</span>
                         <div>
                             <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">E-Mail</dt>
@@ -51,17 +58,10 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-4 py-5">
-                        <span class="mt-0.5 text-accent-on-light">{{ icons.icon('chat', 'h-5 w-5') }}</span>
+                        <span class="mt-0.5 text-accent-on-light">{{ icons.icon('device', 'h-5 w-5') }}</span>
                         <div>
-                            <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">WhatsApp</dt>
-                            <dd class="mt-1.5 text-sm"><a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_contact_whats_app') }}">Schreib mir per WhatsApp</a></dd>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4 py-5">
-                        <span class="mt-0.5 text-accent-on-light">{{ icons.icon('clock', 'h-5 w-5') }}</span>
-                        <div>
-                            <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Reaktionszeit</dt>
-                            <dd class="mt-1.5 text-sm text-neutral-800">In der Regel innerhalb eines Werktags</dd>
+                            <dt class="font-mono text-xs uppercase tracking-[0.15em] text-neutral-600">Mobil</dt>
+                            <dd class="mt-1.5 text-sm"><a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="tel:{{ phone_number|replace({' ': ''}) }}">{{ phone_number }}</a><br><a class="font-semibold text-accent-on-light transition-colors hover:text-accent-on-light-hover" href="{{ path('app_contact_whats_app') }}">Kontakt per WhatsApp</a></dd>
                         </div>
                     </div>
                 </dl>
