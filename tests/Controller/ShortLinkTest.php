@@ -47,10 +47,10 @@ final class ShortLinkTest extends WebTestCase
     public static function countedAsProvider(): array
     {
         return [
-            'Anzeige' => ['/s/ad-ea2610', 'mtm_campaign=advertisement&mtm_medium=print&mtm_source=erftstadt-aktuell&mtm_kwd=2610'],
-            'Flyer' => ['/s/fl-2610', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2610'],
+            'Anzeige' => ['/s/ad-ea2611', 'mtm_campaign=advertisement&mtm_medium=print&mtm_source=erftstadt-aktuell&mtm_kwd=2611'],
+            'Flyer' => ['/s/fl-2611', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2611'],
             'Signature-Modell' => ['/s/sm-jpjp', 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=jurassic-print'],
-            'Visitenkarte' => ['/s/bc-2610', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2610'],
+            'Visitenkarte' => ['/s/bc-2611', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2611'],
         ];
     }
 
@@ -70,17 +70,17 @@ final class ShortLinkTest extends WebTestCase
     public static function unknownSlugProvider(): array
     {
         return [
-            'Anzeige in unbekanntem Medium' => ['/s/ad-xx2610'],
+            'Anzeige in unbekanntem Medium' => ['/s/ad-xx2611'],
             'Anzeige mit unbekannter Auflage' => ['/s/ad-ea0000'],
             'Anzeige ohne Auflage' => ['/s/ad-ea'],
             'Flyer mit unbekannter Auflage' => ['/s/fl-0000'],
             'Flyer ohne Auflage' => ['/s/fl-'],
-            'Kennung mit Bindestrich' => ['/s/fl-2610-b'],
+            'Kennung mit Bindestrich' => ['/s/fl-2611-b'],
             'Modell unter dem Slug statt dem Kürzel' => ['/s/sm-dummy-13'],
-            'Pfad hinter dem Slug' => ['/s/sm-d13/s/fl-2610'],
+            'Pfad hinter dem Slug' => ['/s/sm-d13/s/fl-2611'],
             'Präfix mit unbekanntem Modell' => ['/s/sm-gibt'],
             'unbekannt' => ['/s/gibt-es-nicht'],
-            'unbekanntes Präfix' => ['/s/xx-2610'],
+            'unbekanntes Präfix' => ['/s/xx-2611'],
             'Visitenkarte mit unbekannter Auflage' => ['/s/bc-0000'],
             'Visitenkarte ohne Auflage' => ['/s/bc-'],
         ];

@@ -28,9 +28,9 @@ final class ShortLinkController extends AbstractController
      * @var array<string, list<string>>
      */
     public const PRINT_EDITIONS = [
-        'ad' => ['ea2610'],
-        'bc' => ['2610'],
-        'fl' => ['2610'],
+        'ad' => ['ea2611'],
+        'bc' => ['2611'],
+        'fl' => ['2611'],
     ];
 
     /**
