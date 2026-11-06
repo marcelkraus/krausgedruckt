@@ -12,7 +12,7 @@ parameters:
     # Shown on the legal pages only, so what is harvested there arrives on its own tag.
     app.legal_email_address: 'mail+legal@krausgedruckt.de'
     app.phone_number: '+49 151 47828523'
-    app.whats_app_url: 'https://wa.me/message/TKVKBR7RPHA7B1'
+    app.whats_app_url: 'https://wa.me/message/DE6XB6KKERAZM1'
 
     app.minimum_order_value: 20
 

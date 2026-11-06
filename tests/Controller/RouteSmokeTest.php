@@ -61,6 +61,14 @@ final class RouteSmokeTest extends WebTestCase
         self::assertResponseRedirects();
     }
 
+    public function testWhatsAppEntryPointRedirectsToTheBusinessAccount(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/kontakt-per-whats-app');
+
+        self::assertResponseRedirects('https://wa.me/message/DE6XB6KKERAZM1');
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('renderingRouteProvider')]
     public function testPageHasExactlyOneMainHeading(string $path): void
     {
