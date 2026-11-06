@@ -2,13 +2,13 @@
 {% import 'partials/_icons.html.twig' as icons %}
 
 {% block title %}Der 3D-Druck-Kostenrechner · krausgedruckt von Marcel Kraus{% endblock %}
-{% block meta_description %}Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte. Für iPhone und iPad.{% endblock %}
+{% block meta_description %}Die App bietet dir einen einfachen und schnellen Überblick über die realen Gesamtkosten deiner 3D-Druck-Projekte. Für iPhone, iPad und Mac.{% endblock %}
 
 {% block main %}
     <section class="border-b border-neutral-200 bg-surface-warm pt-20">
         <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-8 lg:py-20">
             <div class="order-2 lg:order-1">
-                {{ include('partials/_eyebrow.html.twig', { text: 'App für iPhone und iPad' }) }}
+                {{ include('partials/_eyebrow.html.twig', { text: 'App für iPhone, iPad und Mac' }) }}
                 <h1 class="mt-5 font-display text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
                     Der 3D-Druck-Kostenrechner.
                     <span class="mt-3 block text-[0.8em] text-accent-on-light">Alles, was du für deine Kalkulation brauchst.</span>
@@ -34,7 +34,7 @@
                 <div class="mt-6 space-y-4 text-base leading-relaxed text-neutral-600">
                     <p>Der 3D-Druck-Kostenrechner gibt dir einen schnellen und einfachen Überblick über die <em>wirklichen</em> Gesamtkosten deiner 3D-Druck-Projekte, bestehend aus den Material-, Arbeits- und Betriebskosten.</p>
                     <p>Dabei ist die Grundfunktionalität der App – die einfache Kostenberechnung von 3D-Drucken – zu 100 % kostenlos. Dies bleibt auch so, für immer.</p>
-                    <p>Entwickelt habe ich die App selbst. Einen hohen Wert lege ich dabei auf den Schutz deiner Daten: Sie ist komplett werbefrei, trackt dich nicht und erfasst vor allem keine persönlichen Daten.</p>
+                    <p>Entwickelt habe ich die App selbst. Einen hohen Wert lege ich dabei auf den Schutz deiner Daten: Sie ist komplett werbefrei und trackt dich nicht. Was du eingibst, bleibt auf deinen Geräten und in deiner iCloud – bei mir kommt nichts davon an.</p>
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                 </h3>
                 <div class="mt-4 space-y-4 text-sm leading-relaxed text-neutral-600">
                     <p>PLUS ist das kostenpflichtige Paket an Zusatzfunktionen, das du über den App Store kaufen kannst.</p>
-                    <p>PLUS ermöglicht dir die Speicherung von Berechnungen, die Erstellung und Auswahl von Profilen und die Berechnung deines Gewinns.</p>
+                    <p>Mit PLUS speicherst du Berechnungen und fasst sie zu Projekten zusammen. Du legst Profile für Material-, Arbeits- und Betriebskosten an, übernimmst Druckzeit und Filamentgewicht aus deiner Modelldatei und berechnest deinen Gewinn. Über iCloud hast du alles auf all deinen Geräten dabei.</p>
                     <p>PLUS ist dabei ein einmaliger Kauf – kein Abo. Falls du langfristig Freude mit der App hast, würde ich mich dennoch ab und an über ein Trinkgeld freuen… 😉</p>
                 </div>
             </div>
@@ -62,7 +62,7 @@
 
     {% embed 'partials/_conversion_band.html.twig' with {
         title: 'Jetzt kostenlos herunterladen.',
-        text: 'Verfügbar für iPhone und iPad.',
+        text: 'Verfügbar für iPhone, iPad und Mac.',
         appStoreUrlMobile: appStoreUrlMobile
     } only %}
         {% block actions %}
