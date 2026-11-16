@@ -17,10 +17,7 @@ final class ShortLinkTest extends WebTestCase
     {
         foreach (ShortLinkController::PRINT_EDITIONS as $prefix => $codes) {
             foreach ($codes as $code) {
-                $query = 'mtm_campaign=' . ShortLinkController::PRINT_CAMPAIGNS[$prefix] . '&mtm_medium=print';
-                $query .= $prefix === 'ad'
-                    ? '&mtm_source=' . ShortLinkController::PRINT_SOURCES[substr($code, 0, 2)] . '&mtm_kwd=' . substr($code, 2)
-                    : '&mtm_kwd=' . $code;
+                $query = 'mtm_campaign=' . ShortLinkController::PRINT_CAMPAIGNS[$prefix] . '&mtm_medium=print&mtm_kwd=' . $code;
 
                 yield $prefix . '-' . $code => [$prefix . '-' . $code, $query];
             }
@@ -47,7 +44,6 @@ final class ShortLinkTest extends WebTestCase
     public static function countedAsProvider(): array
     {
         return [
-            'Anzeige' => ['/s/ad-ea2611', 'mtm_campaign=advertisement&mtm_medium=print&mtm_source=erftstadt-aktuell&mtm_kwd=2611'],
             'Flyer' => ['/s/fl-2611', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2611'],
             'Signature-Modell' => ['/s/sm-jpjp', 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=jurassic-print'],
             'Visitenkarte' => ['/s/bc-2611', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2611'],
@@ -70,9 +66,6 @@ final class ShortLinkTest extends WebTestCase
     public static function unknownSlugProvider(): array
     {
         return [
-            'Anzeige in unbekanntem Medium' => ['/s/ad-xx2611'],
-            'Anzeige mit unbekannter Auflage' => ['/s/ad-ea0000'],
-            'Anzeige ohne Auflage' => ['/s/ad-ea'],
             'Flyer mit unbekannter Auflage' => ['/s/fl-0000'],
             'Flyer ohne Auflage' => ['/s/fl-'],
             'Kennung mit Bindestrich' => ['/s/fl-2611-b'],
@@ -109,10 +102,6 @@ final class ShortLinkTest extends WebTestCase
 
         foreach ($slugs as $slug) {
             self::assertMatchesRegularExpression('/^[a-z]{2}-[a-z0-9]+$/', $slug);
-        }
-
-        foreach (ShortLinkController::PRINT_EDITIONS['ad'] as $code) {
-            self::assertArrayHasKey(substr($code, 0, 2), ShortLinkController::PRINT_SOURCES);
         }
 
         self::assertSame(array_values(array_unique($slugs)), $slugs);

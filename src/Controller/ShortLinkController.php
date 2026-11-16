@@ -16,7 +16,6 @@ final class ShortLinkController extends AbstractController
      * @var array<string, string>
      */
     public const PRINT_CAMPAIGNS = [
-        'ad' => 'advertisement',
         'bc' => 'business-card',
         'fl' => 'flyer',
         'sm' => 'signature-model',
@@ -28,18 +27,8 @@ final class ShortLinkController extends AbstractController
      * @var array<string, list<string>>
      */
     public const PRINT_EDITIONS = [
-        'ad' => ['ea2611'],
         'bc' => ['2611'],
         'fl' => ['2611'],
-    ];
-
-    /**
-     * Medium => the source it is counted under.
-     *
-     * @var array<string, string>
-     */
-    public const PRINT_SOURCES = [
-        'ea' => 'erftstadt-aktuell',
     ];
 
     /**
@@ -87,12 +76,6 @@ final class ShortLinkController extends AbstractController
 
         if (!\in_array($code, self::PRINT_EDITIONS[$prefix] ?? [], true)) {
             return null;
-        }
-
-        if ($prefix === 'ad') {
-            $source = self::PRINT_SOURCES[substr($code, 0, 2)] ?? null;
-
-            return $source === null ? null : $query + ['mtm_source' => $source, 'mtm_kwd' => substr($code, 2)];
         }
 
         return $query + ['mtm_kwd' => $code];
