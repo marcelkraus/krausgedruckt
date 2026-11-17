@@ -39,7 +39,6 @@ final class RouteSmokeTest extends WebTestCase
             'Referenzen' => ['/referenzen'],
             'Kontakt per E-Mail' => ['/kontakt-per-email'],
             'Kontakt per WhatsApp' => ['/kontakt-per-whats-app'],
-            'Shop' => ['/shop'],
         ];
     }
 

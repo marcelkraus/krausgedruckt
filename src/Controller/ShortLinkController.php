@@ -80,11 +80,4 @@ final class ShortLinkController extends AbstractController
 
         return $query + ['mtm_kwd' => $code];
     }
-
-    // For print only: Matomo sees a click on a server redirect as no outlink.
-    #[Route('/shop', name: 'app_shop', methods: ['GET'])]
-    public function shop(): Response
-    {
-        return $this->redirect($this->getParameter('app.etsy_url'));
-    }
 }

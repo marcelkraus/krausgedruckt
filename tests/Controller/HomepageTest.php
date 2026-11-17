@@ -40,6 +40,6 @@ final class HomepageTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertCount(2, $crawler->filter('header a[href="'.self::ASSISTANT.'"]'));
-        self::assertSame('Modell drucken', trim($crawler->filter('header nav a')->eq(0)->text()));
+        self::assertSame('Modell drucken', trim($crawler->filter('header nav a')->eq(1)->text()));
     }
 }

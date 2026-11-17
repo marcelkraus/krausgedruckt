@@ -88,14 +88,6 @@ final class ShortLinkTest extends WebTestCase
         self::assertResponseStatusCodeSame(404);
     }
 
-    public function testShopLeadsToEtsy(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/shop');
-
-        self::assertResponseRedirects(static::getContainer()->getParameter('app.etsy_url'), 302);
-    }
-
     public function testSlugsAreReachableAndUnique(): void
     {
         $slugs = array_map(static fn (array $case): string => $case[0], iterator_to_array(self::printedProvider(), false));

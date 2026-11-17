@@ -60,11 +60,10 @@
 
     {# A page may narrow the list by setting `nav_items` at its top level. #}
     {% set nav_items = nav_items|default([
-        { label: 'Modell drucken', route: 'app_print_order', matches: ['app_print_order'] },
         { label: 'Blog', route: 'app_blog', matches: ['app_blog', 'app_blog_post'] },
+        { label: 'Modell drucken', route: 'app_print_order', matches: ['app_print_order'] },
         { label: 'App', route: 'app_app', matches: ['app_app'] },
-        { label: 'FAQ', route: 'app_faq', matches: ['app_faq'] },
-        { label: 'Shop', url: etsy_url, external: true }
+        { label: 'FAQ', route: 'app_faq', matches: ['app_faq'] }
     ]) %}
     {% set current_route = app.request.attributes.get('_route') %}
 
@@ -78,10 +77,9 @@
             <nav class="hidden items-center gap-8 lg:flex" aria-label="Hauptnavigation">
                 {% for item in nav_items %}
                     {% set is_current = current_route in item.matches|default([]) %}
-                    <a href="{{ item.url|default(null) ?: path(item.route) }}"
-                       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] transition-colors hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
-                       {% if is_current %}aria-current="page"{% endif %}
-                       {% if item.external|default(false) %}target="_blank" rel="noopener"{% endif %}>{{ item.label }}{% if item.external|default(false) %}{{ icons.icon('external', 'h-3.5 w-3.5') }}{% endif %}</a>
+                    <a href="{{ path(item.route) }}"
+                       class="font-mono text-xs uppercase tracking-[0.15em] transition-colors hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
+                       {% if is_current %}aria-current="page"{% endif %}>{{ item.label }}</a>
                 {% endfor %}
             </nav>
 
@@ -102,11 +100,10 @@
             <nav class="mx-auto flex max-w-6xl flex-col px-6 py-2" aria-label="Mobile Navigation">
                 {% for item in nav_items %}
                     {% set is_current = current_route in item.matches|default([]) %}
-                    <a href="{{ item.url|default(null) ?: path(item.route) }}"
-                       class="inline-flex items-center gap-1.5 border-b border-neutral-100 py-3 font-mono text-sm uppercase tracking-[0.15em] hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
+                    <a href="{{ path(item.route) }}"
+                       class="border-b border-neutral-100 py-3 font-mono text-sm uppercase tracking-[0.15em] hover:text-accent-on-light {{ is_current ? 'font-semibold text-accent-on-light' : 'text-neutral-600' }}"
                        {% if is_current %}aria-current="page"{% endif %}
-                       {% if item.external|default(false) %}target="_blank" rel="noopener"{% endif %}
-                       data-menu-link>{{ item.label }}{% if item.external|default(false) %}{{ icons.icon('external', 'h-3.5 w-3.5') }}{% endif %}</a>
+                       data-menu-link>{{ item.label }}</a>
                 {% endfor %}
                 <a href="{{ path('app_contact') }}" class="{{ include('partials/_button_class.html.twig', {}, with_context = false) }} mt-4 mb-3 justify-center" data-menu-link>Jetzt anfragen</a>
             </nav>
@@ -133,7 +130,6 @@
                             <li><a href="{{ path('app_contact') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Kontaktformular</a></li>
                             <li><a href="{{ path('app_contact_email') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>E-Mail</a></li>
                             <li><a href="{{ path('app_contact_whats_app') }}" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>WhatsApp</a></li>
-                            <li><a href="{{ etsy_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Etsy-Shop</a></li>
                             <li><a href="{{ instagram_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 py-2.5 transition-colors hover:text-white"><span class="inline-block h-2.5 w-2.5 shrink-0 rounded-[2px] bg-accent-on-dark" aria-hidden="true"></span>Instagram</a></li>
                         </ul>
                     </div>
