@@ -44,6 +44,7 @@ final class ShortLinkTest extends WebTestCase
     public static function countedAsProvider(): array
     {
         return [
+            'Anzeige in erftstadt aktuell' => ['/s/ad-ea2612', 'mtm_campaign=advertisement&mtm_medium=print&mtm_kwd=ea2612'],
             'Flyer' => ['/s/fl-2612', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2612'],
             'Signature-Modell' => ['/s/sm-jpjp', 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=jurassic-print'],
             'Visitenkarte' => ['/s/bc-2612', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2612'],
@@ -66,6 +67,8 @@ final class ShortLinkTest extends WebTestCase
     public static function unknownSlugProvider(): array
     {
         return [
+            'Anzeige mit unbekannter Ausgabe' => ['/s/ad-ea0000'],
+            'Anzeige ohne Ausgabe' => ['/s/ad-'],
             'Flyer mit unbekannter Auflage' => ['/s/fl-0000'],
             'Flyer ohne Auflage' => ['/s/fl-'],
             'Kennung mit Bindestrich' => ['/s/fl-2612-b'],

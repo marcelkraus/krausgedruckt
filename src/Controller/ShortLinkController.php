@@ -16,6 +16,7 @@ final class ShortLinkController extends AbstractController
      * @var array<string, string>
      */
     public const PRINT_CAMPAIGNS = [
+        'ad' => 'advertisement',
         'bc' => 'business-card',
         'fl' => 'flyer',
         'sm' => 'signature-model',
@@ -27,6 +28,7 @@ final class ShortLinkController extends AbstractController
      * @var array<string, list<string>>
      */
     public const PRINT_EDITIONS = [
+        'ad' => ['ea2612'],
         'bc' => ['2612'],
         'fl' => ['2612'],
     ];
