@@ -44,9 +44,9 @@ final class ShortLinkTest extends WebTestCase
     public static function countedAsProvider(): array
     {
         return [
-            'Flyer' => ['/s/fl-2611', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2611'],
+            'Flyer' => ['/s/fl-2612', 'mtm_campaign=flyer&mtm_medium=print&mtm_kwd=2612'],
             'Signature-Modell' => ['/s/sm-jpjp', 'mtm_campaign=signature-model&mtm_medium=print&mtm_kwd=jurassic-print'],
-            'Visitenkarte' => ['/s/bc-2611', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2611'],
+            'Visitenkarte' => ['/s/bc-2612', 'mtm_campaign=business-card&mtm_medium=print&mtm_kwd=2612'],
         ];
     }
 
@@ -68,12 +68,12 @@ final class ShortLinkTest extends WebTestCase
         return [
             'Flyer mit unbekannter Auflage' => ['/s/fl-0000'],
             'Flyer ohne Auflage' => ['/s/fl-'],
-            'Kennung mit Bindestrich' => ['/s/fl-2611-b'],
+            'Kennung mit Bindestrich' => ['/s/fl-2612-b'],
             'Modell unter dem Slug statt dem Kürzel' => ['/s/sm-dummy-13'],
-            'Pfad hinter dem Slug' => ['/s/sm-d13/s/fl-2611'],
+            'Pfad hinter dem Slug' => ['/s/sm-d13/s/fl-2612'],
             'Präfix mit unbekanntem Modell' => ['/s/sm-gibt'],
             'unbekannt' => ['/s/gibt-es-nicht'],
-            'unbekanntes Präfix' => ['/s/xx-2611'],
+            'unbekanntes Präfix' => ['/s/xx-2612'],
             'Visitenkarte mit unbekannter Auflage' => ['/s/bc-0000'],
             'Visitenkarte ohne Auflage' => ['/s/bc-'],
         ];
